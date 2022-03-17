@@ -69,14 +69,14 @@ rm -r ./ezreleng/efiboot
 rm -r ./ezreleng/syslinux
 }
 
-# Copy ezrepo to opt
-cpezrepo () {
-cp -r ./opt/ezrepo /opt/
+# Copy shastrarepo to opt
+cpshastrarepo () {
+cp -r ./opt/shastrarepo /opt/
 }
 
-# Remove ezrepo from opt
-rmezrepo () {
-rm -r /opt/ezrepo
+# Remove shastrarepo from opt
+rmshastrarepo () {
+rm -r /opt/shastrarepo
 }
 
 # Delete automatic login
@@ -91,7 +91,7 @@ rmunitsd () {
 [[ -f ./ezreleng/airootfs/etc/xdg/reflector/reflector.conf ]] && rm ./ezreleng/airootfs/etc/xdg/reflector/reflector.conf
 }
 
-# Add Bluetooth, cups, haveged, NetworkManager, & sddm systemd links
+# Add Bluetooth, cups, haveged, NetworkManager, & gdm systemd links
 addnmlinks () {
 [[ ! -d ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants
 [[ ! -d ./ezreleng/airootfs/etc/systemd/system/network-online.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/network-online.target.wants
@@ -108,7 +108,7 @@ ln -sf /usr/lib/systemd/system/cups.socket ./ezreleng/airootfs/etc/systemd/syste
 ln -sf /usr/lib/systemd/system/cups.path ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants/cups.path
 ln -sf /usr/lib/systemd/system/bluetooth.service ./ezreleng/airootfs/etc/systemd/system/dbus-org.bluez.service
 ln -sf /usr/lib/systemd/system/bluetooth.service ./ezreleng/airootfs/etc/systemd/system/bluetooth.target.wants/bluetooth.service
-ln -sf /usr/lib/systemd/system/sddm.service ./ezreleng/airootfs/etc/systemd/system/display-manager.service
+ln -sf /usr/lib/systemd/system/gdm.service ./ezreleng/airootfs/etc/systemd/system/display-manager.service
 ln -sf /usr/lib/systemd/system/haveged.service ./ezreleng/airootfs/etc/systemd/system/sysinit.target.wants/haveged.service
 }
 
@@ -122,7 +122,7 @@ cp -r syslinux ./ezreleng/
 cp -r usr ./ezreleng/airootfs/
 cp -r etc ./ezreleng/airootfs/
 cp -r opt ./ezreleng/airootfs/
-ln -sf /usr/share/ezarcher ./ezreleng/airootfs/etc/skel/ezarcher
+ln -sf /usr/share/shastra ./ezreleng/airootfs/etc/skel/shastra
 }
 
 # Set hostname
@@ -208,7 +208,7 @@ prepreqs
 cleanup
 cpezreleng
 addnmlinks
-cpezrepo
+cpshastrarepo
 nalogin
 rmunitsd
 cpmyfiles
@@ -221,4 +221,4 @@ setkeylayout
 crtkeyboard
 crtlocalec
 runmkarchiso
-rmezrepo
+rmshastrarepo
