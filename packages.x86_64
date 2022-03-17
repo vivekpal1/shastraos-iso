@@ -113,39 +113,29 @@ pacman-contrib
 #Arch Linux GUI GNOME
 gnome
 gnome-tweaks
-alg-gnome-settings
+chrome-gnome-shell
+preload
+
+gnome-shell-extensions
+#gnome-shell-extensions-gtile
+#gnome-shell-extensions-appindicator
+gnome-shell-extension-x11gestures
 
 #Installer
 grub
 calamares
-alg-theme-cala-config
 os-prober
 
 #browser
-firefox
-alg-firefox-settings
-beaker-browser
+brave-bin
+#firefox
 
 #Applications
-gimp
-onlyoffice-bin
+#gimp
 vlc
 neofetch
-gnome-software-packagekit-plugin
-
-#Theming
-tela-circle-icon
-vimix-cursors
-orchis-theme-git
-archlinux-wallpaper
-chrome-gnome-shell
-gnome-shell-extensions
-gnome-shell-extension-arc-menu
-gnome-shell-extension-dash-to-dock
-gnome-shell-extension-blur-my-shell
-gnome-shell-extension-coverflow-alt-tab
-gnome-shell-extension-forge
-gnome-shell-extension-bitcoin-markets-git
+alacritty
+timeshift
 
 
 
@@ -153,16 +143,17 @@ gnome-shell-extension-bitcoin-markets-git
 bluez
 gnome-bluetooth
 
+
 #Office
-ttf-ms-fonts
 ttf-roboto
+ttf-ms-fonts
 noto-fonts
 
 #printing
 cups
 
 #AUR Helper
-pamac
+pamac-aur
 
 #NVIDIA Drivers & Tools
 nvidia
