@@ -1,4 +1,5 @@
-
+# Shastra OS Packages
+# List all packages to be installed (even from Shastra Repository)
 # SPDX-License-Identifier: GPL-3.0-or-later
 alsa-utils
 amd-ucode
@@ -117,8 +118,8 @@ chrome-gnome-shell
 preload
 
 gnome-shell-extensions
-#gnome-shell-extensions-gtile
-#gnome-shell-extensions-appindicator
+gnome-shell-extension-dash-to-dock
+#gnome-shell-extension-appindicator
 gnome-shell-extension-x11gestures
 
 #Installer
@@ -146,6 +147,7 @@ gnome-bluetooth
 
 #Office
 ttf-roboto
+noto-fonts-emoji
 ttf-ms-fonts
 noto-fonts
 
@@ -159,3 +161,4 @@ pamac-aur
 nvidia
 nvidia-utils
 nvidia-settings
+
