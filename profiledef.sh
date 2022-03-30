@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="shastraos2022"
-iso_label="SHASTRA_$(date +%Y%m)"
-iso_publisher="ShastraOS Team>"
-iso_application="Shastra DVD"
+
+iso_name="Shastra-pre"
+iso_label="Shastra-pre_$(date +%Y%m)"
+iso_publisher="Shastra OS"
+iso_application="ShastraOS DVD"
 iso_version="$(date +%Y.%m.%d)"
 install_dir="arch"
 buildmodes=('iso')
@@ -25,4 +26,8 @@ file_permissions=(
   ["/usr/local/bin/shastra.bios"]="0:0:755"
   ["/usr/local/bin/shastra.uefi"]="0:0:755"
   ["/usr/local/bin/shastramaint"]="0:0:755"
+  ["/usr/local/bin/ShastraManager"]="0:0:755"
+  ["/usr/local/bin/shastra.bios"]="0:0:755"
+  ["/usr/local/bin/shastra.uefi"]="0:0:755"
+  ["/usr/local/bin/ShastraManager"]="0:0:755"
 )
