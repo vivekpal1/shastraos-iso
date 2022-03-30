@@ -1,9 +1,5 @@
 #!/bin/bash
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 84629dd0 (fixed installation issues :))
 # ----------------------------------------
 # Define Variables
 # ----------------------------------------
@@ -18,29 +14,16 @@ KEYMP="us"
 KEYMOD="pc105"
 # pc105 and pc104 are modern standards, all others need to be researched
 
-<<<<<<< HEAD
 MYUSERNM="live"
 # use all lowercase letters only
 
 MYUSRPASSWD="live"
 # Pick a password of your choice
 
-RTPASSWD="toor"
-# Pick a root password
-
-MYHOSTNM="shastra"
-=======
-MYUSERNM="shastra"
-# use all lowercase letters only
-
-MYUSRPASSWD="shastra"
-# Pick a password of your choice
-
 RTPASSWD="root"
 # Pick a root password
 
-MYHOSTNM="ShastraOS"
->>>>>>> 84629dd0 (fixed installation issues :))
+MYHOSTNM="shastra"
 # Pick a hostname for the machine
 
 # ----------------------------------------
@@ -97,15 +80,9 @@ rm -r /opt/shastrarepo
 }
 
 # Delete automatic login
-<<<<<<< HEAD
 nalogin () {
 [[ -d ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d ]] && rm -r ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d
 }
-=======
-# nalogin () {
-# [[ -d ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d ]] && rm -r ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d
-# }
->>>>>>> 84629dd0 (fixed installation issues :))
 
 # Remove cloud-init and other stuff
 rmunitsd () {
@@ -144,10 +121,7 @@ cp -r efiboot ./ezreleng/
 cp -r syslinux ./ezreleng/
 cp -r usr ./ezreleng/airootfs/
 cp -r etc ./ezreleng/airootfs/
-<<<<<<< HEAD
-=======
 cp -r root ./ezreleng/airootfs/
->>>>>>> 84629dd0 (fixed installation issues :))
 cp -r opt ./ezreleng/airootfs/
 ln -sf /usr/share/shastra ./ezreleng/airootfs/etc/skel/shastra
 }
@@ -236,11 +210,7 @@ cleanup
 cpezreleng
 addnmlinks
 cpshastrarepo
-<<<<<<< HEAD
 nalogin
-=======
-#nalogin 
->>>>>>> 84629dd0 (fixed installation issues :))
 rmunitsd
 cpmyfiles
 sethostname
@@ -252,8 +222,4 @@ setkeylayout
 crtkeyboard
 crtlocalec
 runmkarchiso
-<<<<<<< HEAD
 rmshastrarepo
-=======
-rmshastrarepo
->>>>>>> 84629dd0 (fixed installation issues :))
