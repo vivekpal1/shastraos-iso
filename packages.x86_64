@@ -11,6 +11,10 @@ broadcom-wl
 btrfs-progs
 clonezilla
 cloud-init
+brltty
+broadcom-wl-dkms
+btrfs-progs
+clonezilla
 crda
 cryptsetup
 darkhttpd
@@ -35,6 +39,7 @@ gpart
 gpm
 gptfdisk
 grml-zsh-config
+grub
 hdparm
 intel-ucode
 ipw2100-fw
@@ -43,12 +48,20 @@ irssi
 iwd
 jfsutils
 lftp
+iw
+iwd
+jfsutils
+kitty-terminfo
+less
+libfido2
+libusb-compat
 linux
 linux-atm
 linux-firmware
 livecd-sounds
 lsscsi
 lvm2
+lynx
 man-db
 man-pages
 mc
@@ -75,10 +88,18 @@ parted
 partimage
 ppp
 pptpclient
+pcsclite
+ppp
+pptpclient
+pv
+qemu-guest-agent
+refind
 reflector
 reiserfsprogs
 rp-pppoe
 rsync
+rxvt-unicode-terminfo
+screen
 sdparm
 sg3_utils
 smartmontools
@@ -89,10 +110,16 @@ syslinux
 systemd-resolvconf
 tcpdump
 testdisk
+terminus-font
+testdisk
+tmux
+tpm2-tss
 udftools
 usb_modeswitch
 usbmuxd
 usbutils
+vim
+virtualbox-guest-utils
 vpnc
 wireless-regdb
 wireless_tools
@@ -102,6 +129,7 @@ xfsprogs
 xl2tpd
 zsh
 
+<<<<<<< HEAD
 #Arch Linux GUI GNOME Core
 xorg
 gdm
@@ -162,3 +190,274 @@ nvidia
 nvidia-utils
 nvidia-settings
 
+=======
+# System
+archiso
+base-devel
+bash-completion
+bluez
+bluez-utils
+cdrtools
+cmake
+devtools
+dkms
+dvd+rw-tools
+efitools
+fuse3
+fwupd
+git
+gnome-disk-utility
+gnome-keyring
+gparted
+grsync
+haveged
+htop
+hwdata
+hwdetect
+hwinfo
+libburn
+libisofs
+libisoburn
+linux-headers
+logrotate
+lsb-release
+os-prober
+p7zip
+packagekit
+pacman-contrib
+pacutils
+pahole
+perl
+perl-data-dump
+perl-json
+perl-lwp-protocol-https
+perl-term-readline-gnu
+perl-term-ui
+pkgfile
+plocate
+tlp
+udftools
+udisks2
+unace
+unrar
+unzip
+xdg-user-dirs
+xz
+zstd
+
+# Filesystem
+gvfs
+gvfs-afc
+gvfs-goa
+gvfs-gphoto2
+gvfs-mtp
+gvfs-nfs
+gvfs-smb
+
+# Multimedia
+alsa-lib
+alsa-plugins
+alsa-firmware
+alsa-utils
+audacious
+audacious-plugins
+cdrdao
+dvdauthor
+faac
+faad2
+ffmpeg
+ffmpegthumbnailer
+flac
+frei0r-plugins
+gstreamer
+gst-libav
+gst-plugins-base
+gst-plugins-good
+gst-plugins-bad
+gst-plugins-ugly
+gstreamer-vaapi
+imagemagick
+lame
+libdvdcss
+libopenraw
+mencoder
+mjpegtools
+mpv
+poppler-glib
+# Pipewire - comment pulseaudio packages if using pipewire
+# pipewire
+# pipewire-alsa
+# pipewire-docs
+# pipewire-jack
+# pipewire-media-session
+# pipewire-pulse
+# alsa-card-profiles
+# gst-plugin-pipewire
+# Pulseaudio - comment pipewire packages if using pulseaudio
+pulseaudio
+pulseaudio-alsa
+pulseaudio-bluetooth
+pulseaudio-equalizer
+pulseaudio-jack
+simplescreenrecorder
+sox
+transcode
+smplayer
+x265
+x264
+xvidcore
+
+# XORG
+mesa
+xorg
+xorg-server
+xorg-apps
+xorg-drivers
+xorg-xkill
+xorg-xinit
+xterm
+
+# Networking
+avahi
+curl
+dnsutils
+ethtool
+filezilla
+gnome-nettool
+modemmanager
+netctl
+networkmanager
+networkmanager-openvpn
+nm-connection-editor
+network-manager-applet
+net-tools
+nss-mdns
+openresolv
+r8168
+wget
+whois
+
+# Fonts
+ttf-dejavu
+ttf-liberation
+ttf-bitstream-vera
+ttf-ubuntu-font-family
+cantarell-fonts
+ttf-croscore
+ttf-carlito
+ttf-caladea
+noto-fonts
+opendesktop-fonts
+ttf-opensans
+freetype2
+ttf-ms-fonts
+
+# Printing Support
+cups
+cups-pdf
+cups-filters
+cups-pk-helper
+foomatic-db
+foomatic-db-engine
+ghostscript
+gsfonts
+gutenprint
+python-pillow
+python-pip
+python-pyqt5
+python-reportlab
+simple-scan
+system-config-printer
+
+# Gnome
+gnome
+accountsservice
+dconf-editor
+gnome-firmware
+gnome-packagekit
+gnome-terminal
+meld
+polkit-gnome
+chrome-gnome-shell
+gnome-tweaks
+xf86-input-libinput
+gtk-engine-murrine
+
+
+# Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
+gnome-shell-extensions
+gnome-shell-extension-dash-to-dock
+gnome-shell-extension-x11gestures
+gnome-shell-extension-appindicator
+
+# Theming
+catppuccin-grub-theme-git
+catppuccin-gtk-theme
+
+#Applications
+neofetch
+pavucontrol
+tldr
+transmission-gtk
+viewnior
+gestures
+libinput-gestures
+preload
+timeshift
+touchegg
+
+
+
+# Other and dependencies
+archlinux-appstream-data-pamac
+qgnomeplatform
+qgnomeplatform-qt6
+
+
+# Display Manager
+gdm
+
+# Browser
+brave-bin
+
+# Calamares dependencies (not listed elsewhere)
+boost
+boost-libs
+dmidecode
+extra-cmake-modules
+gtk-update-icon-cache
+icu
+kconfig
+kcoreaddons
+kdbusaddons
+kiconthemes
+ki18n
+kio
+kparts
+kpmcore
+kservice
+kwidgetsaddons
+libpwquality
+plasma-framework
+polkit-qt5
+qt5-location
+qt5-svg
+qt5-tools
+qt5-translations
+qt5-webengine
+qt5-xmlpatterns
+qt5ct
+solid
+upower
+yaml-cpp
+
+# Calamares
+calamares
+ckbcomp
+mkinitcpio-openswap
+
+# AUR
+trizen
+pamac-aur
+libpamac-aur
+>>>>>>> 84629dd0 (fixed installation issues :))
