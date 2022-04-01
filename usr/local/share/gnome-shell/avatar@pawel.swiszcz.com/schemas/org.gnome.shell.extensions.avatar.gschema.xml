@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.avatar" path="/org/gnome/shell/extensions/avatar/">
+    <!-- See also: https://docs.gtk.org/glib/gvariant-format-strings.html -->
+    <key name="horizontal-mode" type="b">
+      <default>true</default>
+      <summary>Horizontal mode</summary>
+      <description>Horizontal mode</description>
+    </key>
+    <key name="show-name" type="b">
+      <default>true</default>
+      <summary>Show user name first and last</summary>
+      <description>Show user name first and last</description>
+    </key>
+    <key name="show-system-name" type="b">
+      <default>true</default>
+      <summary>Show system name</summary>
+      <description>Show system name</description>
+    </key>
+    <key name="system-name-position" type="i">
+      <default>0</default>
+      <summary>Set Position</summary>
+    </key>
+    <key name="name-style-dark" type="b">
+      <default>true</default>
+      <summary>Login dark style</summary>
+      <description>Login dark style</description>
+    </key>
+    <key name="avatar-shadow" type="b">
+      <default>true</default>
+      <summary>Add shadow to avatar</summary>
+      <description>Add shadow to avatar</description>
+    </key>
+    <key name="avatar-shadow-user-name" type="b">
+      <default>true</default>
+      <summary>Add shadow to user name</summary>
+      <description>Add shadow to user name</description>
+    </key>
+    <key name="show-buttons" type="b">
+      <default>true</default>
+      <summary>Show system buttons</summary>
+      <description>Show system buttons</description>
+    </key>
+    <key name="buttons-position" type="i">
+      <default>0</default>
+      <summary>Set Position</summary>
+    </key>
+    <key name="buttons-icon-size" type="i">
+      <default>0</default>
+      <summary>Icon size</summary>
+    </key>
+    <key name="show-media-center" type="b">
+      <default>true</default>
+      <summary>Show media center</summary>
+      <description>Show media center</description>
+    </key>
+      <key name="set-custom-panel-menu-width" type="i">
+      <default>0</default>
+      <summary>Set Panel Menu width</summary>
+    </key>
+    <key name="custom-buttons-background" type="b">
+      <default>false</default>
+      <summary>Use custom buttons background color</summary>
+      <description>Use custom buttons background color</description>
+    </key>
+    <key name="buttons-background" type="s">
+      <default>""</default>
+      <summary>buttons-background</summary>
+      <description>buttons-background</description>
+    </key>
+  </schema>
+</schemalist>
