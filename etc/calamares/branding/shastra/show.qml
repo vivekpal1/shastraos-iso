@@ -67,7 +67,7 @@ Presentation
 
         Image {
             id: background2
-            source: "slide1.png"
+            source: "slide3.png"
             width: parent.width; height: parent.height          
             horizontalAlignment: Image.AlignCenter
     		verticalAlignment: Image.AlignTop
@@ -95,7 +95,7 @@ Presentation
 
         Image {
             id: background3
-            source: "slide1.png"
+            source: "slide2.png"
             width: parent.width; height: parent.height          
             horizontalAlignment: Image.AlignCenter
     		verticalAlignment: Image.AlignTop
@@ -108,7 +108,7 @@ Presentation
                 anchors.horizontalCenterOffset: 0
                 font.pixelSize: parent.width *.020
                 color: 'white'
-                text: qsTr("<b>Look inside the ~/shastradocs folder for documentation<br/>")
+                text: qsTr("<b>Your Shastra is being installing, till then keep enjoing the live session of ShastraOS<br/>")
                 wrapMode: Text.WordWrap
                 width: parent.width / 1.4
                 horizontalAlignment: Text.AlignHCenter
@@ -122,7 +122,7 @@ Presentation
 
         Image {
             id: background4
-            source: "slide1.png"
+            source: "slide4.png"
             width: parent.width; height: parent.height
             horizontalAlignment: Image.AlignCenter
     		verticalAlignment: Image.AlignTop
@@ -135,7 +135,7 @@ Presentation
                 anchors.horizontalCenterOffset: 0
                 font.pixelSize: parent.width *.020
                 color: 'white'
-                text: qsTr("<b>Thank you for trying Shastra<br/>")
+                text: qsTr("<b>Shastra comes with pure Arch Linux with latest Gnome environment.<br/>")
                 wrapMode: Text.WordWrap
                 width: parent.width / 1.4
                 horizontalAlignment: Text.AlignHCenter
