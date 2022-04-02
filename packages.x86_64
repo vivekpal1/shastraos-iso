@@ -7,10 +7,6 @@ arch-install-scripts
 b43-fwcutter
 base
 bind-tools
-broadcom-wl
-btrfs-progs
-clonezilla
-cloud-init
 brltty
 broadcom-wl-dkms
 btrfs-progs
@@ -45,9 +41,6 @@ intel-ucode
 ipw2100-fw
 ipw2200-fw
 irssi
-iwd
-jfsutils
-lftp
 iw
 iwd
 jfsutils
@@ -86,8 +79,6 @@ openvpn
 partclone
 parted
 partimage
-ppp
-pptpclient
 pcsclite
 ppp
 pptpclient
@@ -109,7 +100,6 @@ sudo
 syslinux
 systemd-resolvconf
 tcpdump
-testdisk
 terminus-font
 testdisk
 tmux
@@ -129,68 +119,6 @@ xfsprogs
 xl2tpd
 zsh
 
-<<<<<<< HEAD
-#Arch Linux GUI GNOME Core
-xorg
-gdm
-bash-completion
-networkmanager
-xf86-input-libinput
-base-devel
-pacman-contrib
-
-#Arch Linux GUI GNOME
-gnome
-gnome-tweaks
-chrome-gnome-shell
-preload
-
-gnome-shell-extensions
-gnome-shell-extension-dash-to-dock
-#gnome-shell-extension-appindicator
-gnome-shell-extension-x11gestures
-
-#Installer
-grub
-calamares
-os-prober
-
-#browser
-brave-bin
-#firefox
-
-#Applications
-#gimp
-vlc
-neofetch
-alacritty
-timeshift
-
-
-
-#Bluetooth
-bluez
-gnome-bluetooth
-
-
-#Office
-ttf-roboto
-noto-fonts-emoji
-ttf-ms-fonts
-noto-fonts
-
-#printing
-cups
-
-#AUR Helper
-pamac-aur
-
-#NVIDIA Drivers & Tools
-nvidia
-nvidia-utils
-nvidia-settings
-
-=======
 # System
 archiso
 base-devel
@@ -222,7 +150,6 @@ linux-headers
 logrotate
 lsb-release
 os-prober
-p7zip
 packagekit
 pacman-contrib
 pacutils
@@ -253,16 +180,13 @@ gvfs-gphoto2
 gvfs-mtp
 gvfs-nfs
 gvfs-smb
+gvfs-google
 
 # Multimedia
 alsa-lib
 alsa-plugins
 alsa-firmware
 alsa-utils
-audacious
-audacious-plugins
-cdrdao
-dvdauthor
 faac
 faad2
 ffmpeg
@@ -280,7 +204,6 @@ imagemagick
 lame
 libdvdcss
 libopenraw
-mencoder
 mjpegtools
 mpv
 poppler-glib
@@ -299,10 +222,6 @@ pulseaudio-alsa
 pulseaudio-bluetooth
 pulseaudio-equalizer
 pulseaudio-jack
-simplescreenrecorder
-sox
-transcode
-smplayer
 x265
 x264
 xvidcore
@@ -322,7 +241,6 @@ avahi
 curl
 dnsutils
 ethtool
-filezilla
 gnome-nettool
 modemmanager
 netctl
@@ -338,19 +256,13 @@ wget
 whois
 
 # Fonts
-ttf-dejavu
-ttf-liberation
-ttf-bitstream-vera
-ttf-ubuntu-font-family
+adobe-source-code-pro-fonts
+awesome-terminal-fonts
 cantarell-fonts
-ttf-croscore
-ttf-carlito
-ttf-caladea
-noto-fonts
-opendesktop-fonts
 ttf-opensans
-freetype2
 ttf-ms-fonts
+noto-fonts
+noto-fonts-emoji
 
 # Printing Support
 cups
@@ -361,12 +273,10 @@ foomatic-db
 foomatic-db-engine
 ghostscript
 gsfonts
-gutenprint
 python-pillow
 python-pip
 python-pyqt5
 python-reportlab
-simple-scan
 system-config-printer
 
 # Gnome
@@ -376,8 +286,6 @@ dconf-editor
 gnome-firmware
 gnome-packagekit
 gnome-terminal
-meld
-polkit-gnome
 chrome-gnome-shell
 gnome-tweaks
 xf86-input-libinput
@@ -391,22 +299,20 @@ gnome-shell-extension-x11gestures
 gnome-shell-extension-appindicator
 
 # Theming
-catppuccin-grub-theme-git
 catppuccin-gtk-theme
+volantes-cursors
 
 #Applications
 neofetch
 pavucontrol
 tldr
-transmission-gtk
-viewnior
 gestures
 libinput-gestures
 preload
 timeshift
 touchegg
-
-
+flameshot
+fragments
 
 # Other and dependencies
 archlinux-appstream-data-pamac
@@ -460,4 +366,3 @@ mkinitcpio-openswap
 trizen
 pamac-aur
 libpamac-aur
->>>>>>> 84629dd0 (fixed installation issues :))
