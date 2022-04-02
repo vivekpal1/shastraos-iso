@@ -290,6 +290,8 @@ chrome-gnome-shell
 gnome-tweaks
 xf86-input-libinput
 gtk-engine-murrine
+alg-gnome-settings
+alg-theme-cala-config
 
 
 # Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
@@ -299,6 +301,7 @@ gnome-shell-extension-x11gestures
 gnome-shell-extension-appindicator
 
 # Theming
+catppuccin-grub-theme-git
 catppuccin-gtk-theme
 volantes-cursors
 
