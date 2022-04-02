@@ -290,9 +290,6 @@ chrome-gnome-shell
 gnome-tweaks
 xf86-input-libinput
 gtk-engine-murrine
-alg-gnome-settings
-alg-theme-cala-config
-
 
 # Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
 gnome-shell-extensions
@@ -322,12 +319,13 @@ archlinux-appstream-data-pamac
 qgnomeplatform
 qgnomeplatform-qt6
 
-
 # Display Manager
 gdm
 
 # Browser
-brave-bin
+# brave-bin 
+# uncomment brave bin and commnet firefox, if you are adding brave bin to shastra-repo
+firefox
 
 # Calamares dependencies (not listed elsewhere)
 boost
