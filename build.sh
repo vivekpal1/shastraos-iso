@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # ----------------------------------------
 # Define Variables
 # ----------------------------------------
@@ -23,7 +24,7 @@ MYUSRPASSWD="live"
 RTPASSWD="root"
 # Pick a root password
 
-MYHOSTNM="shastra"
+MYHOSTNM="ShastraOS"
 # Pick a hostname for the machine
 
 # ----------------------------------------
@@ -80,9 +81,9 @@ rm -r /opt/shastrarepo
 }
 
 # Delete automatic login
-nalogin () {
-[[ -d ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d ]] && rm -r ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d
-}
+# nalogin () {
+# [[ -d ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d ]] && rm -r ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d
+# }
 
 # Remove cloud-init and other stuff
 rmunitsd () {
@@ -91,8 +92,9 @@ rmunitsd () {
 [[ -f ./ezreleng/airootfs/etc/xdg/reflector/reflector.conf ]] && rm ./ezreleng/airootfs/etc/xdg/reflector/reflector.conf
 }
 
-# Add Bluetooth, cups, haveged, NetworkManager, & gdm systemd links
+# Add Bluetooth, cups, haveged, NetworkManager, & gdm systemd links,    REMOVE getty@tty1.service.d if deleting autometic login
 addnmlinks () {
+[[ ! -d ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d
 [[ ! -d ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants
 [[ ! -d ./ezreleng/airootfs/etc/systemd/system/network-online.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/network-online.target.wants
 [[ ! -d ./ezreleng/airootfs/etc/systemd/system/printer.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/printer.target.wants
@@ -210,7 +212,7 @@ cleanup
 cpezreleng
 addnmlinks
 cpshastrarepo
-nalogin
+#nalogin 
 rmunitsd
 cpmyfiles
 sethostname

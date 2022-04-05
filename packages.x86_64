@@ -291,9 +291,9 @@ gnome-tweaks
 xf86-input-libinput
 gtk-engine-murrine
 
+
 # Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
 gnome-shell-extensions
-gnome-shell-extension-dash-to-dock
 gnome-shell-extension-x11gestures
 gnome-shell-extension-appindicator
 
@@ -319,13 +319,14 @@ archlinux-appstream-data-pamac
 qgnomeplatform
 qgnomeplatform-qt6
 
+
 # Display Manager
 gdm
 
 # Browser
-# brave-bin 
-# uncomment brave bin and commnet firefox, if you are adding brave bin to shastra-repo
-firefox
+# firefox
+# uncomment firefox if you want to use firefox, and comment brave-bin
+brave-bin
 
 # Calamares dependencies (not listed elsewhere)
 boost
