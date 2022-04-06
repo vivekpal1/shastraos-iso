@@ -51,7 +51,7 @@ trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 
 # Clean up working directories
 cleanup () {
-[[ -d ./ezreleng ]] && rm -r ./ezreleng
+[[ -d ./mkshastra ]] && rm -r ./mkshastra
 [[ -d ./work ]] && rm -r ./work
 [[ -d ./out ]] && mv ./out ../
 sleep 2
@@ -63,11 +63,11 @@ pacman -S --noconfirm archlinux-keyring
 pacman -S --needed --noconfirm archiso mkinitcpio-archiso
 }
 
-# Copy ezreleng to working directory
-cpezreleng () {
-cp -r /usr/share/archiso/configs/releng/ ./ezreleng
-rm -r ./ezreleng/efiboot
-rm -r ./ezreleng/syslinux
+# Copy mkshastra to working directory
+cpmkshastra () {
+cp -r /usr/share/archiso/configs/releng/ ./mkshastra
+rm -r ./mkshastra/efiboot
+rm -r ./mkshastra/syslinux
 }
 
 # Copy shastrarepo to opt
@@ -82,61 +82,61 @@ rm -r /opt/shastrarepo
 
 # Delete automatic login
 # nalogin () {
-# [[ -d ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d ]] && rm -r ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d
+# [[ -d ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d ]] && rm -r ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d
 # }
 
 # Remove cloud-init and other stuff
 rmunitsd () {
-[[ -d ./ezreleng/airootfs/etc/systemd/system/cloud-init.target.wants ]] && rm -r ./ezreleng/airootfs/etc/systemd/system/cloud-init.target.wants
-[[ -f ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants/iwd.service ]] && rm ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants/iwd.service
-[[ -f ./ezreleng/airootfs/etc/xdg/reflector/reflector.conf ]] && rm ./ezreleng/airootfs/etc/xdg/reflector/reflector.conf
+[[ -d ./mkshastra/airootfs/etc/systemd/system/cloud-init.target.wants ]] && rm -r ./mkshastra/airootfs/etc/systemd/system/cloud-init.target.wants
+[[ -f ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants/iwd.service ]] && rm ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants/iwd.service
+[[ -f ./mkshastra/airootfs/etc/xdg/reflector/reflector.conf ]] && rm ./mkshastra/airootfs/etc/xdg/reflector/reflector.conf
 }
 
 # Add Bluetooth, cups, haveged, NetworkManager, & gdm systemd links,    REMOVE getty@tty1.service.d if deleting autometic login
 addnmlinks () {
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/getty@tty1.service.d
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/network-online.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/network-online.target.wants
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/printer.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/printer.target.wants
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/sockets.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/sockets.target.wants
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/timers.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/timers.target.wants
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/bluetooth.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/bluetooth.target.wants
-[[ ! -d ./ezreleng/airootfs/etc/systemd/system/sysinit.target.wants ]] && mkdir -p ./ezreleng/airootfs/etc/systemd/system/sysinit.target.wants
-ln -sf /usr/lib/systemd/system/NetworkManager.service ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants/NetworkManager.service
-ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service ./ezreleng/airootfs/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-ln -sf /usr/lib/systemd/system/NetworkManager-wait-online.service ./ezreleng/airootfs/etc/systemd/system/network-online.target.wants/NetworkManager-wait-online.service
-ln -sf /usr/lib/systemd/system/cups.service ./ezreleng/airootfs/etc/systemd/system/printer.target.wants/cups.service
-ln -sf /usr/lib/systemd/system/cups.socket ./ezreleng/airootfs/etc/systemd/system/sockets.target.wants/cups.socket
-ln -sf /usr/lib/systemd/system/cups.path ./ezreleng/airootfs/etc/systemd/system/multi-user.target.wants/cups.path
-ln -sf /usr/lib/systemd/system/bluetooth.service ./ezreleng/airootfs/etc/systemd/system/dbus-org.bluez.service
-ln -sf /usr/lib/systemd/system/bluetooth.service ./ezreleng/airootfs/etc/systemd/system/bluetooth.target.wants/bluetooth.service
-ln -sf /usr/lib/systemd/system/gdm.service ./ezreleng/airootfs/etc/systemd/system/display-manager.service
-ln -sf /usr/lib/systemd/system/haveged.service ./ezreleng/airootfs/etc/systemd/system/sysinit.target.wants/haveged.service
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/network-online.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/network-online.target.wants
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/printer.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/printer.target.wants
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/sockets.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/sockets.target.wants
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/timers.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/timers.target.wants
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/bluetooth.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/bluetooth.target.wants
+[[ ! -d ./mkshastra/airootfs/etc/systemd/system/sysinit.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/sysinit.target.wants
+ln -sf /usr/lib/systemd/system/NetworkManager.service ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants/NetworkManager.service
+ln -sf /usr/lib/systemd/system/NetworkManager-dispatcher.service ./mkshastra/airootfs/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
+ln -sf /usr/lib/systemd/system/NetworkManager-wait-online.service ./mkshastra/airootfs/etc/systemd/system/network-online.target.wants/NetworkManager-wait-online.service
+ln -sf /usr/lib/systemd/system/cups.service ./mkshastra/airootfs/etc/systemd/system/printer.target.wants/cups.service
+ln -sf /usr/lib/systemd/system/cups.socket ./mkshastra/airootfs/etc/systemd/system/sockets.target.wants/cups.socket
+ln -sf /usr/lib/systemd/system/cups.path ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants/cups.path
+ln -sf /usr/lib/systemd/system/bluetooth.service ./mkshastra/airootfs/etc/systemd/system/dbus-org.bluez.service
+ln -sf /usr/lib/systemd/system/bluetooth.service ./mkshastra/airootfs/etc/systemd/system/bluetooth.target.wants/bluetooth.service
+ln -sf /usr/lib/systemd/system/gdm.service ./mkshastra/airootfs/etc/systemd/system/display-manager.service
+ln -sf /usr/lib/systemd/system/haveged.service ./mkshastra/airootfs/etc/systemd/system/sysinit.target.wants/haveged.service
 }
 
 # Copy files to customize the ISO
 cpmyfiles () {
-cp packages.x86_64 ./ezreleng/
-cp pacman.conf ./ezreleng/
-cp profiledef.sh ./ezreleng/
-cp -r efiboot ./ezreleng/
-cp -r syslinux ./ezreleng/
-cp -r usr ./ezreleng/airootfs/
-cp -r etc ./ezreleng/airootfs/
-cp -r root ./ezreleng/airootfs/
-cp -r opt ./ezreleng/airootfs/
-ln -sf /usr/share/shastra ./ezreleng/airootfs/etc/skel/shastra
+cp packages.x86_64 ./mkshastra/
+cp pacman.conf ./mkshastra/
+cp profiledef.sh ./mkshastra/
+cp -r efiboot ./mkshastra/
+cp -r syslinux ./mkshastra/
+cp -r usr ./mkshastra/airootfs/
+cp -r etc ./mkshastra/airootfs/
+cp -r root ./mkshastra/airootfs/
+cp -r opt ./mkshastra/airootfs/
+ln -sf /usr/share/shastra ./mkshastra/airootfs/etc/skel/shastra
 }
 
 # Set hostname
 sethostname () {
-echo "${MYHOSTNM}" > ./ezreleng/airootfs/etc/hostname
+echo "${MYHOSTNM}" > ./mkshastra/airootfs/etc/hostname
 }
 
 # Create passwd file
 crtpasswd () {
 echo "root:x:0:0:root:/root:/usr/bin/bash
-"${MYUSERNM}":x:1010:1010::/home/"${MYUSERNM}":/bin/bash" > ./ezreleng/airootfs/etc/passwd
+"${MYUSERNM}":x:1010:1010::/home/"${MYUSERNM}":/bin/bash" > ./mkshastra/airootfs/etc/passwd
 }
 
 # Create group file
@@ -157,7 +157,7 @@ storage:x:870:"${MYUSERNM}"
 optical:x:880:"${MYUSERNM}"
 lp:x:840:"${MYUSERNM}"
 audio:x:890:"${MYUSERNM}"
-"${MYUSERNM}":x:1010:" > ./ezreleng/airootfs/etc/group
+"${MYUSERNM}":x:1010:" > ./mkshastra/airootfs/etc/group
 }
 
 # Create shadow file
@@ -165,40 +165,40 @@ crtshadow () {
 usr_hash=$(openssl passwd -6 "${MYUSRPASSWD}")
 root_hash=$(openssl passwd -6 "${RTPASSWD}")
 echo "root:"${root_hash}":14871::::::
-"${MYUSERNM}":"${usr_hash}":14871::::::" > ./ezreleng/airootfs/etc/shadow
+"${MYUSERNM}":"${usr_hash}":14871::::::" > ./mkshastra/airootfs/etc/shadow
 }
 
 # create gshadow file
 crtgshadow () {
 echo "root:!*::root
-"${MYUSERNM}":!*::" > ./ezreleng/airootfs/etc/gshadow
+"${MYUSERNM}":!*::" > ./mkshastra/airootfs/etc/gshadow
 }
 
 # Set the keyboard layout
 setkeylayout () {
-echo "KEYMAP="${KEYMP}"" > ./ezreleng/airootfs/etc/vconsole.conf
+echo "KEYMAP="${KEYMP}"" > ./mkshastra/airootfs/etc/vconsole.conf
 }
 
 # Create 00-keyboard.conf file
 crtkeyboard () {
-mkdir -p ./ezreleng/airootfs/etc/X11/xorg.conf.d
+mkdir -p ./mkshastra/airootfs/etc/X11/xorg.conf.d
 echo "Section \"InputClass\"
         Identifier \"system-keyboard\"
         MatchIsKeyboard \"on\"
         Option \"XkbLayout\" \""${KEYMP}"\"
         Option \"XkbModel\" \""${KEYMOD}"\"
-EndSection" > ./ezreleng/airootfs/etc/X11/xorg.conf.d/00-keyboard.conf
+EndSection" > ./mkshastra/airootfs/etc/X11/xorg.conf.d/00-keyboard.conf
 }
 
 # Fix 40-locale-gen.hook and create locale.conf
 crtlocalec () {
-sed -i "s/en_US/"${LCLST}"/g" ./ezreleng/airootfs/etc/pacman.d/hooks/40-locale-gen.hook
-echo "LANG="${LCLST}".UTF-8" > ./ezreleng/airootfs/etc/locale.conf
+sed -i "s/en_US/"${LCLST}"/g" ./mkshastra/airootfs/etc/pacman.d/hooks/40-locale-gen.hook
+echo "LANG="${LCLST}".UTF-8" > ./mkshastra/airootfs/etc/locale.conf
 }
 
 # Start mkarchiso
 runmkarchiso () {
-mkarchiso -v -w ./work -o ./out ./ezreleng
+mkarchiso -v -w ./work -o ./out ./mkshastra
 }
 
 # ----------------------------------------
@@ -209,7 +209,7 @@ rootuser
 handlerror
 prepreqs
 cleanup
-cpezreleng
+cpmkshastra
 addnmlinks
 cpshastrarepo
 #nalogin 
