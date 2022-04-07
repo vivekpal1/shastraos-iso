@@ -295,7 +295,7 @@ gtk-engine-murrine
 # Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
 gnome-shell-extensions
 gnome-shell-extension-x11gestures
-gnome-shell-extension-appindicator
+gnome-shell-extension-dash-to-dock
 
 # Theming
 catppuccin-grub-theme-git
