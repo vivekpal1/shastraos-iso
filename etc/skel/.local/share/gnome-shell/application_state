@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<application-state>
+  <context id="">
+    <application id="org.gnome.Nautilus.desktop" score="14" last-seen="1649099578"/>
+    <application id="org.gnome.Extensions.desktop" score="50" last-seen="1649099287"/>
+    <application id="gnome-background-panel.desktop" score="0" last-seen="0"/>
+    <application id="org.gnome.tweaks.desktop" score="7" last-seen="1649099095"/>
+    <application id="org.gnome.Shell.Extensions.desktop" score="3" last-seen="1649099325"/>
+    <application id="org.gnome.Software.desktop" score="0" last-seen="1649099578"/>
+    <application id="org.gnome.gedit.desktop" score="4" last-seen="1649099519"/>
+    <application id="gnome-control-center.desktop" score="2" last-seen="1649099129"/>
+    <application id="brave-browser.desktop" score="1" last-seen="1649099537"/>
+    <application id="org.manjaro.pamac.manager.desktop" score="7" last-seen="1649099387"/>
+  </context>
+</application-state>
