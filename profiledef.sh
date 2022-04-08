@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="Shastra-pre"
-iso_label="Shastra-pre_$(date +%Y%m)"
+iso_name="ShastraDignity-Beta"
+iso_label="ShastraDignity-Beta_$(date +%Y%m)"
 iso_publisher="Shastra OS"
 iso_application="ShastraOS DVD"
 iso_version="$(date +%Y.%m.%d)"
