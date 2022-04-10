@@ -1,28 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- *
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- *
- * tognee Layout Created By: tognee https://gitlab.com/tognee
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Gio, Gtk, Shell, St} = imports.gi;
@@ -41,6 +16,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.RIGHT,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -65,7 +41,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'margin-box'
         });
         this.mainBox.add_child(this.subMainBox);
 
@@ -90,7 +65,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 10px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.appBox.add_child(this.searchBox.actor);
         }
         this.appBox.add_child(this.applicationsScrollBox);
@@ -108,7 +83,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.backButton.actor);
         this.appBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 0px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.appBox.add_child(this.searchBox.actor);
         }
         

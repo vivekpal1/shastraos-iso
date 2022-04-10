@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gio, GLib, Gtk, Shell, St} = imports.gi;
@@ -29,6 +6,7 @@ const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
 const MW = Me.imports.menuWidgets;
+const PlaceDisplay = Me.imports.placeDisplay;
 const PopupMenu = imports.ui.popupMenu;
 const Utils =  Me.imports.utils;
 const _ = Gettext.gettext;
@@ -39,6 +17,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.BOTTOM_CENTERED,
             ColumnSpacing: 0,
             RowSpacing: 0,
             VerticalMainBox: true,
@@ -83,7 +62,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
-            style: "padding-bottom: 10px;"
+            style: "padding-bottom: 10px; spacing: 8px;",
+            style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
             clip_to_allocation: true,
@@ -97,8 +77,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.arcMenu.box.style = "padding-bottom:0px;";
-        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(186, 196,201, 0.1); padding: 12px 25px;"+
+        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px; background-color:rgba(10, 10, 15, 0.1); padding: 12px 25px;"+
                                             "border-color: rgba(186, 196,201, 0.2); border-top-width: 1px;";
         this.themeNodeBorderRadius = "";
         this.actionsContainerBox = new St.BoxLayout({
@@ -160,24 +139,16 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style: 'spacing: 10px;'
         });
-        let path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOWNLOAD);
-        if (path !== null){
-            let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Downloads"));
-            let isContainedInCategory = false;
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.quickLinksBox.add_child(placeMenuItem.actor);
-        }
+        let isContainedInCategory = false;
+        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        if(filesButton.shouldShow)
+            this.quickLinksBox.add_child(filesButton);
 
-        path = GLib.get_user_special_dir(GLib.UserDirectory.DIRECTORY_DOCUMENTS);
-        if (path !== null){
-            let placeInfo = new MW.PlaceInfo(Gio.File.new_for_path(path), _("Documents"));
-            let isContainedInCategory = false;
-            let placeMenuItem = new MW.PlaceMenuItem(this, placeInfo, Constants.DisplayType.BUTTON, isContainedInCategory);
-            this.quickLinksBox.add_child(placeMenuItem.actor);
-        }
+        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.quickLinksBox.add_child(terminalButton);
 
-        let settingsButton = new MW.SettingsButton(this);
-        this.quickLinksBox.add_child(settingsButton.actor);
+        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.quickLinksBox.add_child(settingsButton);
 
         this.leaveButton = new MW.LeaveButton(this);
         this.quickLinksBox.add_child(this.leaveButton.actor);
@@ -188,23 +159,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton);
         this.frequentAppsHeader = this._createNavigationButtons(_("Frequent"), null);
 
+        this.updateStyle();
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
 
         this.disableFrequentAppsID = this._settings.connect("changed::eleven-disable-frequent-apps", () => this.setDefaultMenuView());
-    }
-
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
     }
 
     loadPinnedApps(){
@@ -268,28 +229,20 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.setGridLayout(Constants.DisplayType.GRID, 6, 0, false);
     }
 
-    updateStyle(){
-        super.updateStyle();
-        let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
-       
-        let themeNode = this.arcMenu.actor.get_theme_node();
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
+    updateStyle(){       
+        let themeNode = this.arcMenu.box.get_theme_node();
+        let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         borderRadius = borderRadius / scaleFactor;
         this.themeNodeBorderRadius = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + this.themeNodeBorderRadius;
-        
-        if(removeMenuArrow)
-            this.arcMenu.box.style = "padding-bottom:0px; margin:0px;";
-        else
-            this.arcMenu.box.style = "padding-bottom:0px;";
+        this.arcMenu.box.style = "padding-bottom: 0px; padding-left: 0px; padding-right: 0px;";
     }
 
     setGridLayout(displayType, columns, spacing, setStyle = true){
         if(setStyle){
             this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
-            displayType === Constants.DisplayType.LIST ? this.applicationsBox.add_style_class_name('margin-box') : this.applicationsBox.remove_style_class_name('margin-box');
         }
         this.applicationsGrid.layout_manager.column_spacing = spacing;
         this.applicationsGrid.layout_manager.row_spacing = spacing;
@@ -345,9 +298,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _createNavigationButtons(buttonTitle, ButtonClass){
         let navButton = this.createLabelRow(buttonTitle);
-        navButton.remove_child(navButton._ornamentLabel);
         navButton.label.y_align = Clutter.ActorAlign.CENTER;
-        navButton.label.style = 'padding: 15px 0px;';
         navButton.style = 'padding: 0px 25px;'
         if(ButtonClass)
             navButton.add_child(new ButtonClass(this));
@@ -355,7 +306,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _onSearchBoxChanged(searchBox, searchString){
-        this.applicationsBox.remove_style_class_name('margin-box');
         if(!searchBox.isEmpty())
             this._hideNavigationButtons();
         super._onSearchBoxChanged(searchBox, searchString);       
@@ -363,7 +313,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     destroy(){        
         this.arcMenu.box.style = null;
-        this.arcMenu.actor.style = null;
         this.backButton.destroy();
         this.allAppsButton.destroy();
         if(this.disableFrequentAppsID){

@@ -23,6 +23,7 @@ ArcMenu is provided free of charge. If you enjoy using ArcMenu and wish to help 
 
 -----
 
+
 ### Installation
 
 #### To install the most recent official release: Visit ArcMenu on the [Official GNOME Extensions](https://extensions.gnome.org/extension/3628/arcmenu/) website.
@@ -55,7 +56,6 @@ When reporting a bug, please provide as much information as you can about the is
 Additional credits:
 * The 'ArcMenu' layout design is insipired by the Zorin OS menu extension.
 * ArcMenu utilizes various code from GNOME Shell and the GNOME Shell extensions package.
-* Borrowed code from Dash-to-Dock's extension 'location.js' file to implement a trash shortcut in ArcMenu.
 
 -----
 
@@ -82,7 +82,7 @@ Additional credits:
  **@[Ivan](https://gitlab.com/vantu5z), @[Ser82-png](https://gitlab.com/Ser82-png) - Russian** | **@[gkkulik](https://gitlab.com/gkkulik) - Silesian** | **@[vikaig](https://gitlab.com/vikaig) - Ukrainian** | **@[jordim](https://gitlab.com/jordim) - Catalan** | **@[aylinux](https://gitlab.com/aylinux) - Turkish**
  
 
-**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky), @[panmourovaty ](https://gitlab.com/panmourovaty) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
+**@[MorganAntonsson](https://gitlab.com/MorganAntonsson) - Swedish** | **@[jiri.doubravsky](https://gitlab.com/jiri.doubravsky) - Czech** | **@[juanlucer](https://gitlab.com/juanlucer) - Spanish** | **@[plesry](https://gitlab.com/plesry) - Chinese (Taiwan)** | **@[Vombato](https://gitlab.com/Vombato), @[matguidi](https://gitlab.com/matguidi) - Italian**
 
 **@[skygmin](https://gitlab.com/skygmin) - Simplified Chinese** | **@[Vistaus](https://gitlab.com/Vistaus), @[vinno97](https://gitlab.com/vinno97) - Dutch** | **@[artnay](https://gitlab.com/artnay) - Finnish** |  **@[rimasx](https://gitlab.com/rimasx) - Estonian** | **@[stevendobay](https://gitlab.com/stevendobay) - Hungarian** 
 

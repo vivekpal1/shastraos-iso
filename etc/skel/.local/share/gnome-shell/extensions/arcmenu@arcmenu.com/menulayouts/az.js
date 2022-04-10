@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gio, GLib, Gtk, Shell, St} = imports.gi;
@@ -39,6 +16,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.BOTTOM_CENTERED,
             ColumnSpacing: 4,
             RowSpacing: 4,
             VerticalMainBox: true,
@@ -55,7 +33,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){
         super.createLayout();
 
-        this.topBoxStyle = "margin: 0px 0px 10px 0px; spacing: 0px; background-color: rgba(186, 196,201, 0.1); padding: 11px 5px;"+
+        this.topBoxStyle = "margin: 0px 0px 10px 0px; spacing: 0px; background-color: rgba(10, 10, 15, 0.1); padding: 11px 5px;"+
                             "border-color:rgba(186, 196,201, 0.2); border-bottom-width: 1px;";
 
         this.topBox = new St.BoxLayout({
@@ -66,7 +44,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style: this.topBoxStyle
         });
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px;";
 
         this.subMainBox= new St.BoxLayout({
             x_expand: true,
@@ -87,7 +65,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
-            style: "padding-bottom: 10px;"
+            style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
         this.applicationsScrollBox = this._createScrollBox({
             clip_to_allocation: true,
@@ -101,7 +80,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(186, 196,201, 0.1) ; padding: 12px 5px;"+
+        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(10, 10, 15, 0.1) ; padding: 12px 5px;"+
                                         "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
         
         this.actionsContainerBox = new St.BoxLayout({
@@ -129,39 +108,30 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsContainerBox.add_child(this.actionsBox);
 
         this.user = new MW.UserMenuItem(this, Constants.DisplayType.LIST);
-        this.user.x_expand = true;
-        this.user.x_align = Clutter.ActorAlign.FILL;
-        this.actionsBox.add_child(this.user.actor);
+        this.actionsBox.add_child(this.user);
 
-
-        let filesButton = new MW.ShortcutMenuItem(this, _("Files"), "system-file-manager", "org.gnome.Nautilus.desktop", Constants.DisplayType.BUTTON);
+        let isContainedInCategory = false;
+        let filesButton = this.createMenuItem([_("Files"), "", "org.gnome.Nautilus.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
         if(filesButton.shouldShow)
-            this.actionsBox.add_child(filesButton.actor);
+            this.actionsBox.add_child(filesButton);
 
-        let settingsButton = new MW.SettingsButton(this);
-        this.actionsBox.add_child(settingsButton.actor);
+        let terminalButton = this.createMenuItem([_("Terminal"), "", "org.gnome.Terminal.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(terminalButton);
+
+        let settingsButton = this.createMenuItem([_("Settings"),"", "org.gnome.Settings.desktop"], Constants.DisplayType.BUTTON, isContainedInCategory);
+        this.actionsBox.add_child(settingsButton);
 
         this.leaveButton = new MW.LeaveButton(this);
-        this.actionsBox.add_child(this.leaveButton.actor);
+        this.actionsBox.add_child(this.leaveButton);
 
         this.backButton = this._createNavigationButtons(_("All Apps"), MW.BackButton)
         this.allAppsButton = this._createNavigationButtons(_("Pinned"), MW.AllAppsButton)
 
+        this.updateStyle();
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.setDefaultMenuView();
-    }
-
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
     }
 
     loadPinnedApps(){
@@ -197,10 +167,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     updateStyle(){
-        super.updateStyle();
-        
-        let themeNode = this.arcMenu.actor.get_theme_node();
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let themeNode = this.arcMenu.box.get_theme_node();
+        let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         borderRadius = borderRadius / scaleFactor;
@@ -209,13 +177,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         const RoundTopBorder = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + RoundBottomBorder;
         this.topBox.style = this.topBoxStyle + RoundTopBorder;
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px;";
     }
 
     setGridLayout(displayType, columns, spacing, setStyle = true){
         if(setStyle){
             this.applicationsGrid.x_align = displayType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER;
-            displayType === Constants.DisplayType.LIST ? this.applicationsBox.add_style_class_name('margin-box') : this.applicationsBox.remove_style_class_name('margin-box');
         }
 
         this.applicationsGrid.layout_manager.column_spacing = spacing;
@@ -260,7 +227,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _createNavigationButtons(buttonTitle, ButtonClass){
         let navButton = this.createLabelRow(buttonTitle);
-        navButton.remove_child(navButton._ornamentLabel);
         navButton.label.y_align = Clutter.ActorAlign.CENTER;
         navButton.style = 'padding: 0px 15px 10px 15px;'
         navButton.add_child(new ButtonClass(this));
@@ -268,7 +234,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _onSearchBoxChanged(searchBox, searchString){
-        this.applicationsBox.remove_style_class_name('margin-box');
         if(!searchBox.isEmpty())
             this._hideNavigationButtons();
         super._onSearchBoxChanged(searchBox, searchString);       
@@ -276,7 +241,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     destroy(){        
         this.arcMenu.box.style = null;
-        this.arcMenu.actor.style = null;
         this.leaveButton.destroy();
         this.backButton.destroy();
         this.allAppsButton.destroy();

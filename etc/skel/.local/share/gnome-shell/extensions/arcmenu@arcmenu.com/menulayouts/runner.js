@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gtk, Shell, St} = imports.gi;
@@ -73,14 +50,12 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             vertical: false,
             style: "margin: 5px 0px 0px 0px;"
         });
-
-        this.searchBox.style = "margin: 0px 0px 0px 16px;";
         this.runnerTweaksButton = new MW.RunnerTweaksButton(this);
         this.runnerTweaksButton.actor.x_expand = false;
         this.runnerTweaksButton.actor.y_expand = true;
         this.runnerTweaksButton.actor.y_align = this.searchBox.y_align = Clutter.ActorAlign.CENTER;
         this.runnerTweaksButton.actor.x_align = Clutter.ActorAlign.CENTER;
-        this.runnerTweaksButton.actor.style = "margin: 0px 6px;";
+        this.runnerTweaksButton.actor.style = "margin: 0px 0px 0px 6px;";
 
         this.topBox.add_child(this.searchBox.actor);
         this.topBox.add_child(this.runnerTweaksButton);
@@ -91,7 +66,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             x_align: Clutter.ActorAlign.START,
-            overlay_scrollbars: false,
+            overlay_scrollbars: true,
             style_class: this.disableFadeEffect ? '' : 'small-vfade',
             reactive:true
         });
@@ -99,7 +74,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.applicationsScrollBox);
         this.applicationsBox = new St.BoxLayout({ 
             vertical: true,
-            style: "margin: 5px 6px 0px 16px;"
+            style: "margin: 5px 0px 0px 0px;"
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.activeMenuItem = null;
@@ -153,11 +128,6 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
     }
 
     updateLocation(){
-        if(!this.rise){
-            let themeNode = this.arcMenu.actor.get_theme_node();
-            this.rise = themeNode.get_length('-arrow-rise');
-        }
-        this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
         this.arcMenu._boxPointer.setSourceAlignment(0.5);
         this.arcMenu._arrowAlignment = 0.5;
         
@@ -165,7 +135,7 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
 
         //Position the runner menu in the center of the current monitor, at top of screen.
         let positionX = Math.round(rect.x + (rect.width / 2));
-        let positionY = rect.y + (this._settings.get_boolean('runner-use-theme-gap') ? this.rise : 0);
+        let positionY = rect.y;
         if(this._settings.get_enum('runner-position') == 1)
             positionY = Math.round(rect.y + (rect.height / 2) - 125);
         this.dummyCursor.set_position(positionX,  positionY);
@@ -181,23 +151,14 @@ var createMenu =  class extends BaseMenuLayout.BaseLayout{
             this.mainBox.style += `font-size: ${this._runnerFontSize}pt;`
             this.searchBox.style += `font-size: ${this._runnerFontSize}pt;`
         }
-        else{
-            this.searchBox.style = "margin: 0px 0px 0px 16px;";
-        }
         this.topBox.style = `width: ${this._runnerWidth}px; margin: 5px 0px 0px 0px;`;
         this.applicationsScrollBox.style = `width: ${this._runnerWidth}px;`;
-    }
-
-    updateStyle(){
-        super.updateStyle();
-        this.arcMenu.actor.style = "-arrow-base:0px; -arrow-rise:0px;";
     }
 
     loadCategories(){
     }
 
     destroy(){
-        this.arcMenu.actor.style = null;
         this.arcMenu.sourceActor = this.oldSourceActor;
         this.arcMenu.focusActor = this.oldFocusActor;
         this.arcMenu._boxPointer.setPosition(this.oldSourceActor, this.oldArrowAlignment);

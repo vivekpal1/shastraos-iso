@@ -19,6 +19,7 @@ var RecentFilesSearchProvider = class {
         this.isRemoteProvider = true;
         this.canLaunchSearch = false;
         this.recentFilesManager = recentFilesManager;
+
         this._recentFiles = [];
 
         this.appInfo = {

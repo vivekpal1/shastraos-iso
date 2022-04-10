@@ -108,4 +108,3 @@ var RecentFilesManager = class Arc_Menu_RecentFilesManager {
         this._recentManager = null;
     }
 }
-

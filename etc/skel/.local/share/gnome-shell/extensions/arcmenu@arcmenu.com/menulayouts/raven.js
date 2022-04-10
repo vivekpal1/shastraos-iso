@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gtk, St} = imports.gi;
@@ -39,6 +16,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.BOTTOM_CENTERED,
             ColumnSpacing: 10,
             RowSpacing: 10,
             DefaultMenuWidth: 410,
@@ -78,8 +56,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         else
             this.activeCategory = _("All Programs");
 
-        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px"; 
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
+        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px; margin: 0px;";
+        this.arcMenu.box.style = "padding: 0px; margin: 0px; border-radius: 0px;";
+
         this.actionsBoxContainer = new St.BoxLayout({
             x_expand: false,
             y_expand: true,
@@ -97,7 +76,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.actionsBoxContainer.add_child(this.actionsBox);
         this.actionsBox.style = "spacing: 5px;";
-        this.actionsBoxContainerStyle =  "margin: 0px 0px 0px 0px; spacing: 10px; background-color: rgba(186, 196,201, 0.1); padding: 5px 5px;"+
+        this.actionsBoxContainerStyle =  "margin: 0px 0px 0px 0px; spacing: 10px; background-color: rgba(10, 10, 15, 0.1); padding: 5px 5px;"+
                                          "border-color: rgba(186, 196,201, 0.2);";
         
 
@@ -120,13 +99,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
-        this.searchBox.style = "margin: 25px 10px 10px 10px;";
+        this.searchBox.style = "margin: 10px 10px 10px 10px;";
         this.topBox.add_child(this.searchBox.actor);
 
         this.applicationsBox = new St.BoxLayout({
             x_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style: "padding-bottom: 10px;"
+            style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({
@@ -191,24 +171,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.appShortcuts.push(shortcutMenuItem);
         }
 
+        this.updateLocation();
         this.updateWidth();
         this._updatePosition();
         this.loadCategories();
         this.loadPinnedApps();
 
         this.setDefaultMenuView();
-    }
-
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.weatherBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
     }
 
     _updatePosition(){
@@ -257,6 +226,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.activeCategory = _("Pinned Apps");
             this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
             this.displayPinnedApps();
+            let topCategory = this.categoryDirectories.values().next().value;
+            this.setActiveCategory(topCategory);
         }
         else{
             this.activeCategory = _("All Programs");
@@ -264,17 +235,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.displayAllApps(isGridLayout);   
             this.activeCategoryType = Constants.CategoryType.ALL_PROGRAMS;
         }
-        this.activeMenuItem = this.categoryDirectories.values().next().value;
-        if(this.arcMenu.isOpen)
-            this.activeMenuItem.active = true;
-    }
-
-    updateStyle(){
-        super.updateStyle();
-
-        this.arcMenu.actor.style = "-arrow-base: 0px; -arrow-rise: 0px; -boxpointer-gap: 0px; -arrow-border-radius: 0px;";
-        this.arcMenu.box.style = "padding-bottom: 0px; padding-top: 0px; margin: 0px;";
-        this.updateLocation();
     }
 
     loadCategories() {
@@ -338,7 +298,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         label.actor.style += "padding-left: 10px;";
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
-        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -351,7 +310,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.subMainBox.remove_child(this.weatherBox);
         }
 
-        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 

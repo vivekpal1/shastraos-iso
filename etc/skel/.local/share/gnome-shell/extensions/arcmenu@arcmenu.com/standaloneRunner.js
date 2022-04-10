@@ -1,25 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 
@@ -28,6 +6,8 @@ const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const Main = imports.ui.main;
+const MenuButton = Me.imports.menuButton;
+const MW = Me.imports.menuWidgets;
 const PopupMenu = imports.ui.popupMenu;
 const Utils = Me.imports.utils;
 const _ = Gettext.gettext;
@@ -37,31 +17,29 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
         this._settings = settings;
 
         this.tooltipShowing = false;
-        this.tooltipHidingID = null;
         this.tooltipShowingID = null;
-        this.dtpNeedsRelease = false;
+
+        this.tooltip = new MW.Tooltip(this);
 
         this.dummyWidget = new St.Widget({ width: 0, height: 0, opacity: 0 });
         Main.uiGroup.add_child(this.dummyWidget);
 
         //Create Main Menus - ArcMenu and arcMenu's context menu
-        this.arcMenu = new ArcMenu(this.dummyWidget, 0.5, St.Side.TOP, this);
+        this.arcMenu = new MenuButton.ArcMenu(this.dummyWidget, 0.5, St.Side.TOP, this);
         this.arcMenu.connect('open-state-changed', this._onOpenStateChanged.bind(this));
+
+        this.arcMenu.actor.add_style_class_name('panel-menu');
+        this.arcMenu.actor.add_style_class_name('arcmenu-menu');
 
         this.menuManager = new PopupMenu.PopupMenuManager(Main.panel);
         this.menuManager._changeMenu = (menu) => {};
         this.menuManager.addMenu(this.arcMenu);
 
-        if(!this.rise){
-            let themeNode = this.arcMenu.actor.get_theme_node();
-            this.rise = themeNode.get_length('-arrow-rise');
-        }
-        
         let rect = Main.layoutManager.getWorkAreaForMonitor(Main.layoutManager.primaryMonitor.index);
 
         //Position the runner menu in the center of the current monitor, at top of screen.
         let positionX = Math.round(rect.x + (rect.width / 2));
-        let positionY = rect.y + this.rise;
+        let positionY = rect.y;
         this.dummyWidget.set_position(positionX, positionY);
         
         //Context Menus for applications and other menu items
@@ -133,12 +111,14 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     createMenuLayout(){
+        if(this.tooltip)
+            this.tooltip.sourceActor = null;
         this._forcedMenuLocation = false;
-        this.arcMenu.actor.style = null;
         this.arcMenu.removeAll();
         this.section = new PopupMenu.PopupMenuSection();
-        this.arcMenu.addMenuItem(this.section);            
+        this.arcMenu.addMenuItem(this.section);
         this.mainBox = new St.BoxLayout({
+            reactive: true,
             vertical: false,
             x_expand: true,
             y_expand: true,
@@ -150,8 +130,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
 
         const StandaloneRunner = true;
         this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
-        this.updateStyle();
-
         if(this.arcMenu.isOpen){
             if(this.MenuLayout.activeMenuItem)
                 this.MenuLayout.activeMenuItem.active = true;
@@ -161,17 +139,15 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     reloadMenuLayout(){
+        if(this.tooltip)
+            this.tooltip.sourceActor = null;
         this._forcedMenuLocation = false;
 
         this.MenuLayout.destroy();
         this.MenuLayout = null;
-        
-        this.arcMenu.actor.style = null;
 
         const StandaloneRunner = true;
         this.MenuLayout = Utils.getMenuLayout(this, Constants.MenuLayout.RUNNER, StandaloneRunner);
-    
-        this.updateStyle();
 
         if(this.arcMenu.isOpen){
             if(this.MenuLayout.activeMenuItem)
@@ -179,17 +155,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             else
                 this.mainBox.grab_key_focus();
         }
-    }
-
-    updateStyle(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-
-        this.arcMenu.actor.set_style_class_name(null);
-        this.arcMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.arcMenu.actor.add_style_class_name(customStyle ? 'arc-menu' : 'popup-menu');
-
-        if(this.MenuLayout)
-            this.MenuLayout.updateStyle();   
     }
 
     toggleMenu(){
@@ -236,11 +201,8 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
             this.tooltipShowingID = null;
         }
 
-        if (this.tooltipHidingID) {
-            GLib.source_remove(this.tooltipHidingID);
-            this.tooltipHidingID = null;
-        }
-
+        if(this.tooltip)
+            this.tooltip.destroy();
         if(this._installedChangedId){
             appSys.disconnect(this._installedChangedId);
             this._installedChangedId = null;
@@ -257,24 +219,6 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
     }
 
     updateMenuLayout(){
-        this.tooltipShowing = false;
-        if (this.tooltipShowingID) {
-            GLib.source_remove(this.tooltipShowingID);
-            this.tooltipShowingID = null;
-        }     
-        if (this.tooltipHidingID) {
-            GLib.source_remove(this.tooltipHidingID);
-            this.tooltipHidingID = null;
-        }    
-        if(this.MenuLayout){
-            this.MenuLayout.destroy();
-            this.MenuLayout = null;
-        }
-        this.updateMenuLayoutID = GLib.timeout_add(0, 100, () => {
-            this.createMenuLayout();
-            this.updateMenuLayoutID = null;
-            return GLib.SOURCE_REMOVE;
-        });  
     }
 
     loadExtraPinnedApps(){
@@ -328,49 +272,7 @@ var StandaloneRunner = class Arc_Menu_StandaloneRunner{
                 if(this.activeTooltip){
                     this.activeTooltip.hide();
                 }
-
-                if (this.tooltipHidingID) {
-                    GLib.source_remove(this.tooltipHidingID);
-                    this.tooltipHidingID = null;
-                }
             }
-        }
-    }
-};
-
-var ArcMenu = class Arc_Menu_ArcMenu extends PopupMenu.PopupMenu{
-    constructor(sourceActor, arrowAlignment, arrowSide, standaloneRunner) {
-        super(sourceActor, arrowAlignment, arrowSide);
-        this._settings = sourceActor._settings;
-        this.standaloneRunner = standaloneRunner;
-        Main.uiGroup.add_child(this.actor);
-        this.actor.hide();
-        this._boxPointer.set_offscreen_redirect(Clutter.OffscreenRedirect.ON_IDLE);
-        this._menuClosedID = this.connect('menu-closed', () => this.standaloneRunner.setDefaultMenuView());
-        this.connect('destroy', () => this._onDestroy());
-    }
-
-    open(animate){
-        if(!this.isOpen)
-            this.standaloneRunner.arcMenu.actor._muteInput = false;
-        super.open(animate);
-    }
-
-    close(animate){
-        if(this.isOpen){
-            if(this.standaloneRunner.contextMenuManager.activeMenu)
-                this.standaloneRunner.contextMenuManager.activeMenu.toggle();
-            if(this.standaloneRunner.subMenuManager.activeMenu)
-                this.standaloneRunner.subMenuManager.activeMenu.toggle();
-        }
-
-        super.close(animate);
-    }
-
-    _onDestroy(){
-        if(this._menuClosedID){
-            this.disconnect(this._menuClosedID)
-            this._menuClosedID = null;
         }
     }
 };

@@ -1,37 +1,15 @@
 /*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * Credits: This file leverages the work from GNOME Shell search.js file 
+ * Credits: This file leverages the work from GNOME Shell search.js file
  * (https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/master/js/ui/search.js)
  */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const {Clutter, Gio, GLib, GObject, Shell, St } = imports.gi;
 const AppDisplay = imports.ui.appDisplay;
 const appSys = Shell.AppSystem.get_default();
 const Constants = Me.imports.constants;
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
+const { Highlighter } = imports.misc.util;
 const MW = Me.imports.menuWidgets;
-const PopupMenu = imports.ui.popupMenu;
 const { RecentFilesManager } = Me.imports.recentFilesManager;
 const RemoteSearch = imports.ui.remoteSearch;
 const Utils =  Me.imports.utils;
@@ -59,7 +37,7 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
         this.layout = this._settings.get_enum('menu-layout');
 
         if(this.provider.id === 'org.gnome.Nautilus.desktop' || this.provider.id === 'arcmenu.recent-files')
-            this._path = this.metaInfo['description'];
+            this.parentFolderPath = this.metaInfo['description'];
 
         let highlightSearchResultTerms = this._settings.get_boolean('highlight-search-result-terms');
         if(highlightSearchResultTerms){
@@ -67,15 +45,34 @@ var ListSearchResult = GObject.registerClass(class Arc_Menu_ListSearchResult ext
             this._highlightTerms();
         }
 
+        //Force show calculator metaInfo description even if 'show-search-result-details' off.
+        //otherwise equation solution wouldn't appear.
         let showSearchResultDescriptions = this._settings.get_boolean("show-search-result-details");
-        if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions)
-            this.label.text = this.metaInfo['name'] + " " + this.metaInfo['description'];
+        if(this.metaInfo['description'] && this.provider.appInfo.get_id() === 'org.gnome.Calculator.desktop' && !showSearchResultDescriptions){
+            this.remove_child(this.label);
+
+            let labelBox = new St.BoxLayout({
+                x_expand: true,
+                x_align: Clutter.ActorAlign.FILL,
+                style: 'spacing: 8px;'
+            });
+            let descriptionText = this.metaInfo['description'].split('\n')[0];
+            this.descriptionLabel = new St.Label({
+                text: descriptionText,
+                y_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+                style: "font-weight: lighter;"
+            });
+            labelBox.add_child(this.label);
+            labelBox.add_child(this.descriptionLabel);
+            this.add_child(labelBox);
+        }
 
         if(!this.app && this.metaInfo['description'])
             this.description = this.metaInfo['description'].split('\n')[0];
         this.connect('destroy', this._onDestroy.bind(this));
     }
-    
+
     _onDestroy() {
         if (this._termsChangedId) {
             this.resultsView.disconnect(this._termsChangedId);
@@ -168,7 +165,7 @@ var SearchResultsBase = GObject.registerClass({
     _createResultDisplay(meta) {
         if (this.provider.createResultObject)
             return this.provider.createResultObject(meta, this.resultsView);
-        
+
         return null;
     }
 
@@ -215,7 +212,7 @@ var SearchResultsBase = GObject.registerClass({
                 }
 
                 metasNeeded.forEach((resultId, i) => {
-                    let meta = metas[i];                    
+                    let meta = metas[i];
                     let display = this._createResultDisplay(meta);
                     this._resultDisplays[resultId] = display;
                 });
@@ -232,7 +229,10 @@ var SearchResultsBase = GObject.registerClass({
             callback();
         } else {
             let maxResults = this._getMaxDisplayedResults();
-            let results = this.provider.filterResults(providerResults, maxResults);
+            let results = maxResults > -1
+                ? this.provider.filterResults(providerResults, maxResults)
+                : providerResults;
+
             let moreCount = Math.max(providerResults.length - results.length, 0);
 
             this._ensureResultActors(results, successful => {
@@ -250,7 +250,7 @@ var SearchResultsBase = GObject.registerClass({
                 results.forEach(resultId => {
                     this._addItem(this._resultDisplays[resultId]);
                 });
-               
+
                 this._setMoreCount(this.provider.canLaunchSearch ? moreCount : 0);
                 this.show();
                 callback();
@@ -267,7 +267,7 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
         this.searchType = this._menuLayout.layoutProperties.SearchDisplayType;
         this._settings = this._menuLayout._settings;
         this.layout = this._settings.get_enum('menu-layout');
-        
+
         this._container = new St.BoxLayout({
             vertical: true,
             x_align: Clutter.ActorAlign.FILL,
@@ -275,10 +275,6 @@ class ArcMenu_ListSearchResults extends SearchResultsBase {
             x_expand: true,
             y_expand: true,
         });
-
-        if(this.searchType === Constants.DisplayType.GRID){
-            this.add_style_class_name('margin-box');
-        }
 
         this.providerInfo = new ArcSearchProviderInfo(provider, this._menuLayout);
         this.providerInfo.connect('activate', () => {
@@ -342,32 +338,32 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         this.layoutProperties = this._menuLayout.layoutProperties;
         this.searchType = this.layoutProperties.SearchDisplayType;
         this.layout = this._menuLayout._settings.get_enum('menu-layout');
-        
+
         this.itemCount = 0;
         this.gridTop = -1;
         this.gridLeft = 0;
-        
+
         this.rtl = this._menuLayout.mainBox.get_text_direction() == Clutter.TextDirection.RTL;
 
-        let layout = new Clutter.GridLayout({ 
+        let layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL,
             column_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.ColumnSpacing : 0,
             row_spacing: this.searchType === Constants.DisplayType.GRID ? this.layoutProperties.RowSpacing : 0,
         });
-        this._grid = new St.Widget({ 
+        this._grid = new St.Widget({
             x_expand: true,
             x_align: this.searchType === Constants.DisplayType.LIST ? Clutter.ActorAlign.FILL : Clutter.ActorAlign.CENTER,
-            layout_manager: layout 
+            layout_manager: layout
         });
         layout.hookup_style(this._grid);
 
         if(this.searchType === Constants.DisplayType.GRID){
             let spacing = this.layoutProperties.ColumnSpacing;
 
-            this._grid.style = "padding: 0px 0px 10px 0px; spacing: " + spacing + "px;";   
+            this._grid.style = "padding: 0px 0px 10px 0px; spacing: " + spacing + "px;";
             this._resultDisplayBin.x_align = Clutter.ActorAlign.CENTER;
         }
-            
+
         this._resultDisplayBin.set_child(this._grid);
     }
 
@@ -375,7 +371,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         let maxDisplayedResults;
         if(this.searchType === Constants.DisplayType.GRID)
             maxDisplayedResults = this._menuLayout.getColumnsFromGridIconSizeSetting();
-        else 
+        else
             maxDisplayedResults = this._settings.get_int('max-search-results');
         return maxDisplayedResults;
     }
@@ -386,7 +382,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         this.gridLeft = 0;
         this._grid.remove_all_children();
     }
-    
+
     _createResultDisplay(meta) {
         return new AppSearchResult(this.provider, meta, this.resultsView);
     }
@@ -403,7 +399,7 @@ class ArcMenu_AppSearchResults extends SearchResultsBase {
         }
         this._grid.layout_manager.attach(display, this.gridLeft, this.gridTop, 1, 1);
         display.gridLocation = [this.gridLeft, this.gridTop];
-        
+
         if(!this.rtl)
             this.gridLeft++;
         else if(this.rtl)
@@ -429,7 +425,7 @@ var SearchResults = GObject.registerClass({
             vertical: true,
             y_expand: true,
             x_expand: true,
-            x_align: Clutter.ActorAlign.FILL  
+            x_align: Clutter.ActorAlign.FILL
         });
         this._menuLayout = menuLayout;
         this.layoutProperties = this._menuLayout.layoutProperties;
@@ -439,24 +435,19 @@ var SearchResults = GObject.registerClass({
 
         this._content = new St.BoxLayout({
             vertical: true,
-            x_align: Clutter.ActorAlign.FILL  
+            x_align: Clutter.ActorAlign.FILL
         });
- 
+
         this.add_child(this._content);
-       
+
         this._statusText = new St.Label();
-        this._statusBin = new St.Bin({ 
+        this._statusBin = new St.Bin({
             x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER,
             x_expand: true,
-            y_expand: true  
+            y_expand: true
         });
 
-        if(menuLayout._settings.get_boolean('enable-custom-arc-menu'))
-            this._statusText.style_class = 'arc-menu-status-text';
-        else
-            this._statusText.style_class = '';
-        
         this.add_child(this._statusBin);
         this._statusBin.set_child(this._statusText);
 
@@ -469,7 +460,7 @@ var SearchResults = GObject.registerClass({
 
         this._providers = [];
 
-        this._highlightRegex = null;
+        this._highlighter = new Highlighter();
 
         this.recentFilesManager = new RecentFilesManager();
 
@@ -490,7 +481,7 @@ var SearchResults = GObject.registerClass({
 
         this.connect('destroy', this._onDestroy.bind(this));
     }
-    
+
     get terms() {
         return this._terms;
     }
@@ -673,17 +664,7 @@ var SearchResults = GObject.registerClass({
         if (this._searchTimeoutId === null)
             this._searchTimeoutId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 150, this._onSearchTimeout.bind(this));
 
-        
-
-        const escapedTerms = terms
-            .map(term => Shell.util_regex_escape(term))
-            .filter(term => term.length > 0);
-
-        if (escapedTerms.length === 0)
-            return;
-
-        this._highlightRegex = new RegExp('(%s)'.format(
-            escapedTerms.join('|')), 'gi');
+        this._highlighter = new Highlighter(this._terms);
 
         this.emit('terms-changed');
     }
@@ -779,7 +760,7 @@ var SearchResults = GObject.registerClass({
     getTopResult(){
         return this._defaultResult;
     }
-    
+
     getProviders(){
         return this._providers;
     }
@@ -801,9 +782,9 @@ var SearchResults = GObject.registerClass({
         if(!result)
             return;
 
-        if(selected)
+        if(selected && !result.has_style_pseudo_class('active'))
             result.add_style_pseudo_class('active');
-        else
+        else if(!selected)
             result.remove_style_pseudo_class('active');
     }
 
@@ -811,28 +792,11 @@ var SearchResults = GObject.registerClass({
         return (this._defaultResult ? true : false) && this._highlightDefault;
     }
 
-    highlightTerms(text) {
-        if (!this._highlightRegex)
-            return GLib.markup_escape_text(text, -1);
+    highlightTerms(description) {
+        if (!description)
+            return '';
 
-        let escaped = [];
-        let lastMatchEnd = 0;
-        let match;
-        while ((match = this._highlightRegex.exec(text))) {
-            if (match.index > lastMatchEnd) {
-                let unmatched = GLib.markup_escape_text(
-                    text.slice(lastMatchEnd, match.index), -1);
-                escaped.push(unmatched);
-            }
-            let matched = GLib.markup_escape_text(match[0], -1);
-            escaped.push('<b>%s</b>'.format(matched));
-            lastMatchEnd = match.index + match[0].length;
-        }
-        let unmatched = GLib.markup_escape_text(
-            text.slice(lastMatchEnd), -1);
-        escaped.push(unmatched);
-
-        return escaped.join('');
+        return this._highlighter.highlight(description);
     }
 });
 
@@ -847,7 +811,7 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
         if(this.description)
             this.description = this.description.split('\n')[0];
 
-        this.label = new St.Label({ 
+        this.label = new St.Label({
             text: provider.appInfo.get_name(),
             x_align: Clutter.ActorAlign.START,
             y_align: Clutter.ActorAlign.CENTER,
@@ -855,7 +819,7 @@ var ArcSearchProviderInfo = GObject.registerClass(class Arc_Menu_ArcSearchProvid
         });
 
         this.label.style = 'font-weight: bold;';
-        this.style = "padding: 10px 0px;";
+        this.style = "padding: 10px 12px;";
         this.add_child(this.label);
 
         this._moreText = "";

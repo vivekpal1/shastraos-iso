@@ -1,15 +1,25 @@
 <?xml version="1.0"?>
 <application-state>
   <context id="">
-    <application id="org.gnome.Nautilus.desktop" score="14" last-seen="1649099578"/>
-    <application id="org.gnome.Extensions.desktop" score="50" last-seen="1649099287"/>
-    <application id="gnome-background-panel.desktop" score="0" last-seen="0"/>
-    <application id="org.gnome.tweaks.desktop" score="7" last-seen="1649099095"/>
-    <application id="org.gnome.Shell.Extensions.desktop" score="3" last-seen="1649099325"/>
+    <application id="org.gnome.tweaks.desktop" score="21" last-seen="1649524113"/>
+    <application id="brave-browser.desktop" score="43" last-seen="1649523491"/>
     <application id="org.gnome.Software.desktop" score="0" last-seen="1649099578"/>
-    <application id="org.gnome.gedit.desktop" score="4" last-seen="1649099519"/>
-    <application id="gnome-control-center.desktop" score="2" last-seen="1649099129"/>
-    <application id="brave-browser.desktop" score="1" last-seen="1649099537"/>
+    <application id="org.gnome.Shell.Extensions.desktop" score="11" last-seen="1649524207"/>
+    <application id="xterm.desktop" score="1" last-seen="1649523975"/>
+    <application id="gnome-background-panel.desktop" score="0" last-seen="0"/>
+    <application id="calamares.desktop" score="1" last-seen="1649523908"/>
+    <application id="org.gnome.Epiphany.desktop" score="0" last-seen="1649524049"/>
+    <application id="org.gnome.gedit.desktop" score="18" last-seen="1649524794"/>
+    <application id="org.gnome.eog.desktop" score="0" last-seen="1649523080"/>
+    <application id="org.gnome.Nautilus.desktop" score="102" last-seen="1649524792"/>
+    <application id="shotwell.desktop" score="7" last-seen="1649523120"/>
+    <application id="org.gnome.Terminal.desktop" score="15" last-seen="1649524648"/>
+    <application id="org.gnome.PackageUpdater.desktop" score="0" last-seen="1649499937"/>
+    <application id="org.gnome.Music.desktop" score="0" last-seen="1649524011"/>
+    <application id="yelp.desktop" score="1" last-seen="1649500334"/>
     <application id="org.manjaro.pamac.manager.desktop" score="7" last-seen="1649099387"/>
+    <application id="gnome-system-monitor.desktop" score="0" last-seen="1649524148"/>
+    <application id="org.gnome.Extensions.desktop" score="58" last-seen="1649523510"/>
+    <application id="org.gnome.Settings.desktop" score="13" last-seen="1649524070"/>
   </context>
 </application-state>
