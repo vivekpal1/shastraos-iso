@@ -92,9 +92,8 @@ rmunitsd () {
 [[ -f ./mkshastra/airootfs/etc/xdg/reflector/reflector.conf ]] && rm ./mkshastra/airootfs/etc/xdg/reflector/reflector.conf
 }
 
-# Add Bluetooth, cups, haveged, NetworkManager, & gdm systemd links,    REMOVE getty@tty1.service.d if deleting autometic login
+# Add Bluetooth, cups, haveged, NetworkManager, & gdm systemd links,
 addnmlinks () {
-[[ ! -d ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d
 [[ ! -d ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/multi-user.target.wants
 [[ ! -d ./mkshastra/airootfs/etc/systemd/system/network-online.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/network-online.target.wants
 [[ ! -d ./mkshastra/airootfs/etc/systemd/system/printer.target.wants ]] && mkdir -p ./mkshastra/airootfs/etc/systemd/system/printer.target.wants

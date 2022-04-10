@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- *
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 const Gettext = imports.gettext.domain(Me.metadata['gettext-domain']);
 const _ = Gettext.gettext;
@@ -38,9 +15,12 @@ var MenuItemLocation = {
 var DisplayType = {
     LIST: 0,
     GRID: 1,
-    BUTTON: 2,
-    SIMPLE_CATEGORY: 3,
-    SUBMENU_CATEGORY: 4,
+    BUTTON: 2
+}
+
+var AvatarStyle = {
+    ROUND: 0,
+    SQUARE: 1
 }
 
 var CategoryType = {
@@ -68,7 +48,8 @@ var PrefsVisiblePage = {
     LAYOUT_TWEAKS: 3,
     ABOUT: 4,
     CUSTOMIZE_MENU: 5,
-    RUNNER_TWEAKS: 6
+    RUNNER_TWEAKS: 6,
+    GENERAL: 7,
 }
 
 var DefaultMenuViewTognee = {
@@ -87,16 +68,16 @@ var Categories = [
     {CATEGORY: CategoryType.RECENT_FILES, NAME: _("Recent Files"), ICON: 'document-open-recent-symbolic', FULL_COLOR_ICON: 'document-open-recent'}
 ]
 
-var ArcMenuPlacement = {
-    PANEL: 0,
-    DTP: 1,
-    DASH: 2
-};
-
 var TooltipLocation = {
     TOP_CENTERED: 0,
     BOTTOM_CENTERED: 1,
     BOTTOM: 2,
+};
+
+var ContextMenuLocation = {
+    DEFAULT: 0,
+    BOTTOM_CENTERED: 1,
+    RIGHT: 2,
 };
 
 var SeparatorAlignment = {
@@ -185,13 +166,6 @@ var RunnerHotKey = {
     0: SUPER_L,
 };
 
-var HotCornerAction = {
-    DEFAULT: 0,
-    DISABLED: 1,
-    TOGGLE_ARCMENU: 2,
-    CUSTOM: 3
-}
-
 var SECTIONS = [
     'devices',
     'network',
@@ -214,6 +188,16 @@ var DiaglogType = {
     OTHER: 1,
     APPLICATIONS: 2,
     DIRECTORIES: 3
+};
+
+var MenuSettingsListType = {
+    PINNED_APPS: 0,
+    APPLICATIONS: 1,
+    DIRECTORIES: 2,
+    OTHER: 3,
+    POWER_OPTIONS: 4,
+    EXTRA_CATEGORIES: 5,
+    QUICK_LINKS: 6
 };
 
 var MenuButtonAppearance = {
@@ -245,13 +229,13 @@ var SleepIcon = {
 };
 
 var PowerOptions = [
-    { TYPE: PowerType.LOGOUT, IMAGE: 'application-exit-symbolic', TITLE: _("Log Out") },
-    { TYPE: PowerType.LOCK, IMAGE: 'changes-prevent-symbolic', TITLE: _("Lock") },
-    { TYPE: PowerType.RESTART, IMAGE: 'system-reboot-symbolic', TITLE: _("Restart") },
-    { TYPE: PowerType.POWER_OFF, IMAGE: 'system-shutdown-symbolic', TITLE: _("Power Off") },
-    { TYPE: PowerType.SUSPEND, IMAGE: 'media-playback-pause-symbolic', TITLE: _("Suspend") },
-    { TYPE: PowerType.HYBRID_SLEEP, IMAGE: Me.path + SleepIcon.PATH, TITLE: _("Hybrid Sleep") },
-    { TYPE: PowerType.HIBERNATE, IMAGE: 'document-save-symbolic', TITLE: _("Hibernate") },
+    { TYPE: PowerType.LOGOUT, ICON: 'application-exit-symbolic', NAME: _("Log Out") },
+    { TYPE: PowerType.LOCK, ICON: 'changes-prevent-symbolic', NAME: _("Lock") },
+    { TYPE: PowerType.RESTART, ICON: 'system-reboot-symbolic', NAME: _("Restart") },
+    { TYPE: PowerType.POWER_OFF, ICON: 'system-shutdown-symbolic', NAME: _("Power Off") },
+    { TYPE: PowerType.SUSPEND, ICON: 'media-playback-pause-symbolic', NAME: _("Suspend") },
+    { TYPE: PowerType.HYBRID_SLEEP, ICON: Me.path + SleepIcon.PATH, NAME: _("Hybrid Sleep") },
+    { TYPE: PowerType.HIBERNATE, ICON: 'document-save-symbolic', NAME: _("Hibernate") },
 ];
 
 var MenuIcons = [
@@ -358,21 +342,19 @@ var MenuLayout = {
     MINT: 4,
     ELEMENTARY: 5,
     GNOME_OVERVIEW: 6,
-    SIMPLE: 7,
-    SIMPLE_2: 8,
-    REDMOND: 9,
-    UNITY: 10,
-    BUDGIE: 11,
-    INSIDER: 12,
-    RUNNER: 13,
-    CHROMEBOOK: 14,
-    RAVEN: 15,
-    TOGNEE: 16,
-    PLASMA: 17,
-    WINDOWS: 18,
-    LAUNCHER: 19,
-    ELEVEN: 20,
-    AZ: 21,
+    REDMOND: 7,
+    UNITY: 8,
+    BUDGIE: 9,
+    INSIDER: 10,
+    RUNNER: 11,
+    CHROMEBOOK: 12,
+    RAVEN: 13,
+    TOGNEE: 14,
+    PLASMA: 15,
+    WINDOWS: 16,
+    LAUNCHER: 17,
+    ELEVEN: 18,
+    AZ: 19,
 };
 
 var TraditionalMenus = [
@@ -402,10 +384,6 @@ var LauncherMenus = [
     { IMAGE: 'runner-layout-symbolic', TITLE: _('Runner'), LAYOUT: MenuLayout.RUNNER},
     { IMAGE: 'gnomeoverview-layout-symbolic', TITLE: _('GNOME Overview'), LAYOUT: MenuLayout.GNOME_OVERVIEW}];
 
-var SimpleMenus = [
-    { IMAGE: 'simple-layout-symbolic', TITLE: _('Simple'), LAYOUT: MenuLayout.SIMPLE},
-    { IMAGE: 'simple2-layout-symbolic', TITLE: _('Simple 2'), LAYOUT: MenuLayout.SIMPLE_2}];
-
 var AlternativeMenus = [
     { IMAGE: 'raven-layout-symbolic', TITLE: _('Raven'), LAYOUT: MenuLayout.RAVEN}];
 
@@ -414,7 +392,6 @@ var MenuStyles = {
         { IMAGE: 'traditional-category-symbolic', TITLE: _("Traditional"), MENU_TYPE: TraditionalMenus },
         { IMAGE: 'modern-category-symbolic', TITLE: _("Modern"), MENU_TYPE: ModernMenus },
         { IMAGE: 'touch-category-symbolic', TITLE: _("Touch"), MENU_TYPE: TouchMenus },
-        { IMAGE: 'simple-category-symbolic', TITLE: _("Simple"), MENU_TYPE: SimpleMenus },
         { IMAGE: 'launcher-category-symbolic', TITLE: _("Launcher"), MENU_TYPE: LauncherMenus },
         { IMAGE: 'alternative-category-symbolic', TITLE: _("Alternative"), MENU_TYPE: AlternativeMenus }
     ]
@@ -444,17 +421,17 @@ var DistroIconsDisclaimer = '<i>"All brand icons are trademarks of their respect
                                 '\n\n•   <b>Red Hat, Inc.©</b> - Copyright 2020 name and logo' +
                                 '\n\n•   <b>ZORIN OS</b> - The "Z" logomark is a registered trademark of Zorin Technology Group Ltd. Copyright © 2019 - 2021 Zorin Technology Group Ltd';
 
-var DEVELOPERS = '<b>Andrew Zaech</b> <a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a>\nLead Project Developer and Maintainer\t' +
-                '\n\n<b>LinxGem33</b> aka <b>Andy C</b> <a href="https://gitlab.com/LinxGem33">@LinxGem33</a> - <b>(Inactive)</b>\nArcMenu Founder - Former Maintainer - Former Digital Art Designer';
-var TRANSLATORS = '<b>Thank you to all translators!</b>\n\n' +
-                    '<b>For a list of all translators please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
-var CONTRIBUTORS = '<b>Thank you to all who contributed to, and/or helped, the developement of ArcMenu!</b>'
-                    +'\n\n<b>For a list of all contributors please visit <a href="https://gitlab.com/arcmenu/ArcMenu">ArcMenu on GitLab</a></b>';
-var ARTWORK = '<b>LinxGem33</b> aka <b>Andy C</b>\nWiki Screens, Icons, Wire-Frames, ArcMenu Assets' +
-                '\n\n<b>Andrew Zaech</b>\nIcons, Wire-Frames';
+var DEVELOPERS = '<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Current ArcMenu Maintainer and Developer' +
+                '\n\n<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - ArcMenu Founder, Former Maintainer, Digital Art Designer';
+var CONTRIBUTORS = '<b>Thank you to all contributors and translators</b>\n\n' +
+                    '<b><a href="https://gitlab.com/arcmenu/ArcMenu#contributors">Contributors</a></b> - ' +
+                    '<b><a href="https://gitlab.com/arcmenu/ArcMenu#translators">Translators</a></b>';
+var ARTWORK = '<b>ArcMenu Artwork</b>\n\n' +
+                '<b><a href="https://gitlab.com/LinxGem33">@AndyC</a></b> - Menu Icons, Settings Icons, Wire-Frame Icons, other ArcMenu Assets' +
+                '\n\n<b><a href="https://gitlab.com/AndrewZaech">@AndrewZaech</a></b> - Menu Icons, Wire-Frame Icons';
 
 var GNU_SOFTWARE = '<span size="small">' +
     'This program comes with absolutely no warranty.\n' +
     'See the <a href="https://gnu.org/licenses/old-licenses/gpl-2.0.html">' +
-	'GNU General Public License, version 2 or later</a> for details.' +
-	'</span>';
+    'GNU General Public License, version 2 or later</a> for details.' +
+    '</span>';

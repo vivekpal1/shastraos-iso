@@ -290,10 +290,13 @@ chrome-gnome-shell
 gnome-tweaks
 xf86-input-libinput
 gtk-engine-murrine
-
+gnome-builder
+totem
+gnome-notes
 
 # Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
 gnome-shell-extensions
+extension-manager
 gnome-shell-extension-x11gestures
 gnome-shell-extension-dash-to-dock
 
@@ -301,9 +304,12 @@ gnome-shell-extension-dash-to-dock
 catppuccin-grub-theme-git
 catppuccin-gtk-theme
 volantes-cursors
+# uncomment plank if not using other docks
+# plank
+gnome-terminal-transparency
 
 #Applications
-neofetch
+vlc
 pavucontrol
 tldr
 gestures
@@ -311,14 +317,35 @@ libinput-gestures
 preload
 timeshift
 touchegg
-flameshot
 fragments
+android-tools
+android-udev
+gimp
+openshot
+deja-dup
+gnome-chess
+shotwell
+
+etherwall
+electrum
+kwalletmanager
+
+#office
+abiword
+gnumeric
+spice-up
+simple-scan
+gnucash
 
 # Other and dependencies
+adwaita-qt6
+adwaita-qt
+blueprint-compiler-git
+ckbcomp
 archlinux-appstream-data-pamac
 qgnomeplatform
 qgnomeplatform-qt6
-
+text-engine
 
 # Display Manager
 gdm

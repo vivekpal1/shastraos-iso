@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- *
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gtk, Shell, St} = imports.gi;
@@ -37,6 +14,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: true,
+            DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
@@ -55,11 +33,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 5px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.mainBox.add_child(this.searchBox.actor);
         }
 
-        this.buttonPressEventID = global.stage.connect("button-press-event", () => {
+        this.buttonPressEventID = this.mainBox.connect("button-press-event", () => {
             if(this.arcMenu.isOpen && this.backButton.visible){
                 let event = Clutter.get_current_event();
                 if(event.get_button() === 8){
@@ -74,7 +52,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'margin-box'
         });
         this.mainBox.add_child(this.subMainBox);
 
@@ -83,7 +60,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             vertical: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'left-panel'
         });
 
         //Applications Box - Contains Favorites, Categories or programs
@@ -91,7 +67,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true
         });
@@ -103,7 +79,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             vertical: true,
             x_expand: true,
             y_expand: true,
-            y_align: Clutter.ActorAlign.END
+            y_align: Clutter.ActorAlign.END,
         });
         let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
         this.navigateBox.add_child(separator);
@@ -115,13 +91,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.navigateBox.add_child(this.viewProgramsButton.actor);
         this.leftBox.add_child(this.navigateBox);
         if(this._settings.get_enum('searchbar-default-bottom-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 5px 10px 0px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.leftBox.add_child(this.searchBox.actor);
         }
 
         this.rightBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'right-panel'
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -150,7 +125,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.shortcutsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
 
         this.shortcutsScrollBox.add_actor(this.shortcutsBox);
@@ -216,7 +191,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.CENTER,
             y_expand: true,
             y_align: Clutter.ActorAlign.END,
-            style: "spacing: 6px; padding: 0px;"
+            style: "spacing: 6px;"
         });
 
         let powerOptions = this._settings.get_value("power-options").deep_unpack();
@@ -225,6 +200,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             let shouldShow = powerOptions[i][1];
             if(shouldShow){
                 let powerButton = new MW.PowerButton(this, powerType);
+                powerButton.style = "margin: 0px;"
                 this.actionsBox.add_child(powerButton);
             }
         }
@@ -243,9 +219,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.navigateBox.insert_child_above(this.extraCategoriesLinksBox, this.navigateBox.get_child_at_index(0));
         this.extraCategoriesLinksBox.add_child(this.extraCategoriesSeparator);
 
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-
         this.setDefaultMenuView();
     }
 
@@ -389,10 +365,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     displayCategoryAppList(appList, category){
-        super.displayCategoryAppList(appList, category);
         this.extraCategoriesLinksBox.hide();
-        this.backButton.actor.show();
         this.viewProgramsButton.actor.hide();
+        this.backButton.actor.show();
+        super.displayCategoryAppList(appList, category);
     }
 
     displayFrequentApps(){
@@ -448,7 +424,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     destroy(){
         if(this.buttonPressEventID){
-            global.stage.disconnect(this.buttonPressEventID);
+            this.mainBox.disconnect(this.buttonPressEventID);
             this.buttonPressEventID = null;
         }
         super.destroy()

@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gtk, St} = imports.gi;
@@ -35,6 +12,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: false,
+            DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
@@ -56,7 +34,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: false,
-            style_class: 'margin-box'
         });
         this.mainBox.add_child(this.subMainBox);
 
@@ -65,7 +42,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             vertical: true,
-            style_class: 'right-panel-plus45'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -74,7 +50,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus45 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         }); 
         
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -86,7 +62,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_align: Clutter.ActorAlign.FILL,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'left-panel'
         });
         
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -99,7 +74,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 
@@ -117,19 +92,25 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.activitiesBox.add_child(activities.actor);
         this.leftBox.add_child(this.activitiesBox);
 
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
-
         this.setDefaultMenuView(); 
+    }
+
+    updateWidth(setDefaultMenuView){
+        let leftPanelWidthOffset = 0;
+        let rightPanelWidthOffset = 45;
+        super.updateWidth(setDefaultMenuView, leftPanelWidthOffset, rightPanelWidthOffset);
     }
 
     setDefaultMenuView(){
         super.setDefaultMenuView();
         this.displayCategories();
-        this.categoryDirectories.values().next().value.displayAppList();
-        this.activeMenuItem = this.categoryDirectories.values().next().value;
-        if(this.arcMenu.isOpen)
-            this.activeMenuItem.active = true;
+
+        let topCategory = this.categoryDirectories.values().next().value;
+        topCategory.displayAppList();
+        this.setActiveCategory(topCategory);
     }
 
     loadCategories(){

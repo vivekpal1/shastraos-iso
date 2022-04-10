@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Gio, Gtk, Shell, St} = imports.gi;
@@ -58,7 +35,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     createLayout(){     
         super.createLayout();
         this.activeResult = null;
-        this.searchProvidersBoxStyle = "padding: 0px 15px; margin-bottom: 10px; height: 50px; background-color: rgba(186, 196, 201, 0.1); border-color:rgba(186, 196, 201, 0.2); border-bottom-width: 1px;"
+        this.arcMenu.box.style = "padding-top: 0px; padding-left: 0px; padding-right: 0px; margin: 0px;";
+        this.searchProvidersBoxStyle = "spacing: 4px; padding: 3px 15px; margin-bottom: 10px; background-color: rgba(186, 196, 201, 0.1); border-color:rgba(186, 196, 201, 0.2); border-bottom-width: 1px;"
         this.themeNodeBorderRadius = "";
         this.searchProvidersBox = new St.BoxLayout({
             x_expand: true,
@@ -75,12 +53,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: false,
-            style_class: 'margin-box'
         });
         this.mainBox.add_child(this.subMainBox);
 
         this.searchBox.name = "ArcSearchEntryRound";
-        this.searchBox.style = "margin: 0px 10px;";
+        this.searchBox.style_class = 'arcmenu-search-bottom';
         this.searchTermsChangedID = this.searchResults.connect('have-results', () => {
             this.searchResultsChangedEvent();
         });
@@ -124,8 +101,9 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.subMainBox.add_child(this.applicationsScrollBox);
         this.mainBox.add_child(this.searchBox);
         this.activeCategoryType = Constants.CategoryType.HOME_SCREEN;
-        this.arcMenu.box.style = "padding-top: 0px;";
         this.hasPinnedApps = true;
+
+        this.updateStyle();
         this.loadPinnedApps();
         this.loadCategories();
 
@@ -193,11 +171,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let providerName = provider.appInfo ? provider.appInfo.get_name() : provider;
     
         let providerMenuItem = new MW.ArcMenuPopupBaseMenuItem(this);
-        providerMenuItem.name = "arc-menu-launcher-button";
+        providerMenuItem.name = "arcmenu-launcher-button";
         providerMenuItem.x_expand = false;
         providerMenuItem.remove_child(providerMenuItem._ornamentLabel);
         providerMenuItem.x_align = Clutter.ActorAlign.START;
-        providerMenuItem.style = 'padding: 10px 14px; margin: 0px;';
         providerMenuItem.provider = provider;
         let label = new St.Label({
             text: _(providerName),
@@ -311,6 +288,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _createMoreProvidersMenu(){
         this.moreProvidersMenu = new PopupMenu.PopupMenu(this.moreItem, 0.5, St.Side.TOP);
+        this.moreProvidersMenu.actor.add_style_class_name('popup-menu context-menu');
         this.moreProvidersMenu.connect('open-state-changed', (menu, open) => {
             if(!open)
                 this.moreItem.remove_style_class_name("active-item");
@@ -343,10 +321,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     toggleMoreProvidersMenu(){
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.moreProvidersMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.moreProvidersMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
-
         this.moreProvidersMenu.toggle();
     }
 
@@ -365,19 +339,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     updateStyle(){
-        super.updateStyle();
-        let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
-        let themeNode = this.arcMenu.actor.get_theme_node();
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let themeNode = this.arcMenu.box.get_theme_node();
+        let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         borderRadius = borderRadius / scaleFactor;
         this.themeNodeBorderRadius = "border-radius: " + borderRadius + "px " + borderRadius + "px 0px 0px;";
         this.searchProvidersBox.style = this.searchProvidersBoxStyle + this.themeNodeBorderRadius;
-        if(removeMenuArrow)
-            this.arcMenu.box.style = "padding-top: 0px; margin: 0px;";
-        else
-            this.arcMenu.box.style = "padding-top: 0px;";
     }
 
     _clearActorsFromBox(box){
@@ -421,13 +389,13 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             return;
 
         let app = activeResult.app ? activeResult.app : null;
-        let path = activeResult._path ? activeResult._path : null;
+        let path = activeResult.parentFolderPath ? activeResult.parentFolderPath : null;
 
         this.activeResultMenuItem = new MW.ApplicationMenuItem(this, app, Constants.DisplayType.GRID, activeResult.metaInfo);
         this.activeResultMenuItem.name = "ExtraLargeIconGrid";
         this.activeResultMenuItem.provider = activeResult.provider;
         this.activeResultMenuItem.resultsView = activeResult.resultsView;
-        this.activeResultMenuItem._path = path;
+        this.activeResultMenuItem.parentFolderPath = path;
         this.activeResultMenuItem.x_expand = false;
         this.activeResultMenuItem.x_align = Clutter.ActorAlign.CENTER;
         let iconSize = 76;

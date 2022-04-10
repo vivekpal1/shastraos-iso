@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Gtk, Shell, St} = imports.gi;
@@ -39,6 +16,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             Search: true,
             DisplayType: Constants.DisplayType.GRID,
             SearchDisplayType: Constants.DisplayType.GRID,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.BOTTOM_CENTERED,
             ColumnSpacing: 15,
             RowSpacing: 15,
             VerticalMainBox: true,
@@ -90,7 +68,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         this.applicationsBox = new St.BoxLayout({
             vertical: true,
-            style: "padding-bottom: 10px;"
+            style: "padding-bottom: 10px;",
+            style_class: 'arcmenu-margin-box'
         });
 
         this.applicationsScrollBox = this._createScrollBox({
@@ -104,9 +83,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.subMainBox.add_child(this.applicationsScrollBox);
 
-        this.arcMenu.box.style = "padding-bottom:0px;";
-
-        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(186, 196,201, 0.1) ; padding: 5px 5px;"+
+        this.actionsContainerBoxStyle = "margin: 0px; spacing: 0px;background-color:rgba(10, 10, 15, 0.1) ; padding: 5px 5px;"+
                                             "border-color:rgba(186, 196,201, 0.2) ; border-top-width: 1px;";
         this.themeNodeBorderRadius = "";
         this.actionsContainerBox = new St.BoxLayout({
@@ -181,6 +158,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this.appShortcuts.push(shortcutMenuItem);
         }
 
+        this.updateStyle();
         this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
@@ -188,17 +166,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.loadExtraPinnedApps();
 
         this.setDefaultMenuView();
-    }
-
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
     }
 
     _addSeparator(){
@@ -230,11 +197,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         let software = Utils.findSoftwareManager();
         if(software)
-            pinnedApps.push(_("Software"), 'system-software-install-symbolic', software);
+            pinnedApps.push(_("Software"), '', software);
         else
             pinnedApps.push(_("Computer"), "ArcMenu_Computer", "ArcMenu_Computer");
         
-        pinnedApps.push(_("Files"), "system-file-manager", "org.gnome.Nautilus.desktop");
+        pinnedApps.push(_("Files"), "", "org.gnome.Nautilus.desktop");
         pinnedApps.push(_("Log Out"), "application-exit-symbolic", "ArcMenu_LogOut");
         pinnedApps.push(_("Lock"), "changes-prevent-symbolic", "ArcMenu_Lock");
         pinnedApps.push(_("Power Off"), "system-shutdown-symbolic", "ArcMenu_PowerOff");
@@ -247,6 +214,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
     _createCategoriesMenu(){
         this.categoriesMenu = new PopupMenu.PopupMenu(this.categoriesButton.actor, 0.5, St.Side.TOP);
+        this.categoriesMenu.actor.add_style_class_name('popup-menu arcmenu-menu');
         this.categoriesMenu.blockSourceEvents = true;
         this.categoriesMenu.connect('open-state-changed', (menu, open) => {
             if(open){
@@ -285,7 +253,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
        
         this.categoriesBox = new St.BoxLayout({
             vertical: true,
-            style_class: 'margin-box'
         });     
         this.categoriesScrollBox.add_actor(this.categoriesBox);
         this.categoriesScrollBox.clip_to_allocation = true;
@@ -304,11 +271,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     toggleCategoriesMenu(){
         let appsScrollBoxAdj = this.categoriesScrollBox.get_vscroll_bar().get_adjustment();
         appsScrollBoxAdj.set_value(0);
-
-        let customStyle = this._settings.get_boolean('enable-custom-arc-menu');
-        this.categoriesMenu.actor.style_class = customStyle ? 'arc-menu-boxpointer': 'popup-menu-boxpointer';
-        this.categoriesMenu.actor.add_style_class_name( customStyle ? 'arc-menu' : 'popup-menu');
-        this.categoriesButton.tooltip.hide();
 
         this.categoriesMenu.toggle();
     }
@@ -330,21 +292,15 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     updateStyle(){
-        super.updateStyle();
-        let removeMenuArrow = this._settings.get_boolean('remove-menu-arrow'); 
-       
-        let themeNode = this.arcMenu.actor.get_theme_node();
-        let borderRadius = themeNode.get_length('-arrow-border-radius');
+        let themeNode = this.arcMenu.box.get_theme_node();
+        let borderRadius = themeNode.get_length('border-radius');
         let monitorIndex = Main.layoutManager.findIndexForActor(this.menuButton);
         let scaleFactor = Main.layoutManager.monitors[monitorIndex].geometry_scale;
         borderRadius = borderRadius / scaleFactor;
         this.themeNodeBorderRadius = "border-radius: 0px 0px " + borderRadius + "px " + borderRadius + "px;";
         this.actionsContainerBox.style = this.actionsContainerBoxStyle + this.themeNodeBorderRadius;
-        
-        if(removeMenuArrow)
-            this.arcMenu.box.style = "padding-bottom:0px; margin:0px;";
-        else
-            this.arcMenu.box.style = "padding-bottom:0px;";
+
+        this.arcMenu.box.style = "padding-bottom: 0px; padding-left: 0px; padding-right: 0px;";
     }
 
     loadCategories() {
@@ -403,7 +359,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         let label = this._createLabelWithSeparator(_("Recent Files"));
         this.applicationsBox.insert_child_at_index(label, 0);
         this.activeCategoryType = Constants.CategoryType.RECENT_FILES;
-        this.applicationsBox.add_style_class_name('margin-box');
     }
 
     displayCategoryAppList(appList, category){
@@ -417,7 +372,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(this.subMainBox.contains(this.widgetBox)){
             this.subMainBox.remove_child(this.widgetBox);
         }
-        this.applicationsBox.remove_style_class_name('margin-box');
         super._clearActorsFromBox(box);
     }
 
@@ -438,7 +392,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             this._weatherItem.destroy();
         
         this.arcMenu.box.style = null;
-        this.arcMenu.actor.style = null;
 
         super.destroy();
     }

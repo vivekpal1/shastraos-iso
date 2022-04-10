@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gio, GLib, Gtk, Shell, St} = imports.gi;
@@ -36,6 +13,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: true,
+            DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
             GridColumns: 1,
@@ -54,8 +32,12 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         super.createLayout();
 
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 10px 5px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
+            this.searchBox.style = "margin-bottom: 0px;";
             this.mainBox.add_child(this.searchBox.actor);
+
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MEDIUM, Constants.SeparatorAlignment.HORIZONTAL);
+            this.mainBox.add_child(separator);
         }
 
         //subMainBox stores left and right box
@@ -64,7 +46,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'margin-box'
         });
         this.mainBox.add_child(this.subMainBox);
         
@@ -73,7 +54,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
             vertical: true,
-            style_class: 'right-panel-plus70'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -83,7 +63,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus70 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
         this.applicationsScrollBox.add_actor(this.applicationsBox);
         this.rightBox.add_child(this.applicationsScrollBox);
@@ -106,7 +86,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'left-panel-small ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
         });
 
         this.leftBox.add_child(this.categoriesScrollBox);
@@ -120,7 +100,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.END
         });
-        this.actionsBox.style = "padding: 5px 0px 0px 0px;"
         this.leftBox.add_child(this.actionsBox);
         
         //create new section for Power, Lock, Logout, Suspend Buttons
@@ -145,15 +124,22 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.leftBox.add_child(this.sessionBox);
         
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 10px 0px 10px;";
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.mainBox.add_child(this.searchBox.actor); 
         }
 
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.loadExtraPinnedApps();
 
         this.setDefaultMenuView();
+    }
+
+    updateWidth(setDefaultMenuView){
+        let leftPanelWidthOffset = -70;
+        let rightPanelWidthOffset = 70;
+        super.updateWidth(setDefaultMenuView, leftPanelWidthOffset, rightPanelWidthOffset);
     }
 
     loadExtraPinnedApps(){
@@ -164,7 +150,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
 
         for(let i = 0;i < pinnedApps.length; i += 3){
             let isContainedInCategory = false;
-            let placeMenuItem = this.createMenuItem([pinnedApps[i],pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);     
+            let placeMenuItem = this.createMenuItem([pinnedApps[i], pinnedApps[i+1], pinnedApps[i+2]], Constants.DisplayType.LIST, isContainedInCategory);     
             if(placeMenuItem){
                 this.actionsBox.add_child(placeMenuItem.actor);
             }
@@ -176,10 +162,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     setDefaultMenuView(){
         super.setDefaultMenuView();
         this.displayCategories();
-        this.categoryDirectories.values().next().value.displayAppList();
-        this.activeMenuItem = this.categoryDirectories.values().next().value;
-        if(this.arcMenu.isOpen)
-            this.activeMenuItem.active = true;
+
+        let topCategory = this.categoryDirectories.values().next().value;
+        topCategory.displayAppList();
+        this.setActiveCategory(topCategory);
     }
     
     loadCategories(){

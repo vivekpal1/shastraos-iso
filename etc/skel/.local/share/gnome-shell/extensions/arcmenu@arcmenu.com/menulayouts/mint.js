@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, GLib, Gio, Gtk, Shell, St} = imports.gi;
@@ -37,8 +14,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     constructor(menuButton) {
         super(menuButton, {
             Search: true,
+            DualPanelMenu: true,
             DisplayType: Constants.DisplayType.LIST,
             SearchDisplayType: Constants.DisplayType.LIST,
+            ShortcutContextMenuLocation: Constants.ContextMenuLocation.RIGHT,
             GridColumns: 1,
             ColumnSpacing: 0,
             RowSpacing: 0,
@@ -56,8 +35,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         //Stores the Pinned Icons on the left side
         this.actionsScrollBox = new St.ScrollView({
             x_expand: false,
-            y_expand: false,
-            y_align: Clutter.ActorAlign.START,
+            y_expand: true,
+            y_align: Clutter.ActorAlign.CENTER,
             overlay_scrollbars: true,
             style_class: 'small-vfade'
         });   
@@ -68,11 +47,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.actionsScrollBox.add_actor(this.actionsBox);
         this.actionsScrollBox.clip_to_allocation = true;
         
-        this.actionsScrollBox.style = "padding: 21px 0px; width: 62px; margin: 0px 10px 10px 20px; background-color:rgba(186, 196,201, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 5px;";
+        this.actionsScrollBox.style = "padding: 10px 0px; width: 62px; margin: 0px 8px 0px 0px; background-color:rgba(10, 10, 15, 0.1); border-color:rgba(186, 196,201, 0.2); border-width: 1px; border-radius: 8px;";
         this.actionsBox.style = "spacing: 10px;";
-        //check if custom ArcMenu is enabled
-        if( this._settings.get_boolean('enable-custom-arc-menu'))
-            this.actionsBox.add_style_class_name('arc-menu');
 
         this.mainBox.add_child(this.actionsScrollBox);
         this.rightMenuBox = new St.BoxLayout({ 
@@ -83,12 +59,14 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         });
         this.mainBox.add_child(this.rightMenuBox);
 
+        this.searchBox.style = "margin: 0px;";
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.TOP){
-            this.searchBox.style = "margin: 0px 20px 10px 8px;";
+            this.searchBox.style_class = 'arcmenu-search-top';
             this.rightMenuBox.add_child(this.searchBox.actor);
+
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+            this.rightMenuBox.add_child(separator);
         }
-        else
-            this.rightMenuBox.style = "margin-top: 10px;";
         
         //Sub Main Box -- stores left and right box
         this.subMainBox = new St.BoxLayout({
@@ -96,7 +74,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true,
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
-            style_class: 'margin-box'
         });
         this.rightMenuBox.add_child(this.subMainBox);
 
@@ -105,7 +82,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'right-panel-plus45'
         });
 
         this.applicationsBox = new St.BoxLayout({
@@ -115,7 +91,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.applicationsScrollBox = this._createScrollBox({
             y_align: Clutter.ActorAlign.START,
             overlay_scrollbars: true,
-            style_class: 'right-panel-plus45 ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
         });   
 
         this.applicationsScrollBox.add_actor(this.applicationsBox);
@@ -126,7 +102,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             y_expand: true,
             y_align: Clutter.ActorAlign.FILL,
             vertical: true,
-            style_class: 'left-panel'
         });
 
         let horizonalFlip = this._settings.get_boolean("enable-horizontal-flip");
@@ -139,7 +114,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: false,
             y_align: Clutter.ActorAlign.START,
-            style_class: 'left-panel ' + (this.disableFadeEffect ? '' : 'small-vfade'),
+            style_class: (this.disableFadeEffect ? '' : 'small-vfade'),
             overlay_scrollbars: true
         });
 
@@ -149,14 +124,24 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.categoriesScrollBox.add_actor( this.categoriesBox);  
         this.categoriesScrollBox.clip_to_allocation = true;
         if(this._settings.get_enum('searchbar-default-top-location') === Constants.SearchbarLocation.BOTTOM){
-            this.searchBox.style = "margin: 10px 20px 10px 8px;";
+            let separator = new MW.ArcMenuSeparator(Constants.SeparatorStyle.MAX, Constants.SeparatorAlignment.HORIZONTAL);
+            this.rightMenuBox.add_child(separator);
+
+            this.searchBox.style_class = 'arcmenu-search-bottom';
             this.rightMenuBox.add_child(this.searchBox.actor);
         }
+
+        this.updateWidth();
         this.loadCategories();
         this.loadPinnedApps();
         this.loadExtraPinnedApps();
-
         this.setDefaultMenuView(); 
+    }
+
+    updateWidth(setDefaultMenuView){
+        let leftPanelWidthOffset = 0;
+        let rightPanelWidthOffset = 45;
+        super.updateWidth(setDefaultMenuView, leftPanelWidthOffset, rightPanelWidthOffset);
     }
 
     _addSeparator(){
@@ -167,10 +152,10 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     setDefaultMenuView(){
         super.setDefaultMenuView();
         this.displayCategories();
-        this.categoryDirectories.values().next().value.displayAppList();
-        this.activeMenuItem = this.categoryDirectories.values().next().value;
-        if(this.arcMenu.isOpen)
-            this.activeMenuItem.active = true;
+
+        let topCategory = this.categoryDirectories.values().next().value;
+        topCategory.displayAppList();
+        this.setActiveCategory(topCategory);
     }
 
     loadCategories() {
@@ -225,11 +210,11 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             pinnedApps.push(_("Home"), "ArcMenu_Home", "ArcMenu_Home");
         }
         pinnedApps.push(_("Terminal"), "utilities-terminal", "org.gnome.Terminal.desktop");
-        pinnedApps.push(_("Settings"), "emblem-system-symbolic", "gnome-control-center.desktop");
+        pinnedApps.push(_("Settings"), "emblem-system-symbolic", "org.gnome.Settings.desktop");
 
         let software = Utils.findSoftwareManager();
         if(software)
-            pinnedApps.push(_("Software"), 'system-software-install-symbolic', software);
+            pinnedApps.push(_("Software"), '', software);
         else
             pinnedApps.push(_("Documents"), "ArcMenu_Documents", "ArcMenu_Documents");
         

@@ -1,26 +1,3 @@
-/*
- * ArcMenu - A traditional application menu for GNOME 3
- *
- * ArcMenu Lead Developer and Maintainer
- * Andrew Zaech https://gitlab.com/AndrewZaech
- * 
- * ArcMenu Founder, Former Maintainer, and Former Graphic Designer
- * LinxGem33 https://gitlab.com/LinxGem33 - (No Longer Active)
- * 
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
 const Me = imports.misc.extensionUtils.getCurrentExtension();
 
 const {Clutter, Gio, GLib, Gtk, Shell, St} = imports.gi;
@@ -102,7 +79,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
             x_expand: true, 
             y_expand: true,
             y_align: Clutter.ActorAlign.START,
-            style_class: this.disableFadeEffect ? 'margin-box' : 'margin-box small-vfade',
+            style_class: this.disableFadeEffect ? '' : 'small-vfade',
             overlay_scrollbars: true,
             reactive:true,
         });
@@ -155,7 +132,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.grid.layout_manager.attach(this.leaveButton, 3, 0, 1, 1);
 
         this.categoryHeader = new MW.PlasmaCategoryHeader(this);
-        this.categoryHeader.add_style_class_name('margin-box');
 
         if(this.searchBarLocation === Constants.SearchbarLocation.BOTTOM){
             this.searchBox.style = "margin: 3px 10px 5px 10px;";
@@ -227,17 +203,6 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         this.setDefaultMenuView();
     }
 
-    updateWidth(setDefaultMenuView){
-        const widthAdjustment = this._settings.get_int("menu-width-adjustment");
-        let menuWidth = this.layoutProperties.DefaultMenuWidth + widthAdjustment;
-        //Set a 300px minimum limit for the menu width
-        menuWidth = Math.max(300, menuWidth);
-        this.applicationsScrollBox.style = `width: ${menuWidth}px;`;
-        this.layoutProperties.MenuWidth = menuWidth;
-        if(setDefaultMenuView)
-            this.setDefaultMenuView();
-    }
-
     setFrequentAppsList(categoryMenuItem){
         categoryMenuItem.appList = [];
         let mostUsed = Shell.AppUsage.get_default().get_most_used();
@@ -307,7 +272,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'bookmarks' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Bookmarks")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
+                let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_child(item); 
             } 
         }
@@ -315,7 +280,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'devices' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Devices")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
+                let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_child(item); 
             }
         }
@@ -323,7 +288,7 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
         if(id === 'network' && places.length > 0){
             this._sections[id].add_child(this.createLabelRow(_("Network")));
             for (let i = 0; i < places.length; i++){
-                let item = new PlaceDisplay.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
+                let item = new MW.PlaceMenuItem(this, places[i], Constants.DisplayType.LIST);
                 this._sections[id].add_child(item); 
             }
         }
@@ -345,40 +310,42 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     _createPowerItems(){
-        this.lock = new MW.PowerMenuItem(this, Constants.PowerType.LOCK);
-        this.logOut = new MW.PowerMenuItem(this, Constants.PowerType.LOGOUT);
-        Utils.canHybridSleep((canHybridSleep, needsAuth) => {
-            if(canHybridSleep){
-                this.sleep = new MW.PowerMenuItem(this, Constants.PowerType.HYBRID_SLEEP);
-            }
+        this.sessionBox = new St.BoxLayout({
+            vertical: true,
         });
+        this.sessionBox.add_child(this.createLabelRow(_("Session")));
 
-
-        Utils.canHibernate((canHibernate, needsAuth) => {
-            if(canHibernate){
-                this.hibernate = new MW.PowerMenuItem(this, Constants.PowerType.HIBERNATE);
-            }
+        this.systemBox = new St.BoxLayout({
+            vertical: true,
         });
-        this.suspend = new MW.PowerMenuItem(this, Constants.PowerType.SUSPEND);
-        this.restart = new MW.PowerMenuItem(this, Constants.PowerType.RESTART);
-        this.powerOff = new MW.PowerMenuItem(this, Constants.PowerType.POWER_OFF);
+        this.systemBox.add_child(this.createLabelRow(_("System")));
+
+        this.hasSessionOption = false;
+        this.hasSystemOption = false;
+        let powerOptions = this._settings.get_value("power-options").deep_unpack();
+        for(let i = 0; i < powerOptions.length; i++){
+            let powerType = powerOptions[i][0];
+            let shouldShow = powerOptions[i][1];
+            if(shouldShow){
+                let powerButton = new MW.PowerMenuItem(this, powerType);
+                if(powerType === Constants.PowerType.LOCK || powerType === Constants.PowerType.LOGOUT){
+                    this.hasSessionOption = true;
+                    this.sessionBox.add_child(powerButton);
+                }
+                else{
+                    this.hasSystemOption = true;
+                    this.systemBox.add_child(powerButton);
+                }
+            }
+        }
     }
 
     displayPowerItems(){
         this._clearActorsFromBox(this.applicationsBox);         
-        this.applicationsBox.add_child(this.createLabelRow(_("Session")));
-        this.applicationsBox.add_child(this.lock);
-        this.applicationsBox.add_child(this.logOut);
-        this.applicationsBox.add_child(this.createLabelRow(_("System")));
-        this.applicationsBox.add_child(this.suspend);
-        if(this.sleep)
-            this.applicationsBox.insert_child_at_index(this.sleep, 4);
-
-        if(this.hibernate)
-            this.applicationsBox.insert_child_at_index(this.hibernate, 5);
-        this.applicationsBox.add_child(this.restart);
-        this.applicationsBox.add_child(this.powerOff);
-        this.activeMenuItem = this.lock;
+        if(this.hasSessionOption)
+            this.applicationsBox.add_child(this.sessionBox);
+        if(this.hasSystemOption)
+            this.applicationsBox.add_child(this.systemBox);
     }
 
     displayCategories(){
@@ -437,16 +404,8 @@ var createMenu = class extends BaseMenuLayout.BaseLayout{
     }
 
     destroy(){
-        if(this.sleep)
-            this.sleep.destroy();
-        if(this.hibernate)
-            this.hibernate.destroy();
-
-        this.lock.destroy();
-        this.logOut.destroy();
-        this.suspend.destroy();
-        this.restart.destroy();
-        this.powerOff.destroy();
+        this.systemBox.destroy();
+        this.sessionBox.destroy();
     
         super.destroy();
     }
