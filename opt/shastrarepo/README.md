@@ -6,3 +6,5 @@ including
 - shastrarepo.files
 - shastrarepo.files.tar.gz
 
+##### Add brave-bin manually
+
