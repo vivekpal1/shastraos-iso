@@ -58,10 +58,10 @@ sleep 2
 }
 
 # Requirements and preparation
-prepreqs () {
-pacman -S --noconfirm archlinux-keyring
-pacman -S --needed --noconfirm archiso mkinitcpio-archiso
-}
+#prepreqs () {
+#pacman -S --noconfirm archlinux-keyring
+#pacman -S --needed --noconfirm archiso mkinitcpio-archiso
+#}
 
 # Copy mkshastra to working directory
 cpmkshastra () {
@@ -206,7 +206,7 @@ mkarchiso -v -w ./work -o ./out ./mkshastra
 
 rootuser
 handlerror
-prepreqs
+#prepreqs
 cleanup
 cpmkshastra
 addnmlinks
