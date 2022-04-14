@@ -315,25 +315,22 @@ tldr
 gestures
 libinput-gestures
 preload
-timeshift
 touchegg
 fragments
 android-tools
 android-udev
 gimp
 openshot
-deja-dup
 gnome-chess
 shotwell
+ranger
 
 etherwall
 electrum
 kwalletmanager
 
 #office
-abiword
-gnumeric
-spice-up
+onlyoffice-bin
 simple-scan
 gnucash
 
@@ -349,6 +346,14 @@ text-engine
 
 # Display Manager
 gdm
+
+# Sedurity, Privacy and networking tools
+gufw
+gnupg
+go-ipfs
+clamtk
+# for backups
+deja-dup
 
 # Browser
 # firefox
@@ -392,6 +397,6 @@ ckbcomp
 mkinitcpio-openswap
 
 # AUR
-trizen
+yay
 pamac-aur
 libpamac-aur
