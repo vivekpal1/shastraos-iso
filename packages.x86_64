@@ -297,7 +297,6 @@ gnome-notes
 # Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
 gnome-shell-extensions
 extension-manager
-gnome-shell-extension-x11gestures
 gnome-shell-extension-dash-to-dock
 
 # Theming
@@ -325,6 +324,21 @@ gnome-chess
 shotwell
 ranger
 
+# windows support
+patool
+wine
+bottles
+# 32 bit dependencies (wine)
+lib32-gnutls
+libcap
+lib32-libcap
+lib32-systemd
+libdbus-1.so=3-32
+lib32-dbus
+lib32-faudio
+
+
+# crypto
 etherwall
 electrum
 kwalletmanager
