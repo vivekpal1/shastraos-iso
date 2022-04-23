@@ -58,10 +58,10 @@ sleep 2
 }
 
 # Requirements and preparation
-prepreqs () {
-pacman -S --noconfirm archlinux-keyring
-pacman -S --needed --noconfirm archiso mkinitcpio-archiso
-}
+#prepreqs () {
+#pacman -S --noconfirm archlinux-keyring
+#pacman -S --needed --noconfirm archiso mkinitcpio-archiso
+#}
 
 # Copy mkshastra to working directory
 cpmkshastra () {
@@ -78,6 +78,16 @@ cp -r ./opt/shastrarepo /opt/
 # Remove shastrarepo from opt
 rmshastrarepo () {
 rm -r /opt/shastrarepo
+}
+
+# Copy shastraaur to opt
+cpshastraaur () {
+cp -r ./opt/shastraaur /opt/
+}
+
+# Remove shastraaur from opt
+rmshastraaur () {
+rm -r /opt/shastraaur
 }
 
 # Delete automatic login
@@ -206,11 +216,12 @@ mkarchiso -v -w ./work -o ./out ./mkshastra
 
 rootuser
 handlerror
-prepreqs
+#prepreqs
 cleanup
 cpmkshastra
 addnmlinks
 cpshastrarepo
+cpshastraaur
 #nalogin 
 rmunitsd
 cpmyfiles
@@ -224,3 +235,4 @@ crtkeyboard
 crtlocalec
 runmkarchiso
 rmshastrarepo
+rmshastraaur
