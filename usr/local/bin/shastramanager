@@ -14,12 +14,11 @@ welcomer () {
   clear
   echo "==================================================="
   echo "=                                                 ="
-  echo "=     Shastra Maintenance Script                 ="
+  echo "=     Shastra Manager                             ="
   echo "=                                                 ="
   echo "=     Version 0.1  (Release)                      ="
   echo "=                                                 ="
-  echo "=                                                 ="
-  echo -e "=================================================== \n"
+  echo -e "============================================= \n"
   sleep 4
 }
 
@@ -56,7 +55,8 @@ journalcln () {
 sysupdate () {
   clear
   pacman -Syyuu
-  yay -Syyuu
+  pamac update
+  pamac upgrade
   clear
   echo -e "\n"
   echo "Full system upgrade finished"
