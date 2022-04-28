@@ -227,7 +227,6 @@ x264
 xvidcore
 
 # XORG
-mesa
 xorg
 xorg-server
 xorg-apps
@@ -235,6 +234,17 @@ xorg-drivers
 xorg-xkill
 xorg-xinit
 xterm
+
+## X system
+mesa
+mesa-utils
+nvidia
+nvidia-dkms
+nvidia-settings
+nvidia-utils
+xf86-input-libinput
+xf86-video-amdgpu
+xf86-video-ati
 
 # Networking
 avahi
@@ -288,7 +298,6 @@ gnome-packagekit
 gnome-terminal
 chrome-gnome-shell
 gnome-tweaks
-xf86-input-libinput
 gtk-engine-murrine
 gnome-builder
 totem
@@ -358,6 +367,7 @@ qgnomeplatform
 qgnomeplatform-qt6
 text-engine
 
+
 # Display Manager
 gdm
 
@@ -412,8 +422,7 @@ mkinitcpio-openswap
 
 # AUR and Repo
 #yay
-pamac-all
-libpamac-full
+pamac-aur
 snapd
 snapd-glib
 flatpak
