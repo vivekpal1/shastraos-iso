@@ -355,7 +355,7 @@ kwalletmanager
 #office
 #onlyoffice-bin
 simple-scan
-gnucash
+#gnucash
 
 # Other and dependencies
 adwaita-qt6
@@ -387,7 +387,6 @@ brave-bin
 # Calamares dependencies (not listed elsewhere)
 boost
 boost-libs
-dmidecode
 extra-cmake-modules
 gtk-update-icon-cache
 icu
@@ -412,7 +411,6 @@ qt5-webengine
 qt5-xmlpatterns
 qt5ct
 solid
-upower
 yaml-cpp
 
 # Calamares

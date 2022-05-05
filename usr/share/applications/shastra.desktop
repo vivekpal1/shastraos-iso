@@ -1,11 +1,11 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Shastra Maint Tool
+Name=Shastra Manager Tool
 Comment=ShastraManager tool
 Categories=System;
 Keywords=System;
-Exec=pkexec /usr/local/bin/ShastraManager
+Exec=pkexec /usr/local/bin/shastramanager
 Icon=/usr/share/icons/default/shastramanager.png
 Path=/usr/local/bin
 Terminal=true
