@@ -154,18 +154,8 @@ echo "root:x:0:root
 sys:x:3:"${MYUSERNM}"
 adm:x:4:"${MYUSERNM}"
 wheel:x:10:"${MYUSERNM}"
-log:x:19:"${MYUSERNM}"
-network:x:90:"${MYUSERNM}"
-floppy:x:94:"${MYUSERNM}"
-scanner:x:96:"${MYUSERNM}"
-power:x:98:"${MYUSERNM}"
 rfkill:x:850:"${MYUSERNM}"
-users:x:985:"${MYUSERNM}"
-video:x:860:"${MYUSERNM}"
-storage:x:870:"${MYUSERNM}"
-optical:x:880:"${MYUSERNM}"
 lp:x:840:"${MYUSERNM}"
-audio:x:890:"${MYUSERNM}"
 "${MYUSERNM}":x:1010:" > ./mkshastra/airootfs/etc/group
 }
 
