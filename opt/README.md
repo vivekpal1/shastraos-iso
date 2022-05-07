@@ -1,6 +1,15 @@
 ## If you want to install your own custom packages,
+Open terminal here
 
-## Upload all your packages here
+```bash
+mkdir myrepo
+```
+
+```bash
+cd myrepo
+```
+
+### Upload all your packages inside 'myrepo'
 
 #### Make your packages database
 
@@ -8,12 +17,11 @@
 repo-add ./shastrarepo.db.tar.gz package-name.pkg.tar.zst
 ```
 
+### Edit pacman.conf file
 
-### And you can also upload shastrarepo here (If you are want to use local repo)
-#### Clone repository from gitlab
-
-```bash
-git clone https://gitlab.com/shastraos/shastrarepo.git
+Add this inside pacman.conf (at bottom of the page)
 ```
-
-[Shastra-Repo](https://gitlab.com/shastraos/shastrarepo)
+[myrepo]
+SigLevel = Optional TrustAll
+Server = file:///opt/myrepo
+```
