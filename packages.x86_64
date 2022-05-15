@@ -358,14 +358,13 @@ simple-scan
 #gnucash
 
 # Other and dependencies
-adwaita-qt6
-adwaita-qt
-blueprint-compiler-git
-ckbcomp
+#adwaita-qt6
+#adwaita-qt
+#blueprint-compiler-git
 archlinux-appstream-data-pamac
-qgnomeplatform
-qgnomeplatform-qt6
-text-engine
+#qgnomeplatform
+#qgnomeplatform-qt6
+#text-engine
 
 
 # Display Manager
