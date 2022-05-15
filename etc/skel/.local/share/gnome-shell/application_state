@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<application-state>
+  <context id="">
+    <application id="calamares.desktop" score="3" last-seen="1651652558"/>
+    <application id="org.gnome.Shell.Extensions.desktop" score="0" last-seen="1651652614"/>
+    <application id="org.gnome.gedit.desktop" score="0" last-seen="1651652748"/>
+    <application id="com.mattjakeman.ExtensionManager.desktop" score="1" last-seen="1651652616"/>
+    <application id="org.gnome.Nautilus.desktop" score="13" last-seen="1651652777"/>
+    <application id="org.manjaro.pamac.manager.desktop" score="2" last-seen="1651652606"/>
+    <application id="org.gnome.Settings.desktop" score="0" last-seen="1651652779"/>
+  </context>
+</application-state>
