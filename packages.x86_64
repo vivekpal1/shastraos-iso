@@ -376,8 +376,15 @@ gufw
 gnupg
 go-ipfs
 clamtk
+libredefender
+git-crypt
+
+#firejail
+#nikto
+
 # for backups
 deja-dup
+#buttercup-desktop
 
 # Browser
 # firefox

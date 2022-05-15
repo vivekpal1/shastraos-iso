@@ -81,14 +81,14 @@ rm -r /opt/shastrarepo
 }
 
 # Copy shastraaur to opt
-cpshastraaur () {
-cp -r ./opt/shastraaur /opt/
-}
+# cpshastraaur () {
+# cp -r ./opt/shastraaur /opt/
+# }
 
 # Remove shastraaur from opt
-rmshastraaur () {
-rm -r /opt/shastraaur
-}
+# rmshastraaur () {
+# rm -r /opt/shastraaur
+# }
 
 # Delete automatic login
 # nalogin () {
@@ -211,7 +211,7 @@ cleanup
 cpmkshastra
 addnmlinks
 cpshastrarepo
-cpshastraaur
+#cpshastraaur
 #nalogin 
 rmunitsd
 cpmyfiles
@@ -225,4 +225,4 @@ crtkeyboard
 crtlocalec
 runmkarchiso
 rmshastrarepo
-rmshastraaur
+#rmshastraaur
