@@ -425,6 +425,7 @@ ckbcomp
 mkinitcpio-openswap
 
 # AUR and Repo
+yay
 pamac-aur
 snapd
 snapd-glib
