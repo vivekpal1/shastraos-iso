@@ -211,7 +211,6 @@ cleanup
 cpmkshastra
 addnmlinks
 cpshastrarepo
-#cpshastraaur
 #nalogin 
 rmunitsd
 cpmyfiles
@@ -225,4 +224,3 @@ crtkeyboard
 crtlocalec
 runmkarchiso
 rmshastrarepo
-#rmshastraaur
