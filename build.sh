@@ -80,16 +80,6 @@ rmshastrarepo () {
 rm -r /opt/shastrarepo
 }
 
-# Copy shastraaur to opt
-# cpshastraaur () {
-# cp -r ./opt/shastraaur /opt/
-# }
-
-# Remove shastraaur from opt
-# rmshastraaur () {
-# rm -r /opt/shastraaur
-# }
-
 # Delete automatic login
 # nalogin () {
 # [[ -d ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d ]] && rm -r ./mkshastra/airootfs/etc/systemd/system/getty@tty1.service.d
@@ -211,7 +201,6 @@ cleanup
 cpmkshastra
 addnmlinks
 cpshastrarepo
-#cpshastraaur
 #nalogin 
 rmunitsd
 cpmyfiles
@@ -225,4 +214,3 @@ crtkeyboard
 crtlocalec
 runmkarchiso
 rmshastrarepo
-#rmshastraaur
