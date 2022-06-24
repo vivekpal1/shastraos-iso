@@ -134,10 +134,6 @@ efitools
 fuse3
 fwupd
 git
-gnome-disk-utility
-gnome-keyring
-gparted
-grsync
 haveged
 htop
 hwdata
@@ -171,16 +167,6 @@ unzip
 xdg-user-dirs
 xz
 zstd
-
-# Filesystem
-gvfs
-gvfs-afc
-gvfs-goa
-gvfs-gphoto2
-gvfs-mtp
-gvfs-nfs
-gvfs-smb
-gvfs-google
 
 # Multimedia
 alsa-lib
@@ -290,16 +276,57 @@ python-reportlab
 system-config-printer
 
 # Gnome
-gnome
-accountsservice
-dconf-editor
-gnome-firmware
-gnome-packagekit
+baobab
+cheese
+gthumb
+evince
+file-roller
+gdm
+gedit
+gnome-calendar
+gnome-characters
+gnome-clocks
+gnome-color-manager
+gnome-contacts
+gnome-control-center
+gnome-disk-utility
+gnome-font-viewer
+gnome-keyring
+gnome-logs
+gnome-menus
+gnome-session
+gnome-settings-daemon
+gnome-shell
+gnome-system-monitor
 gnome-terminal
+gnome-user-docs
+gnome-user-share
+gnome-video-effects
+grilo-plugins
+gvfs
+gvfs-afc
+gvfs-goa
+gvfs-google
+gvfs-gphoto2
+gvfs-mtp
+gvfs-nfs
+gvfs-smb
+malcontent
+mutter
+nautilus
+orca
+rygel
+sushi
+tracker3-miners
+vino
+xdg-user-dirs-gtk
+simple-scan
+mutter-performance
+
+dconf-editor
 chrome-gnome-shell
 gnome-tweaks
 gtk-engine-murrine
-gnome-builder
 totem
 gnome-notes
 
@@ -317,7 +344,7 @@ volantes-cursors
 gnome-terminal-transparency
 
 #Applications
-vlc
+clapper
 pavucontrol
 tldr
 gestures
@@ -327,8 +354,6 @@ touchegg
 fragments
 android-tools
 android-udev
-gimp
-shotcut
 gnome-chess
 shotwell
 ranger
@@ -347,14 +372,16 @@ ranger
 #lib32-faudio
 
 
-# crypto
-etherwall
+# crypto, Dapps
 electrum
-kwalletmanager
+atomicwallet
+# Adding in future (In Shastra Repo) - beaker-browser, CGMiner, BTCMiner, mist, ledger-live, 
+
+# will also add breezy, neochat, etc
+
 
 #office
 #onlyoffice-bin
-simple-scan
 #gnucash
 
 # Other and dependencies
@@ -386,8 +413,8 @@ deja-dup
 #buttercup-desktop
 
 # Browser
-# firefox
-# uncomment firefox if you want to use firefox, and comment brave-bin
+firefox
+# comment firefox if you want to only use brave-bin
 brave-bin
 
 # Calamares dependencies (not listed elsewhere)
@@ -428,6 +455,4 @@ mkinitcpio-openswap
 # AUR and Repo
 yay
 pamac-aur
-snapd
-snapd-glib
 flatpak
