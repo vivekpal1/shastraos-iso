@@ -421,6 +421,7 @@ yaml-cpp
 
 # Calamares
 calamares
+calamares-tools
 ckbcomp
 mkinitcpio-openswap
 
