@@ -9,4 +9,4 @@
 repo-add ./shastrarepo.db.tar.gz package-name.pkg.tar.zst
 ```
 
-[Link to ShastraAUR](https://gitlab.com/shastraos/shastraaur)
+[Link to ShastraRepo](https://gitlab.com/shastraos/shastrarepo)
