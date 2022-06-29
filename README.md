@@ -7,7 +7,9 @@
 <p align="center">
   A decentralized open source operating system for 21st centuary
     <br />
-    <a href="https://shastraos.vercel.app"><strong>Visit Website</strong></a>
+    <a href="https://shastraos.vercel.app"><strong>Visit Website</strong></a><br />
+    <a href="https://discord.com/invite/5Z4UMvhppm"><strong>Discord</strong></a><br />
+    <a href="https://twitter.com/ShastraOS"><strong>Twitter</strong></a>
     <br /> <br />
    <i><strong> Currenlty under Developemnt</strong></i><br />
     Developer preview version available for testing purposes
