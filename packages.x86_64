@@ -145,7 +145,6 @@ libisoburn
 linux-headers
 logrotate
 lsb-release
-os-prober
 packagekit
 pacman-contrib
 pacutils
@@ -215,11 +214,22 @@ xvidcore
 # XORG
 xorg
 xorg-server
-xorg-apps
 xorg-drivers
 xorg-xkill
 xorg-xinit
-xterm
+xorg-xbacklight
+xorg-fonts-misc
+xorg-xfd
+xorg-xrandr
+xorg-xrdb
+xorg-xset
+xorg-xev
+xorg-xmodmap
+xorg-xwininfo
+xorg-xsetroot
+# TouchScreens
+xorg-xinput
+xf86-input-libinput
 
 ## X system
 mesa
@@ -228,9 +238,12 @@ nvidia
 nvidia-dkms
 nvidia-settings
 nvidia-utils
-xf86-input-libinput
+xf86-video-nouveau
 xf86-video-amdgpu
 xf86-video-ati
+xf86-video-fbdev
+xf86-video-vesa
+xf86-video-intel
 
 # Networking
 avahi
@@ -449,6 +462,7 @@ yaml-cpp
 # Calamares
 calamares
 calamares-tools
+boost
 ckbcomp
 mkinitcpio-openswap
 
