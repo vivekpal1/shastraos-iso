@@ -334,7 +334,7 @@ tracker3-miners
 vino
 xdg-user-dirs-gtk
 simple-scan
-mutter-performance
+#mutter-performance
 
 dconf-editor
 chrome-gnome-shell
