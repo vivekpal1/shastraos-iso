@@ -334,7 +334,7 @@ tracker3-miners
 vino
 xdg-user-dirs-gtk
 simple-scan
-#mutter-performance
+mutter-performance
 
 dconf-editor
 chrome-gnome-shell
@@ -354,7 +354,7 @@ catppuccin-gtk-theme
 volantes-cursors
 # uncomment plank if not using other docks
 # plank
-gnome-terminal-transparency
+# gnome-terminal-transparency
 
 #Applications
 clapper
@@ -371,7 +371,7 @@ gnome-chess
 shotwell
 ranger
 
-# windows support
+# wine support
 #patool
 #wine
 #bottles
@@ -386,12 +386,11 @@ ranger
 
 
 # crypto, Dapps
-electrum
-atomicwallet
-# Adding in future (In Shastra Repo) - beaker-browser, CGMiner, BTCMiner, mist, ledger-live, 
+# electrum
+# atomicwallet
+# Adding in future (In Shastra Repo) - shastra-broser(fork of beaker-browser), CGMiner, BTCMiner, mist, ledger-live, 
 
 # will also add breezy, neochat, etc
-
 
 #office
 #onlyoffice-bin
@@ -426,8 +425,8 @@ deja-dup
 #buttercup-desktop
 
 # Browser
-firefox
-# comment firefox if you want to only use brave-bin
+# firefox
+# uncomment firefox if you want to only use
 brave-bin
 
 # Calamares dependencies (not listed elsewhere)
@@ -470,3 +469,8 @@ mkinitcpio-openswap
 yay
 pamac-aur
 flatpak
+
+
+# ShastraOS Packages
+shastraos-hooks
+
