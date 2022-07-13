@@ -120,7 +120,6 @@ xl2tpd
 zsh
 
 # System
-archiso
 base-devel
 bash-completion
 bluez
@@ -311,7 +310,7 @@ gnome-session
 gnome-settings-daemon
 gnome-shell
 gnome-system-monitor
-gnome-terminal
+#gnome-terminal
 gnome-user-docs
 gnome-user-share
 gnome-video-effects
@@ -334,7 +333,6 @@ tracker3-miners
 vino
 xdg-user-dirs-gtk
 simple-scan
-mutter-performance
 
 dconf-editor
 chrome-gnome-shell
@@ -350,7 +348,6 @@ gnome-shell-extension-dash-to-dock
 
 # Theming
 catppuccin-grub-theme-git
-catppuccin-gtk-theme
 volantes-cursors
 # uncomment plank if not using other docks
 # plank
@@ -365,12 +362,9 @@ gestures
 libinput-gestures
 preload
 touchegg
-fragments
-android-tools
-android-udev
-gnome-chess
 shotwell
 ranger
+alacritty
 
 # wine support
 #patool
@@ -414,9 +408,9 @@ gdm
 gufw
 gnupg
 go-ipfs
-clamtk
 libredefender
 git-crypt
+#clamtk
 
 #firejail
 #nikto
@@ -426,42 +420,41 @@ deja-dup
 #buttercup-desktop
 
 # Browser
-# firefox
-# uncomment firefox if you want to only use
+#firefox
+#uncomment firefox if you want to only use
 brave-bin
 
 # Calamares dependencies (not listed elsewhere)
-boost
-boost-libs
-extra-cmake-modules
-gtk-update-icon-cache
-icu
-kconfig
-kcoreaddons
-kdbusaddons
-kiconthemes
-ki18n
-kio
-kparts
-kpmcore
-kservice
-kwidgetsaddons
-libpwquality
-plasma-framework
-polkit-qt5
-qt5-location
-qt5-svg
-qt5-tools
-qt5-translations
-qt5-webengine
-qt5-xmlpatterns
-qt5ct
-solid
-yaml-cpp
+#boost
+#boost-libs
+#extra-cmake-modules
+#gtk-update-icon-cache
+#icu
+#kconfig
+#kcoreaddons
+#kdbusaddons
+#kiconthemes
+#ki18n
+#kio
+#kparts
+#kpmcore
+#kservice
+#kwidgetsaddons
+#libpwquality
+#plasma-framework
+#polkit-qt5
+#qt5-location
+#qt5-svg
+#qt5-tools
+#qt5-translations
+#qt5-webengine
+#qt5-xmlpatterns
+#qt5ct
+#solid
+#yaml-cpp
 
 # Calamares
 calamares
-calamares-tools
 boost
 ckbcomp
 mkinitcpio-openswap
@@ -470,8 +463,13 @@ mkinitcpio-openswap
 yay
 pamac-aur
 flatpak
+snapd
 
 
 # ShastraOS Packages
+kitty-git
+about-shastraos
 shastraos-hooks
 shastrarepo
+shastraos-artwork
+calamares-config
