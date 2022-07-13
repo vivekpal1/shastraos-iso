@@ -32,15 +32,15 @@ Visit <a href="https://shastraos.vercel.app/guide">ShastraOS Installation Guide<
 
 <h4 align="center">Latest ISO build</h4>
 <p align="center">
-ShastraDignity-Beta-2022.05.07-x86_64.iso<br />
+Shastra-Beta-2022.07.12-x86_64.iso<br />
 File Size
-2,912,759,808 bytes<br />
+2,201,399,296 bytes<br />
 MD5
-b4a7727c8a41fab6a83f05919e6d1492<br />
+7cf48a4decb01c76fb0ac56913219fc2<br />
 SHA1
-56819dbc2b51a9427deae635bd41b7e0aff987bf<br />
+60b5cec7bca1fce0d156bd80097767a7c0a852ce<br />
 SHA256
-3acd6104b2d3eef60d90711fe81f93c354e94f87acce59260c69cffb207e8378
+71bd288e0c37adad8413cde809e1c1271397a3cff806f171fe89584156ee0353
 </p>
 <hr>
 
