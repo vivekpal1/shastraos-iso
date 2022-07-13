@@ -35,7 +35,7 @@ gpart
 gpm
 gptfdisk
 grml-zsh-config
-grub
+grub-silent
 hdparm
 intel-ucode
 ipw2100-fw
@@ -364,7 +364,8 @@ preload
 touchegg
 shotwell
 ranger
-alacritty
+kitty-git
+#alacritty
 
 # wine support
 #patool
@@ -466,8 +467,7 @@ flatpak
 snapd
 
 
-# ShastraOS Packages
-kitty-git
+# ShastraOS
 about-shastraos
 shastraos-hooks
 shastrarepo
