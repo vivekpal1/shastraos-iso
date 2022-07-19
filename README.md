@@ -30,17 +30,17 @@ Flash the ISO file in a USB and boot it into your computer.
 Visit <a href="https://shastraos.vercel.app/guide">ShastraOS Installation Guide</a>
 </p>
 
-<h4 align="center">Latest ISO build</h4>
+<h4 align="center">Latest Release</h4>
 <p align="center">
-Shastra-Beta-2022.07.12-x86_64.iso<br />
+<a href="https://osdn.net/frs/redir.php?m=gigenet&f=shastraos%2F77132%2FShastra-Beta-2022.07.17-x86_64.iso"> Download Shastra-Beta-2022.07.12-x86_64.iso </a><br />
 File Size
-2,201,399,296 bytes<br />
+2,171,940,864 bytes<br />
 MD5
-7cf48a4decb01c76fb0ac56913219fc2<br />
+c19b96e09c4b0346f8f75c6d0b952472<br />
 SHA1
-60b5cec7bca1fce0d156bd80097767a7c0a852ce<br />
+677b3019ebeea2d96e9e969884396cde6d23f967<br />
 SHA256
-71bd288e0c37adad8413cde809e1c1271397a3cff806f171fe89584156ee0353
+edcb768c2dd61ee1103b072471f927e8fd6d306f3484a68cdf07bcd6927d63d5
 </p>
 <hr>
 
