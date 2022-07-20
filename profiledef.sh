@@ -23,6 +23,7 @@ file_permissions=(
   ["/root"]="0:0:750"
   ["/root/.automated_script.sh"]="0:0:755"
   ["/etc/sudoers.d"]="0:0:750"
+  ["/usr/bin/postinstall.sh"]="0:0:755"
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/usr/local/bin/shastra.bios"]="0:0:755"
   ["/usr/local/bin/shastra.uefi"]="0:0:755"
