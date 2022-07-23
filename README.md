@@ -32,15 +32,15 @@ Visit <a href="https://shastraos.vercel.app/guide">ShastraOS Installation Guide<
 
 <h4 align="center">Latest Release</h4>
 <p align="center">
-<a href="https://osdn.net/frs/redir.php?m=gigenet&f=shastraos%2F77132%2FShastra-Beta-2022.07.17-x86_64.iso"> Download Shastra-Beta-2022.07.12-x86_64.iso </a><br />
+<a href="https://osdn.net/frs/redir.php?m=gigenet&f=shastraos%2F77132%2FShastra-Beta-2022.07.22-x86_64.iso"> Download Shastra-Beta-2022.07.22-x86_64.iso </a><br />
 File Size
-2,171,940,864 bytes<br />
+2,174,496,768 bytes<br />
 MD5
-c19b96e09c4b0346f8f75c6d0b952472<br />
+e62dc54e09366cbc3a44c7710f9c1b9c<br />
 SHA1
-677b3019ebeea2d96e9e969884396cde6d23f967<br />
+c56f44ec1350695b4ebfe49605cc149ddd551c6f<br />
 SHA256
-edcb768c2dd61ee1103b072471f927e8fd6d306f3484a68cdf07bcd6927d63d5
+59e480e44f6e7741c0f287578eb1c2cf6857b7a2884a5e5665f276761ecf4648
 </p>
 <hr>
 
