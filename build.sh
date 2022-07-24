@@ -70,14 +70,14 @@ rm -r ./mkshastra/efiboot
 rm -r ./mkshastra/syslinux
 }
 
-# Copy shastrarepo to opt
-cpshastrarepo () {
-cp -r ./opt/shastrarepo /opt/
+# Copy shastraur to opt
+cpshastraur () {
+cp -r ./opt/shastraur /opt/
 }
 
-# Remove shastrarepo from opt
-rmshastrarepo () {
-rm -r /opt/shastrarepo
+# Remove shastraur from opt
+rmshastraur () {
+rm -r /opt/shastraur
 }
 
 # Delete automatic login
@@ -151,6 +151,7 @@ audio:x:15:"${MYUSERNM}"
 video:x:16:"${MYUSERNM}"
 scanner:x:20:"${MYUSERNM}"
 optical:x:22:"${MYUSERNM}"
+nopasswdlogin:x:966:"${MYUSERNM}"
 rfkill:x:850:"${MYUSERNM}"
 lp:x:840:"${MYUSERNM}"
 "${MYUSERNM}":x:1010:" > ./mkshastra/airootfs/etc/group
@@ -187,15 +188,17 @@ EndSection" > ./mkshastra/airootfs/etc/X11/xorg.conf.d/00-keyboard.conf
 }
 
 # Fix 40-locale-gen.hook and create locale.conf
-crtlocalec () {
-sed -i "s/en_US/"${LCLST}"/g" ./mkshastra/airootfs/etc/pacman.d/hooks/40-locale-gen.hook
-echo "LANG="${LCLST}".UTF-8" > ./mkshastra/airootfs/etc/locale.conf
-}
+#crtlocalec () {
+#sed -i "s/en_US/"${LCLST}"/g" ./mkshastra/airootfs/etc/pacman.d/hooks/40-locale-gen.hook
+#echo "LANG="${LCLST}".UTF-8" > ./mkshastra/airootfs/etc/locale.conf
+#}
 
 # Start mkarchiso
 runmkarchiso () {
 mkarchiso -v -w ./work -o ./out ./mkshastra
 }
+
+
 
 # ----------------------------------------
 # Run Functions
@@ -207,7 +210,7 @@ prepreqs
 cleanup
 cpmkshastra
 addnmlinks
-cpshastrarepo
+cpshastraur
 #nalogin 
 rmunitsd
 cpmyfiles
@@ -218,6 +221,7 @@ crtshadow
 crtgshadow
 setkeylayout
 crtkeyboard
-crtlocalec
+#crtlocalec
 runmkarchiso
-rmshastrarepo
+rmshastraur
+
