@@ -45,6 +45,16 @@
         <summary>Icon style</summary>
         <description>Whether the application icon should be displayed next to the title label or as an overlay.</description>
     </key>
+    <key type="i" name="overlay-icon-size">
+        <default>128</default>
+        <summary>The size of the overlay icon</summary>
+        <description>Define the size of the overlay icon.</description>
+    </key>
+    <key type="i" name="overlay-icon-opacity">
+        <default>100</default>
+        <summary>The opacity of the overlay icon</summary>
+        <description>Define the opacity of the overlay icon.</description>
+    </key>
     <key type="s" name="switcher-style">
         <choices>
             <choice value="Coverflow"/>
@@ -56,18 +66,25 @@
     </key>
     <key type="s" name="easing-function">
         <choices>
+            <choice value="ease-in-cubic"/>
             <choice value="ease-out-cubic"/>
             <choice value="ease-in-out-cubic"/>
+            <choice value="ease-in-quad"/>
             <choice value="ease-out-quad"/>
             <choice value="ease-in-out-quad"/>
+            <choice value="ease-in-quint"/>
             <choice value="ease-out-quint"/>
             <choice value="ease-in-out-quint"/>
+            <choice value="ease-in-circ"/>
             <choice value="ease-out-circ"/>
             <choice value="ease-in-out-circ"/>
+            <choice value="ease-in-back"/>
             <choice value="ease-out-back"/>
             <choice value="ease-in-out-back"/>
+            <choice value="ease-in-elastic"/>
             <choice value="ease-out-elastic"/>
             <choice value="ease-in-out-elastic"/>
+            <choice value="ease-in-bounce"/>
             <choice value="ease-out-bounce"/>
             <choice value="ease-in-out-bounce"/>
         </choices>
@@ -89,6 +106,11 @@
         <default>false</default>
         <summary>Per monitor window switch</summary>
         <description>Switch between windows on current monitor (monitor with the mouse cursor)</description>
+    </key>
+    <key type="b" name="icon-has-shadow">
+        <default>false</default>
+        <summary>Icon has shadow switch</summary>
+        <description>Whether or not the icon has a drop shadow.</description>
     </key>
   </schema>
 </schemalist>

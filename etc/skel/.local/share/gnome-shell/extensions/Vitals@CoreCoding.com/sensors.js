@@ -40,7 +40,7 @@ try {
 }
 
 var Sensors = GObject.registerClass({
-       GTypeName: 'Sensors',
+    GTypeName: 'Sensors',
 }, class Sensors extends GObject.Object {
     _init(settings, sensorIcons) {
         this._settings = settings;
@@ -48,7 +48,7 @@ var Sensors = GObject.registerClass({
 
         this.resetHistory();
 
-        this._last_processor = {};
+        this._last_processor = { 'core': {}, 'speed': [] };
 
         if (hasGTop) {
             this.storage = new GTop.glibtop_fsusage();
@@ -69,8 +69,7 @@ var Sensors = GObject.registerClass({
     }
 
     _findStorageDevice() {
-        new FileModule.File('/proc/mounts').read().then(lines => {
-            lines = lines.split("\n");
+        new FileModule.File('/proc/mounts').read("\n").then(lines => {
             for (let line of Object.values(lines)) {
                 let loadArray = line.trim().split(/\s+/);
                 if (loadArray[1] == this._settings.get_string('storage-path')) {
@@ -82,32 +81,35 @@ var Sensors = GObject.registerClass({
     }
 
     query(callback, dwell) {
-        if (this._trisensorsScanned) {
-            this._queryTempVoltFan(callback);
-        } else {
-            this._trisensorsScanned = true;
+        if (!this._hardware_detected) {
+            // we could set _hardware_detected in discoverHardwareMonitors, but by
+            // doing it here, we guarantee avoidance of race conditions
+            this._hardware_detected = true;
             this._discoverHardwareMonitors(callback);
         }
 
         for (let sensor in this._sensorIcons) {
-            if (sensor == 'temperature' || sensor == 'voltage' || sensor == 'fan')
-                continue;
-
             if (this._settings.get_boolean('show-' + sensor)) {
-                let method = '_query' + sensor[0].toUpperCase() + sensor.slice(1);
-                this[method](callback, dwell);
+                if (sensor == 'temperature' || sensor == 'voltage' || sensor == 'fan') {
+                    // for temp, volt, fan, we have a shared handler
+                    this._queryTempVoltFan(callback, sensor);
+                } else {
+                    // directly call queryFunction below
+                    let method = '_query' + sensor[0].toUpperCase() + sensor.slice(1);
+                    this[method](callback, dwell);
+                }
             }
         }
     }
 
-    _queryTempVoltFan(callback) {
-        for (let path in this._tempVoltFanSensors) {
-            let sensor = this._tempVoltFanSensors[path];
+    _queryTempVoltFan(callback, type) {
+        for (let label in this._tempVoltFanSensors[type]) {
+            let sensor = this._tempVoltFanSensors[type][label];
 
-            new FileModule.File(path).read().then(value => {
-                this._returnValue(callback, sensor['label'], value, sensor['type'], sensor['format']);
+            new FileModule.File(sensor['path']).read().then(value => {
+                this._returnValue(callback, label, value, type, sensor['format']);
             }).catch(err => {
-                this._returnValue(callback, sensor['label'], 'disabled', sensor['type'], sensor['format']);
+                this._returnValue(callback, label, 'disabled', type, sensor['format']);
             });
         }
     }
@@ -137,7 +139,7 @@ var Sensors = GObject.registerClass({
             this._returnValue(callback, 'Physical', total, 'memory', 'memory');
             this._returnValue(callback, 'Available', avail, 'memory', 'memory');
             this._returnValue(callback, 'Allocated', used, 'memory', 'memory');
-            this._returnValue(callback, 'Swap Used', swapTotal - swapFree, 'memory', 'memory');
+            this._returnValue(callback, 'Swap', swapTotal - swapFree, 'memory', 'memory');
         }).catch(err => { });
     }
 
@@ -145,10 +147,8 @@ var Sensors = GObject.registerClass({
         let columns = ['user', 'nice', 'system', 'idle', 'iowait', 'irq', 'softirq', 'steal', 'guest', 'guest_nice'];
 
         // check processor usage
-        new FileModule.File('/proc/stat').read().then(lines => {
-            lines = lines.split("\n");
+        new FileModule.File('/proc/stat').read("\n").then(lines => {
             let statistics = {};
-            let reverse_data;
 
             for (let line of Object.values(lines)) {
                 let reverse_data = line.match(/^(cpu\d*\s)(.+)/);
@@ -158,92 +158,83 @@ var Sensors = GObject.registerClass({
                     if (!(cpu in statistics))
                         statistics[cpu] = {};
 
-                    if (!(cpu in this._last_processor))
-                        this._last_processor[cpu] = 0;
+                    if (!(cpu in this._last_processor['core']))
+                        this._last_processor['core'][cpu] = 0;
 
                     let stats = reverse_data[2].trim().split(' ').reverse();
-                    for (let index in columns)
-                        statistics[cpu][columns[index]] = parseInt(stats.pop());
+                    for (let column of columns)
+                        statistics[cpu][column] = parseInt(stats.pop());
                 }
             }
+
+            let cores = Object.keys(statistics).length - 1;
 
             for (let cpu in statistics) {
                 let total = statistics[cpu]['user'] + statistics[cpu]['nice'] + statistics[cpu]['system'];
 
                 // make sure we have data to report
-                if (this._last_processor[cpu] > 0) {
-                    let delta = (total - this._last_processor[cpu]) / dwell;
+                if (this._last_processor['core'][cpu] > 0) {
+                    let delta = (total - this._last_processor['core'][cpu]) / dwell;
 
-                    let label = cpu;
+                    // /proc/stat provides overall usage for us under the 'cpu' heading
                     if (cpu == 'cpu') {
-                        delta = delta / (Object.keys(statistics).length - 1);
-                        label = 'Average';
+                        delta = delta / cores;
                         this._returnValue(callback, 'processor', delta / 100, 'processor-group', 'percent');
-                    } else
-                        label = _('Core %d').format(cpu.substr(3));
-
-                    this._returnValue(callback, label, delta / 100, 'processor', 'percent');
+                        this._returnValue(callback, 'Usage', delta / 100, 'processor', 'percent');
+                    } else {
+                        this._returnValue(callback, _('Core %d').format(cpu.substr(3)), delta / 100, 'processor', 'percent');
+                    }
                 }
 
-                this._last_processor[cpu] = total;
+                this._last_processor['core'][cpu] = total;
+            }
+
+            // if frequency scaling is enabled, gather cpu-freq values
+            if (!this._processor_uses_cpu_info) {
+                for (let core = 0; core <= cores; core++) {
+                    new FileModule.File('/sys/devices/system/cpu/cpu' + core + '/cpufreq/scaling_cur_freq').read().then(value => {
+                        this._last_processor['speed'][core] = parseInt(value);
+                    }).catch(err => { });
+                }
             }
         }).catch(err => { });
 
-        // grab CPU information including frequency
-        new FileModule.File('/proc/cpuinfo').read().then(lines => {
-            lines = lines.split("\n");
+        // if frequency scaling is disabled, use cpuinfo for speed
+        if (this._processor_uses_cpu_info) {
+            // grab CPU frequency
+            new FileModule.File('/proc/cpuinfo').read("\n").then(lines => {
+                let freqs = [];
+                for (let line of Object.values(lines)) {
+                    // grab megahertz
+                    let value = line.match(/^cpu MHz(\s+): ([+-]?\d+(\.\d+)?)/);
+                    if (value) freqs.push(parseFloat(value[2]));
+                }
 
-            let vendor_id = '';
-            let sockets = {};
-            let bogomips = '';
-            let cache = '';
+                let sum = freqs.reduce((a, b) => a + b);
+                let hertz = (sum / freqs.length) * 1000 * 1000;
+                this._returnValue(callback, 'Frequency', hertz, 'processor', 'hertz');
 
-            let freqs = [];
-            for (let line of Object.values(lines)) {
-                // grab megahertz
-                let value = line.match(/^cpu MHz(\s+): ([+-]?\d+(\.\d+)?)/);
-                if (value) freqs.push(parseFloat(value[2]));
-
-                // grab cpu vendor
-                value = line.match(/^vendor_id(\s+): (\w+.*)/);
-                if (value) vendor_id = value[2];
-
-                // grab bogomips
-                value = line.match(/^bogomips(\s+): (\d*\.?\d*)$/);
-                if (value) bogomips = value[2];
-
-                // grab processor count
-                value = line.match(/^physical id(\s+): (\d+)$/);
-                if (value) sockets[value[2]] = 1;
-
-                // grab cache
-                value = line.match(/^cache size(\s+): (\d+) KB$/);
-                if (value) cache = value[2];
-            }
-
-            let max_hertz = Math.getMaxOfArray(freqs) * 1000 * 1000;
-            let sum = freqs.reduce((a, b) => a + b);
-            let hertz = (sum / freqs.length) * 1000 * 1000;
+                //let max_hertz = Math.getMaxOfArray(freqs) * 1000 * 1000;
+                //this._returnValue(callback, 'Boost', max_hertz, 'processor', 'hertz');
+            }).catch(err => { });
+        // if frequency scaling is enabled, cpu-freq reports
+        } else if (Object.values(this._last_processor['speed']).length > 0) {
+            let sum = this._last_processor['speed'].reduce((a, b) => a + b);
+            let hertz = (sum / this._last_processor['speed'].length) * 1000;
             this._returnValue(callback, 'Frequency', hertz, 'processor', 'hertz');
-            this._returnValue(callback, 'Boost', max_hertz, 'processor', 'hertz');
-            this._returnValue(callback, 'Vendor', vendor_id, 'processor', 'string');
-            this._returnValue(callback, 'Bogomips', bogomips, 'processor', 'string');
-            this._returnValue(callback, 'Sockets', Object.keys(sockets).length, 'processor', 'string');
-            this._returnValue(callback, 'Cache', cache, 'processor', 'memory');
-        }).catch(err => { });
+            //let max_hertz = Math.getMaxOfArray(this._last_processor['speed']) * 1000;
+            //this._returnValue(callback, 'Boost', max_hertz, 'processor', 'hertz');
+        }
     }
 
     _querySystem(callback) {
         // check load average
-        new FileModule.File('/proc/sys/fs/file-nr').read().then(contents => {
-            let loadArray = contents.split('\t');
-
+        new FileModule.File('/proc/sys/fs/file-nr').read("\t").then(loadArray => {
             this._returnValue(callback, 'Open Files', loadArray[0], 'system', 'string');
         }).catch(err => { });
 
         // check load average
-        new FileModule.File('/proc/loadavg').read().then(contents => {
-            let loadArray = contents.split(' ');
+        new FileModule.File('/proc/loadavg').read(' ').then(loadArray => {
             let proc = loadArray[3].split('/');
 
             this._returnValue(callback, 'Load 1m', loadArray[0], 'system', 'load');
@@ -255,14 +246,117 @@ var Sensors = GObject.registerClass({
         }).catch(err => { });
 
         // check uptime
-        new FileModule.File('/proc/uptime').read().then(contents => {
-            let upArray = contents.split(' ');
+        new FileModule.File('/proc/uptime').read(' ').then(upArray => {
             this._returnValue(callback, 'Uptime', upArray[0], 'system', 'duration');
 
-            let cores = Object.keys(this._last_processor).length - 1;
+            let cores = Object.keys(this._last_processor['core']).length - 1;
             if (cores > 0)
                 this._returnValue(callback, 'Process Time', upArray[0] - upArray[1] / cores, 'processor', 'duration');
         }).catch(err => { });
+    }
+
+    _queryNetwork(callback, dwell) {
+        // check network speed
+        let directions = ['tx', 'rx'];
+        let netbase = '/sys/class/net/';
+
+        new FileModule.File(netbase).list().then(interfaces => {
+            for (let iface of interfaces) {
+                for (let direction of directions) {
+                    // lo tx and rx are the same
+                    if (iface == 'lo' && direction == 'rx') continue;
+
+                    new FileModule.File(netbase + iface + '/statistics/' + direction + '_bytes').read().then(value => {
+                        // issue #217 - don't include 'lo' traffic in Maximum calculations in values.js
+                        // by not using network-rx or network-tx
+                        let name = iface + ((iface == 'lo')?'':' ' + direction);
+
+                        let type = 'network' + ((iface=='lo')?'':'-' + direction);
+                        this._returnValue(callback, name, value, type, 'storage');
+                    }).catch(err => { });
+                }
+            }
+        }).catch(err => { });
+
+        // some may not want public ip checking
+        if (this._settings.get_boolean('include-public-ip')) {
+            // check the public ip every hour or when waking from sleep
+            if (this._next_public_ip_check <= 0) {
+                this._next_public_ip_check = 3600;
+
+                this._refreshIPAddress(callback);
+            }
+
+            this._next_public_ip_check -= dwell;
+        }
+
+        // wireless interface statistics
+        new FileModule.File('/proc/net/wireless').read("\n", true).then(lines => {
+            for (let line of Object.values(lines)) {
+                let netArray = line.trim().split(/\s+/);
+                let quality_pct = netArray[2].substr(0, netArray[2].length-1) / 70;
+                let signal = netArray[3].substr(0, netArray[3].length-1);
+
+                this._returnValue(callback, 'WiFi Link Quality', quality_pct, 'network', 'percent');
+                this._returnValue(callback, 'WiFi Signal Level', signal, 'network', 'string');
+            }
+        }).catch(err => { });
+    }
+
+    _queryStorage(callback, dwell) {
+        // display zfs arc status, if available
+        new FileModule.File('/proc/spl/kstat/zfs/arcstats').read().then(lines => {
+            let target = 0, maximum = 0, current = 0;
+
+            let values = lines.match(/c(\s+)(\d+)(\s+)(\d+)/);
+            if (values) target = values[4];
+
+            values = lines.match(/c_max(\s+)(\d+)(\s+)(\d+)/);
+            if (values) maximum = values[4];
+
+            values = lines.match(/size(\s+)(\d+)(\s+)(\d+)/);
+            if (values) current = values[4];
+
+            // ZFS statistics
+            this._returnValue(callback, 'ARC Target', target, 'storage', 'storage');
+            this._returnValue(callback, 'ARC Maximum', maximum, 'storage', 'storage');
+            this._returnValue(callback, 'ARC Current', current, 'storage', 'storage');
+        }).catch(err => { });
+
+        // check disk performance stats
+        new FileModule.File('/proc/diskstats').read("\n").then(lines => {
+            for (let line of Object.values(lines)) {
+                let loadArray = line.trim().split(/\s+/);
+                if ('/dev/' + loadArray[2] == this._storageDevice) {
+                    var read = (loadArray[5] * 512);
+                    var write = (loadArray[9] * 512);
+                    this._returnValue(callback, 'Read total', read, 'storage', 'storage');
+                    this._returnValue(callback, 'Write total', write, 'storage', 'storage');
+                    this._returnValue(callback, 'Read rate', (read - this._lastRead) / dwell, 'storage', 'storage');
+                    this._returnValue(callback, 'Write rate', (write - this._lastWrite) / dwell, 'storage', 'storage');
+                    this._lastRead = read;
+                    this._lastWrite = write;
+                    break;
+                }
+            }
+        }).catch(err => { });
+
+        // skip rest of stats if gtop not available
+        if (!hasGTop) return;
+
+        GTop.glibtop_get_fsusage(this.storage, this._settings.get_string('storage-path'));
+
+        let total = this.storage.blocks * this.storage.block_size;
+        let avail = this.storage.bavail * this.storage.block_size;
+        let free = this.storage.bfree * this.storage.block_size;
+        let used = total - free;
+        let reserved = (total - avail) - used;
+
+        this._returnValue(callback, 'Total', total, 'storage', 'storage');
+        this._returnValue(callback, 'Used', used, 'storage', 'storage');
+        this._returnValue(callback, 'Reserved', reserved, 'storage', 'storage');
+        this._returnValue(callback, 'Free', avail, 'storage', 'storage');
+        this._returnValue(callback, 'storage', avail, 'storage-group', 'storage');
     }
 
     _queryBattery(callback) {
@@ -347,146 +441,46 @@ var Sensors = GObject.registerClass({
         });
     }
 
-    _queryNetwork(callback, dwell) {
-        // check network speed
-        let directions = ['tx', 'rx'];
-        let netbase = '/sys/class/net/';
-
-        new FileModule.File(netbase).list().then(interfaces => {
-            for (let iface of interfaces) {
-                for (let direction of directions) {
-                    // lo tx and rx are the same
-                    if (iface == 'lo' && direction == 'rx') continue;
-
-                    new FileModule.File(netbase + iface + '/statistics/' + direction + '_bytes').read().then(value => {
-                        // issue #217 - don't include 'lo' traffic in Maximum calculations in values.js
-                        // by not using network-rx or network-tx
-                        let name = iface + ((iface == 'lo')?'':' ' + direction);
-
-                        let type = 'network' + ((iface=='lo')?'':'-' + direction);
-                        this._returnValue(callback, name, value, type, 'storage');
-                    }).catch(err => { });
-                }
-            }
-        }).catch(err => { });
-
-        // some may not want public ip checking
-        if (this._settings.get_boolean('include-public-ip')) {
-            // check the public ip every hour or when waking from sleep
-            if (this._next_public_ip_check <= 0) {
-                this._next_public_ip_check = 3600;
-
-                this._refreshIPAddress(callback);
-            }
-
-            this._next_public_ip_check -= dwell;
-        }
-
-        // wireless interface statistics
-        new FileModule.File('/proc/net/wireless').read().then(lines => {
-            lines = lines.split("\n");
-            let counter = 0;
-            for (let line of Object.values(lines)) {
-                if (counter++ <= 1)
-                    continue;
-
-                let netArray = line.trim().split(/\s+/);
-                //let iface = netArray[0].substr(0, netArray[0].length-1);
-
-                let quality = netArray[2].substr(0, netArray[2].length-1);
-                let quality_pct = quality / 70;
-
-                let signal = netArray[3].substr(0, netArray[3].length-1);
-                //let signal_pct = (signal + 110) * 10 / 7
-
-                this._returnValue(callback, 'WiFi Link Quality', quality_pct, 'network', 'percent');
-                this._returnValue(callback, 'WiFi Signal Level', signal, 'network', 'string');
-            }
-        }).catch(err => { });
-    }
-
-    _queryStorage(callback, dwell) {
-        // display zfs arc status, if available
-        new FileModule.File('/proc/spl/kstat/zfs/arcstats').read().then(lines => {
-            let target = 0, maximum = 0, current = 0;
-
-            let values = lines.match(/c(\s+)(\d+)(\s+)(\d+)/);
-            if (values) target = values[4];
-
-            values = lines.match(/c_max(\s+)(\d+)(\s+)(\d+)/);
-            if (values) maximum = values[4];
-
-            values = lines.match(/size(\s+)(\d+)(\s+)(\d+)/);
-            if (values) current = values[4];
-
-            // ZFS statistics
-            this._returnValue(callback, 'ARC Target', target, 'storage', 'storage');
-            this._returnValue(callback, 'ARC Maximum', maximum, 'storage', 'storage');
-            this._returnValue(callback, 'ARC Current', current, 'storage', 'storage');
-        }).catch(err => { });
-
-        // check disk performance stats
-        new FileModule.File('/proc/diskstats').read().then(lines => {
-            lines = lines.split("\n");
-            for (let line of Object.values(lines)) {
-                let loadArray = line.trim().split(/\s+/);
-                if ('/dev/' + loadArray[2] == this._storageDevice) {
-                    var read = (loadArray[5] * 512);
-                    var write = (loadArray[9] * 512);
-                    this._returnValue(callback, 'Read total', read, 'storage', 'storage');
-                    this._returnValue(callback, 'Write total', write, 'storage', 'storage');
-                    this._returnValue(callback, 'Read rate', (read - this._lastRead) / dwell, 'storage', 'storage');
-                    this._returnValue(callback, 'Write rate', (write - this._lastWrite) / dwell, 'storage', 'storage');
-                    this._lastRead = read;
-                    this._lastWrite = write;
-                    break;
-                }
-            }
-        }).catch(err => { });
-
-        // skip rest of stats if gtop not available
-        if (!hasGTop) return;
-
-        GTop.glibtop_get_fsusage(this.storage, this._settings.get_string('storage-path'));
-
-        let total = this.storage.blocks * this.storage.block_size;
-        let avail = this.storage.bavail * this.storage.block_size;
-        let free = this.storage.bfree * this.storage.block_size;
-        let used = total - free;
-        let reserved = (total - avail) - used;
-
-        this._returnValue(callback, 'Total', total, 'storage', 'storage');
-        this._returnValue(callback, 'Used', used, 'storage', 'storage');
-        this._returnValue(callback, 'Reserved', reserved, 'storage', 'storage');
-        this._returnValue(callback, 'Free', avail, 'storage', 'storage');
-        this._returnValue(callback, 'storage', avail, 'storage-group', 'storage');
-    }
-
     _returnValue(callback, label, value, type, format) {
         callback(label, value, type, format);
     }
 
     _discoverHardwareMonitors(callback) {
-        this._tempVoltFanSensors = {};
+        this._tempVoltFanSensors = { 'temperature': {}, 'voltage': {}, 'fan': {} };
 
         let hwbase = '/sys/class/hwmon/';
 
         // process sensor_types now so it is not called multiple times below
         let sensor_types = {};
+
         if (this._settings.get_boolean('show-temperature'))
             sensor_types['temp'] = 'temperature';
+
         if (this._settings.get_boolean('show-voltage'))
             sensor_types['in'] = 'voltage';
+
         if (this._settings.get_boolean('show-fan'))
             sensor_types['fan'] = 'fan';
 
         // a little informal, but this code has zero I/O block
         new FileModule.File(hwbase).list().then(files => {
-            for (let key in files) {
-                let file = files[key];
-
+            for (let file of files) {
+                // grab name of sensor
                 new FileModule.File(hwbase + file + '/name').read().then(name => {
-                    this._processTempVoltFan(callback, sensor_types, name, hwbase + file, file);
+                    // are we dealing with a CPU?
+                    if (name == 'coretemp') {
+                        // determine which processor (socket) we are dealing with
+                        new FileModule.File(hwbase + file + '/temp1_label').read().then(prefix => {
+                            this._processTempVoltFan(callback, sensor_types, prefix, hwbase + file, file);
+                        }).catch(err => {
+                            // this shouldn't be necessary, but just in case temp1_label doesn't exist
+                            // attempt to fix #266
+                            this._processTempVoltFan(callback, sensor_types, name, hwbase + file, file);
+                        });
+                    } else {
+                        // not a CPU, process all other sensors
+                        this._processTempVoltFan(callback, sensor_types, name, hwbase + file, file);
+                    }
                 }).catch(err => {
                     new FileModule.File(hwbase + file + '/device/name').read().then(name => {
                         this._processTempVoltFan(callback, sensor_types, name, hwbase + file + '/device', file);
@@ -494,24 +488,66 @@ var Sensors = GObject.registerClass({
                 });
             }
         }).catch(err => { });
+
+        // does this system support cpu scaling? if so we will use it to grab Frequency and Boost below
+        new FileModule.File('/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq').read().then(value => {
+            this._processor_uses_cpu_info = false;
+        }).catch(err => { });
+
+        // grab static CPU information
+        new FileModule.File('/proc/cpuinfo').read("\n").then(lines => {
+            let vendor_id = '';
+            let bogomips = '';
+            let sockets = {};
+            let cache = '';
+
+            for (let line of Object.values(lines)) {
+                // grab cpu vendor
+                let value = line.match(/^vendor_id(\s+): (\w+.*)/);
+                if (value) vendor_id = value[2];
+
+                // grab bogomips
+                value = line.match(/^bogomips(\s+): (\d*\.?\d*)$/);
+                if (value) bogomips = value[2];
+
+                // grab processor count
+                value = line.match(/^physical id(\s+): (\d+)$/);
+                if (value) sockets[value[2]] = 1;
+
+                // grab cache
+                value = line.match(/^cache size(\s+): (\d+) KB$/);
+                if (value) cache = value[2];
+            }
+
+            this._returnValue(callback, 'Vendor', vendor_id, 'processor', 'string');
+            this._returnValue(callback, 'Bogomips', bogomips, 'processor', 'string');
+            this._returnValue(callback, 'Sockets', Object.keys(sockets).length, 'processor', 'string');
+            this._returnValue(callback, 'Cache', cache, 'processor', 'memory');
+        }).catch(err => { });
     }
 
     _processTempVoltFan(callback, sensor_types, name, path, file) {
         let sensor_files = [ 'input', 'label' ];
 
+        // grab files from directory
         new FileModule.File(path).list().then(files2 => {
             let trisensors = {};
 
+            // loop over files from directory
             for (let file2 of Object.values(files2)) {
+                // simple way of processing input and label (from above)
                 for (let key of Object.values(sensor_files)) {
+                    // process toggled on sensors from extension preferences
                     for (let sensor_type in sensor_types) {
                         if (file2.substr(0, sensor_type.length) == sensor_type && file2.substr(-(key.length+1)) == '_' + key) {
                             let key2 = file + file2.substr(0, file2.indexOf('_'));
 
                             if (!(key2 in trisensors)) {
-                                trisensors[key2] = { 'type': sensor_types[sensor_type],
-                                                   'format': sensor_type,
-                                                    'label': path + '/name' };
+                                trisensors[key2] = {
+                                    'type': sensor_types[sensor_type],
+                                  'format': sensor_type,
+                                   'label': path + '/name'
+                                };
                             }
 
                             trisensors[key2][key] = path + '/' + file2;
@@ -531,7 +567,6 @@ var Sensors = GObject.registerClass({
                         new FileModule.File(obj['label']).read().then(label => {
                             this._addTempVoltFan(callback, obj, name, label, extra, value);
                         }).catch(err => {
-                            // label file reading sometimes returns Invalid argument in which case we default to the name
                             let tmpFile = obj['label'].substr(0, obj['label'].lastIndexOf('/')) + '/name';
                             new FileModule.File(tmpFile).read().then(label => {
                                 this._addTempVoltFan(callback, obj, name, label, extra, value);
@@ -545,10 +580,7 @@ var Sensors = GObject.registerClass({
 
     _addTempVoltFan(callback, obj, name, label, extra, value) {
         // prepend module that provided sensor data
-        if (name != label) {
-            if (name == 'coretemp') name = 'CPU';
-            label = name + ' ' + label;
-        }
+        if (name != label) label = name + ' ' + label;
 
         //if (label == 'nvme Composite') label = 'NVMe';
         //if (label == 'nouveau') label = 'Nvidia';
@@ -559,21 +591,39 @@ var Sensors = GObject.registerClass({
         if (label == 'acpitz temp1') label = 'ACPI Thermal Zone';
         if (label == 'pch_cannonlake temp1') label = 'Platform Controller Hub';
         if (label == 'iwlwifi_1 temp1') label = 'Wireless Adapter';
-        if (label == 'CPU Package id 0') label = 'Processor 0';
-        if (label == 'CPU Package id 1') label = 'Processor 1';
+        if (label == 'Package id 0') label = 'Processor 0';
+        if (label == 'Package id 1') label = 'Processor 1';
+        label = label.replace('Package id', 'CPU');
+
+        let types = [ 'temperature', 'voltage', 'fan' ];
+        for (let type of types) {
+            // check if this label already exists
+            if (label in this._tempVoltFanSensors[type]) {
+                for (let i = 2; i <= 9; i++) {
+                    // append an incremented number to end
+                    let new_label = label + ' ' + i;
+
+                    // if new label is available, use it
+                    if (!(new_label in this._tempVoltFanSensors[type])) {
+                        label = new_label;
+                        break;
+                    }
+                }
+            }
+        }
 
         // update screen on initial build to prevent delay on update
         this._returnValue(callback, label, value, obj['type'], obj['format']);
 
-        this._tempVoltFanSensors[obj['input']] = {
-            'type': obj['type'],
+        this._tempVoltFanSensors[obj['type']][label] = {
           'format': obj['format'],
-           'label': label
+            'path': obj['input']
         };
     }
 
     resetHistory() {
         this._next_public_ip_check = 0;
-        this._trisensorsScanned = false;
+        this._hardware_detected = false;
+        this._processor_uses_cpu_info = true;
     }
 });

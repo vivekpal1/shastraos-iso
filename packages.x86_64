@@ -38,8 +38,6 @@ grml-zsh-config
 grub-silent
 hdparm
 intel-ucode
-ipw2100-fw
-ipw2200-fw
 irssi
 iw
 iwd
@@ -310,7 +308,7 @@ gnome-session
 gnome-settings-daemon
 gnome-shell
 gnome-system-monitor
-#gnome-terminal
+gnome-terminal
 gnome-user-docs
 gnome-user-share
 gnome-video-effects
@@ -351,7 +349,7 @@ catppuccin-grub-theme-git
 volantes-cursors
 # uncomment plank if not using other docks
 # plank
-# gnome-terminal-transparency
+
 
 #Applications
 clapper
@@ -455,16 +453,15 @@ brave-bin
 #yaml-cpp
 
 # Calamares
-calamares
-boost
-ckbcomp
-mkinitcpio-openswap
+#calamares
+#boost
+#ckbcomp
+#mkinitcpio-openswap
 
 # AUR and Repo
 yay
-pamac-aur
+pamac-flatpak
 flatpak
-snapd
 
 
 # ShastraOS

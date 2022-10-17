@@ -143,7 +143,7 @@ var VitalsMenuButton = GObject.registerClass({
         let monitorButton = this._createRoundButton('org.gnome.SystemMonitor-symbolic', _('System Monitor'));
         monitorButton.connect('clicked', (self) => {
             this.menu._getTopMenu().close();
-            Util.spawn(['gnome-system-monitor']);
+            Util.spawn([this._settings.get_string('monitor-cmd')]);
         });
         customButtonBox.add_actor(monitorButton);
 
@@ -254,6 +254,7 @@ var VitalsMenuButton = GObject.registerClass({
     }
 
     _showHideSensorsChanged(self, sensor) {
+        this._sensors.resetHistory();
         this._groups[sensor.substr(5)].visible = this._settings.get_boolean(sensor);
     }
 
@@ -520,7 +521,7 @@ var VitalsMenuButton = GObject.registerClass({
 
             let items = this._values.returnIfDifferent(dwell, label, value, type, format, key);
             for (let item of Object.values(items))
-		this._updateDisplay(_(item[0]), item[1], item[2], item[3]);
+                this._updateDisplay(_(item[0]), item[1], item[2], item[3]);
         }, dwell);
 
         if (this._warnings.length > 0) {

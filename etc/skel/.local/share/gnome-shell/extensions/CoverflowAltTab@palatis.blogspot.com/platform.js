@@ -29,6 +29,7 @@ const Config = imports.misc.config;
 const Main = imports.ui.main;
 const Meta = imports.gi.Meta;
 const Clutter = imports.gi.Clutter;
+const Lightbox = imports.ui.lightbox;
 
 const ExtensionImports = imports.misc.extensionUtils.getCurrentExtension().imports;
 
@@ -66,6 +67,9 @@ class AbstractPlatform {
             dim_factor: 0.4,
             title_position: POSITION_BOTTOM,
             icon_style: 'Classic',
+            icon_has_shadow: false,
+            overlay_icon_size: 128,
+            overlay_icon_opacity: 1,
             offset: 0,
             hide_panel: true,
             enforce_primary_monitor: true,
@@ -116,6 +120,9 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
             "dim-factor",
             "position",
             "icon-style",
+            "icon-has-shadow",
+            "overlay-icon-size",
+            "overlay-icon-opacity",
             "offset",
             "hide-panel",
             "enforce-primary-monitor",
@@ -175,6 +182,9 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
                 dim_factor: clamp(settings.get_int("dim-factor") / 10, 0, 1),
                 title_position: (settings.get_string("position") == 'Top' ? POSITION_TOP : POSITION_BOTTOM),
                 icon_style: (settings.get_string("icon-style") == 'Overlay' ? 'Overlay' : 'Classic'),
+                icon_has_shadow: settings.get_boolean("icon-has-shadow"),
+                overlay_icon_size: clamp(settings.get_int("overlay-icon-size"), 64, 1024),
+                overlay_icon_opacity: clamp(settings.get_int("overlay-icon-opacity") / 100, 0, 1),
                 offset: settings.get_int("offset"),
                 hide_panel: settings.get_boolean("hide-panel"),
                 enforce_primary_monitor: settings.get_boolean("enforce-primary-monitor"),
@@ -193,37 +203,60 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
 
     tween(actor, params) {
         params.duration = params.time * 1000;
-        if (this.getSettings().switcher_class.name === "TimelineSwitcher" ||
-            params.transition === 'easeOutCubic') {
+        if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-bounce" ||
+            params.transition == 'easeInBounce') {
+            params.mode = Clutter.AnimationMode.EASE_IN_BOUNCE;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-bounce" ||
+            params.transition == 'easeOutBounce') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_BOUNCE;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-bounce" ||
+            params.transition == 'easeInOutBounce') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_BOUNCE;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-back" ||
+            params.transition == 'easeInBack') {
+            params.mode = Clutter.AnimationMode.EASE_IN_BACK;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-back" ||
+            params.transition == 'easeOutBack') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_BACK;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-back" ||
+            params.transition == 'easeInOutBack') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_BACK;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-elastic" ||
+            params.transition == 'easeInElastic') {
+            params.mode = Clutter.AnimationMode.EASE_IN_ELASTIC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-elastic" ||
+            params.transition == 'easeOutElastic') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_ELASTIC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-elastic" ||
+            params.transition == 'easeInOutElastic') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_ELASTIC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-cubic" ||
+            params.transition == 'easeInCubic') {
+            params.mode = Clutter.AnimationMode.EASE_IN_CUBIC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-cubic" ||
+            params.transition == 'easeOutCubic') {
             params.mode = Clutter.AnimationMode.EASE_OUT_CUBIC;
-        } else {
-            if (this.getSettings().easing_function == "ease-out-bounce") {
-                params.mode = Clutter.AnimationMode.EASE_OUT_BOUNCE;
-            } else if (this.getSettings().easing_function == "ease-in-out-bounce") {
-                params.mode = Clutter.AnimationMode.EASE_IN_OUT_BOUNCE;
-            } else if (this.getSettings().easing_function == "ease-out-back") {
-                params.mode = Clutter.AnimationMode.EASE_OUT_BACK;
-            } else if (this.getSettings().easing_function == "ease-in-out-back") {
-                params.mode = Clutter.AnimationMode.EASE_IN_OUT_BACK;
-            } else if (this.getSettings().easing_function == "ease-out-elastic") {
-                params.mode = Clutter.AnimationMode.EASE_OUT_ELASTIC;
-            } else if (this.getSettings().easing_function == "ease-in-out-elastic") {
-                params.mode = Clutter.AnimationMode.EASE_IN_OUT_ELASTIC;
-            } else if (this.getSettings().easing_function == "ease-out-cubic") {
-                params.mode = Clutter.AnimationMode.EASE_OUT_CUBIC;
-            } else if (this.getSettings().easing_function == "ease-in-out-cubic") {
-                params.mode = Clutter.AnimationMode.EASE_IN_OUT_CUBIC;
-            } else if (this.getSettings().easing_function == "ease-out_quad") {
-                params.mode = Clutter.AnimationMode.EASE_OUT_QUAD;
-            } else if (this.getSettings().easing_function == "ease-out-quint") {
-                params.mode = Clutter.AnimationMode.EASE_OUT_QUINT;
-            } else if (this.getSettings().easing_function == "ease-in-out-quint") {
-                params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUINT;
-            } else if (this.getSettings().easing_function == "ease-out-quint") {
-                params.mode = Clutter.AnimationMode.EASE_OUT_QUINT;
-            } else if (this.getSettings().easing_function == "ease-in-out-quint") {
-                params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUINT;
-            }
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-cubic" ||
+            params.transition == 'easeInOutCubic') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_CUBIC;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-quad" ||
+            params.transition == 'easeInQuad') {
+            params.mode = Clutter.AnimationMode.EASE_IN_QUAD;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out_quad" ||
+            params.transition == 'easeOutQuad') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_QUAD;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-quad" ||
+            params.transition == 'easeInOutQuad') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUINT;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-quint" ||
+            params.transition == 'easeInQuint') {
+            params.mode = Clutter.AnimationMode.EASE_IN_QUINT;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-out-quint" ||
+            params.transition == 'easeOutQuint') {
+            params.mode = Clutter.AnimationMode.EASE_OUT_QUINT;
+        } else if (params.transition == 'userChoice' && this.getSettings().easing_function == "ease-in-out-quint" ||
+            params.transition == 'easeInOutQuint') {
+            params.mode = Clutter.AnimationMode.EASE_IN_OUT_QUINT;
         }
 
         if (params.onComplete) {
@@ -244,6 +277,12 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
     }
 
     initBackground() {
+        this._vignette_sharpness_backup = Lightbox.VIGNETTE_SHARPNESS;
+        this._vignette_brigtness_backup = Lightbox.VIGNETTE_SHARPNESS;
+
+        Lightbox.VIGNETTE_SHARPNESS = 1.0;
+        Lightbox.VIGNETTE_BRIGHTNESS = 1.0;
+
     	let Background = imports.ui.background;
 
     	this._backgroundGroup = new Meta.BackgroundGroup();
@@ -253,29 +292,45 @@ var PlatformGnomeShell = class PlatformGnomeShell extends AbstractPlatform {
         } else {
 	        Main.uiGroup.set_child_below_sibling(this._backgroundGroup, null);
         }
+         this._lightbox = new Lightbox.Lightbox(this._backgroundGroup, {
+             inhibitEvents: true,
+             radialEffect: true,
+        });
 
         this._backgroundGroup.hide();
         for (let i = 0; i < Main.layoutManager.monitors.length; i++) {
             new Background.BackgroundManager({
                 container: this._backgroundGroup,
                 monitorIndex: i,
-                vignette: true
+                vignette: false,
             });
         }
-    }
+     }
 
-    dimBackground() {
-    	this._backgroundGroup.show();
-        let backgrounds = this._backgroundGroup.get_children();
-        for (let background of backgrounds) {
-            background.content.set({
-                brightness: 0.8,
-                vignette_sharpness: 1 - this.getSettings().dim_factor
-            });
-        }
+     dimBackground() {
+        this._backgroundGroup.show();
+        this._lightbox.lightOn();
+        this._lightbox.opacity = 0;
+        let alpha = 1 - this._settings.dim_factor;
+        this.tween(this._lightbox, {
+            opacity: 255 * alpha,
+            time: this._settings.animation_time,
+            transition: 'easeInOutQuint',
+        });
+     }
+
+    lightenBackground() {
+        this.tween(this._lightbox, {
+            time: this._settings.animation_time * 0.97,
+            transition: 'easeInOutQuint',
+            opacity: 0,
+            onComplete: this._lightbox.lightOff.bind(this._lightbox),
+        });
     }
 
     removeBackground() {
+        Lightbox.VIGNETTE_SHARPNESS = this._vignette_sharpness_backup;
+        Lightbox.VIGNETTE_BRIGHTNESS = this._vignette_brigtness_backup;
         Main.layoutManager.uiGroup.remove_child(this._backgroundGroup);
 	}
 }
