@@ -71,14 +71,14 @@ rm -r ./mkshastra/syslinux
 }
 
 # Copy shastraur to opt
-cpshastraur () {
-cp -r ./opt/shastraur /opt/
-}
+#cpshastraur () {
+#cp -r ./opt/shastraur /opt/
+#}
 
 # Remove shastraur from opt
-rmshastraur () {
-rm -r /opt/shastraur
-}
+#rmshastraur () {
+#rm -r /opt/shastraur
+#}
 
 # Delete automatic login
 # nalogin () {
@@ -210,7 +210,7 @@ prepreqs
 cleanup
 cpmkshastra
 addnmlinks
-cpshastraur
+#cpshastraur
 #nalogin 
 rmunitsd
 cpmyfiles
@@ -223,5 +223,5 @@ setkeylayout
 crtkeyboard
 #crtlocalec
 runmkarchiso
-rmshastraur
+#rmshastraur
 
