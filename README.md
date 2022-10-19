@@ -27,20 +27,20 @@
 <p align="center">
 ShastraOS is easy to insstall as other linux distros.
 Flash the ISO file in a USB and boot it into your computer.
-Visit <a href="https://shastraos.vercel.app/install">ShastraOS Installation Guide</a>
+Visit <a href="https://shastraos.co/install">ShastraOS Installation Guide</a>
 </p>
 
 <h4 align="center">Latest Release</h4>
 <p align="center">
-<a href="https://osdn.net/frs/redir.php?m=gigenet&f=shastraos%2F77132%2FShastra-Beta-2022.07.22-x86_64.iso"> Download Shastra-Beta-2022.07.22-x86_64.iso </a><br />
+<a href="https://osdn.net/frs/redir.php?m=rwthaachen&f=shastraos%2F77132%2FShastraOS-preview-2022.10.18-x86_64.iso"> Download ShastraOS-preview-2022.10.18-x86_64.iso</a><br />
 File Size
-2,174,496,768 bytes<br />
+2,140,483,584 bytes<br />
 MD5
-e62dc54e09366cbc3a44c7710f9c1b9c<br />
+8ac71c34d4e9629091df774652c22552<br />
 SHA1
-c56f44ec1350695b4ebfe49605cc149ddd551c6f<br />
+96c236537106f6727d1f6c91fc8b0dae67987023<br />
 SHA256
-59e480e44f6e7741c0f287578eb1c2cf6857b7a2884a5e5665f276761ecf4648
+2e5d931dfba375aaa67ae83ce9df384d958c7010d2526c91e00b64a94e674a53
 </p>
 <hr>
 
