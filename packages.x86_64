@@ -286,13 +286,14 @@ python-reportlab
 system-config-printer
 
 # Gnome
+file-roller
 baobab
 cheese
 gthumb
 evince
 file-roller
 gdm
-gedit
+gnome-text-editor
 gnome-calendar
 gnome-characters
 gnome-clocks
@@ -308,7 +309,7 @@ gnome-session
 gnome-settings-daemon
 gnome-shell
 gnome-system-monitor
-gnome-terminal
+gnome-console
 gnome-user-docs
 gnome-user-share
 gnome-video-effects
@@ -353,7 +354,7 @@ volantes-cursors
 
 #Applications
 clapper
-#amberol
+amberol
 pavucontrol
 tldr
 gestures
@@ -362,7 +363,7 @@ preload
 touchegg
 shotwell
 ranger
-kitty-git
+#kitty-git
 #alacritty
 
 # wine support
