@@ -291,13 +291,11 @@ baobab
 cheese
 gthumb
 evince
-file-roller
 gdm
 gnome-text-editor
 gnome-calendar
 gnome-characters
 gnome-clocks
-gnome-color-manager
 gnome-contacts
 gnome-control-center
 gnome-disk-utility
@@ -325,16 +323,18 @@ gvfs-smb
 malcontent
 mutter
 nautilus
+nautilus-sendto
+nautilus-share
+nautilus-image-converter
 orca
 rygel
 sushi
 tracker3-miners
-vino
 xdg-user-dirs-gtk
 simple-scan
 
 dconf-editor
-chrome-gnome-shell
+gnome-browser-connector
 gnome-tweaks
 gtk-engine-murrine
 totem
@@ -343,13 +343,10 @@ gnome-notes
 # Extensions for gnome (Other extenstions in /usr/share/gnome-shell/extensions)
 gnome-shell-extensions
 extension-manager
-gnome-shell-extension-dash-to-dock
 
 # Theming
-catppuccin-grub-theme-git
+catppuccin-macchiato-grub-theme-git
 volantes-cursors
-# uncomment plank if not using other docks
-# plank
 
 
 #Applications
@@ -361,10 +358,7 @@ gestures
 libinput-gestures
 preload
 touchegg
-shotwell
 ranger
-#kitty-git
-#alacritty
 
 # wine support
 #patool
@@ -380,16 +374,20 @@ ranger
 #lib32-faudio
 
 
-# crypto, Dapps
-# electrum
-# atomicwallet
-# Adding in future (In Shastra Repo) - shastra-broser(fork of beaker-browser), CGMiner, BTCMiner, mist, ledger-live, 
+# blockchain, Dapps ----------------------
 
-# will also add breezy, neochat, etc
+# -- To be build for Shastrarepo Extras ---
+# go-filecoin
+# go-filecoin-git
+# lotus-git
+# solidity-git
 
-#office
+breezy
+kubo
+#neochat
+
+#office ---------------------------- 
 #onlyoffice-bin
-#gnucash
 
 # Other and dependencies
 #adwaita-qt6
@@ -398,7 +396,7 @@ ranger
 archlinux-appstream-data-pamac
 #qgnomeplatform
 #qgnomeplatform-qt6
-#text-engine
+text-engine
 
 
 # Display Manager
@@ -407,11 +405,9 @@ gdm
 # Sedurity, Privacy and networking tools
 gufw
 gnupg
-go-ipfs
 libredefender
 git-crypt
 #clamtk
-
 #firejail
 #nikto
 
