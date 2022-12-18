@@ -4,9 +4,10 @@
   "gettext-domain": "material-you-theme",
   "name": "Material You Color Theming",
   "shell-version": [
-    "42"
+    "42",
+    "43"
   ],
   "url": "https://github.com/avanishsubbiah/material-you-theme",
   "uuid": "material-you-theme@asubbiah.com",
-  "version": 13
+  "version": 14
 }

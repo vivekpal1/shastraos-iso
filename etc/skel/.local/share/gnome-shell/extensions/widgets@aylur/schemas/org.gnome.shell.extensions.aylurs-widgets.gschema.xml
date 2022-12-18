@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+
+  <schema id="org.gnome.shell.extensions.aylurs-widgets"
+    path="/org/gnome/shell/extensions/aylurs-widgets/">
+
+    <!-- enables -->
+    <key name="battery-bar" type="b">
+      <default>true</default>
+    </key>
+    <key name="dash-board" type="b">
+      <default>true</default>
+    </key>
+    <key name="date-menu-mod" type="b">
+      <default>true</default>
+    </key>
+    <key name="media-player" type="b">
+      <default>true</default>
+    </key>
+    <key name="power-menu" type="b">
+      <default>true</default>
+    </key>
+    <key name="workspace-indicator" type="b">
+      <default>true</default>
+    </key>
+    <key name="notification-indicator" type="b">
+      <default>true</default>
+    </key>
+    <key name="background-clock" type="b">
+      <default>true</default>
+    </key>
+    <key name="quick-toggles" type="b">
+      <default>true</default>
+    </key>
+
+
+    <!-- batter-bar -->
+    <key name="battery-bar-position" type="i">
+      <default>2</default>
+    </key>
+
+    <key name="battery-bar-offset" type="i">
+      <default>8</default>
+    </key>
+
+    <key name="battery-bar-show-icon" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="battery-bar-icon-position" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="battery-bar-show-percentage" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="battery-bar-font-color" type="s">
+      <default>"#000"</default>
+    </key>
+
+    <key name="battery-bar-font-bg-color" type="s">
+      <default>"#000"</default>
+    </key>
+
+    <key name="battery-bar-width" type="i">
+      <default>140</default>
+    </key>
+
+    <key name="battery-bar-height" type="i">
+      <default>34</default>
+    </key>
+
+    <key name="battery-bar-roundness" type="i">
+      <default>99</default>
+    </key>
+
+    <key name="battery-bar-low-threshold" type="i">
+      <default>30</default>
+    </key>
+
+    <key name="battery-bar-charging-color" type="s">
+      <default>"#33d17a"</default>
+    </key>
+
+    <key name="battery-bar-low-color" type="s">
+      <default>"#f66151"</default>
+    </key>
+
+    <key name="battery-bar-color" type="s">
+      <default>"#62a0ea"</default>
+    </key>
+
+    <key name="battery-bar-bg-color" type="s">
+      <default>"rgba(255,255,255,0.2)"</default>
+    </key>
+
+    <!-- dash -->
+    <key name="dash-hide-activities" type="b">
+      <default>false</default> 
+    </key>
+
+    <key name="dash-button-position" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="dash-button-offset" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="dash-button-enable" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="dash-button-label" type="s">
+      <default>"Dash"</default>
+    </key>
+
+    <key name="dash-button-icon-path" type="s">
+      <default>""</default>
+    </key>
+
+    <key name="dash-button-show-icon" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="dash-shortcut" type="as">
+      <default><![CDATA[['<Super>d']]]></default>
+    </key>
+
+    <key name="dash-layout" type="i">
+      <default>1</default>
+    </key>
+
+    <key name="dash-link-names" type="as">
+      <default>['reddit', 'youtube', 'gmail', 'twitter', 'github']</default>
+      <description>needs shell reload for this</description>
+    </key>
+
+    <key name="dash-link-urls" type="as">
+      <default>['https://www.reddit.com/', 'https://www.youtube.com/', 'https://www.gmail.com/', 'https://twitter.com/', 'https://www.github.com/']</default>
+      <description>needs shell reload for this</description>
+    </key>
+
+    <key name="dash-apps-rows" type="i">
+      <default>3</default>
+    </key>
+
+    <key name="dash-apps-cols" type="i">
+      <default>3</default>
+    </key>
+    
+    <key name="dash-app-icon-size" type="i">
+      <default>42</default>
+    </key>
+
+    <!-- date-menu-mod -->
+    <key name="date-menu-position" type="i">
+      <default>1</default> 
+    </key>
+
+    <key name="date-menu-offset" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="date-menu-remove-padding" type="b">
+      <default>false</default> 
+    </key>
+
+    <key name="date-menu-indicator-position" type="i">
+      <default>1</default> 
+    </key>
+
+    <key name="date-menu-date-format" type="s">
+      <default>"%H:%M | %a:%d"</default> 
+    </key>
+
+    <key name="date-menu-mirror" type="b">
+      <default>false</default> 
+    </key>
+
+    <key name="date-menu-hide-notifications" type="b">
+      <default>false</default> 
+    </key>
+
+    <key name="date-menu-custom-menu" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="date-menu-hide-events" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="date-menu-hide-clocks" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="date-menu-hide-weather" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="date-menu-hide-media" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="date-menu-hide-system-levels" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="date-menu-hide-user" type="b">
+      <default>false</default>
+    </key>
+
+    <!-- media-player -->
+    <key name="media-player-position" type="i">
+      <default>1</default> 
+    </key>
+
+    <key name="media-player-offset" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="media-player-prefer" type="s">
+      <default>"spotify"</default> 
+    </key>
+
+    <key name="media-player-layout" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="media-player-controls-position" type="i">
+      <default>1</default> 
+    </key>
+
+    <key name="media-player-controls-offset" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="media-player-enable-controls" type="b">
+      <default>true</default> 
+    </key>
+
+    <key name="media-player-max-width" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="media-player-enable-track" type="b">
+      <default>true</default>
+    </key>
+
+    <!-- power-menu -->
+    <key name="power-menu-position" type="i">
+      <default>2</default> 
+    </key>
+
+    <key name="power-menu-offset" type="i">
+      <default>12</default> 
+    </key>
+    
+    <key name="power-menu-layout" type="i">
+      <default>0</default> 
+    </key>
+
+    <key name="power-menu-label-position" type="i">
+      <default>2</default>
+      <summary>
+        0 - inside
+        1 - outside
+        2 - hidden
+      </summary>
+    </key>
+
+    <key name="power-menu-button-roundness" type="i">
+      <default>56</default> 
+    </key>
+
+    <key name="power-menu-icon-size" type="i">
+      <default>70</default> 
+    </key>
+
+    <key name="power-menu-icon-padding" type="i">
+      <default>24</default> 
+    </key>
+
+    <key name="power-menu-dialog-padding" type="i">
+      <default>36</default>
+    </key>
+
+    <key name="power-menu-dialog-spacing" type="i">
+      <default>16</default>
+    </key>
+
+    <key name="power-menu-dialog-roundness" type="i">
+      <default>16</default>
+    </key>
+
+    <key name="power-menu-dialog-show-bg" type="b">
+      <default>true</default>
+    </key>
+
+    <!-- workspace-indicator -->
+    <key name="workspace-indicator-position" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="workspace-indicator-offset" type="i">
+      <default>2</default> 
+    </key>
+
+    <key name="workspace-indicator-show-names" type="b">
+      <default>false</default> 
+    </key>
+
+    <!-- notification-indicator -->
+    <key name="notification-indicator-position" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="notification-indicator-offset" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="notification-indicator-hide-on-zero" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="notification-indicator-menu-width" type="i">
+      <default>500</default>
+    </key>
+
+    <key name="notification-indicator-hide-counter" type="b">
+      <default>false</default>
+    </key>
+
+    <!-- background-clock -->
+    <key name="background-clock-position" type="i">
+      <default>8</default>
+    </key>
+
+    <key name="background-clock-x-offset" type="i">
+      <default>80</default>
+    </key>
+
+    <key name="background-clock-y-offset" type="i">
+      <default>80</default>
+    </key>
+
+    <key name="background-clock-enable-clock" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="background-clock-clock-custom-font" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="background-clock-clock-font" type="s">
+      <default>"Cantarell"</default>
+    </key>
+
+    <key name="background-clock-clock-size" type="i">
+      <default>78</default>
+    </key>
+
+    <key name="background-clock-clock-color" type="s">
+      <default>"#fff"</default>
+    </key>
+
+    <key name="background-clock-clock-shadow-x" type="i">
+      <default>2</default>
+    </key>
+
+    <key name="background-clock-clock-shadow-y" type="i">
+      <default>2</default>
+    </key>
+
+    <key name="background-clock-clock-shadow-blur" type="i">
+      <default>4</default>
+    </key>
+
+    <key name="background-clock-clock-shadow-width" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-clock-shadow-color" type="s">
+      <default>"#000"</default>
+    </key>
+
+    <key name="background-clock-enable-date" type="b">
+      <default>true</default>
+    </key>
+
+    <key name="background-clock-date-custom-font" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="background-clock-date-font" type="s">
+      <default>"Cantarell"</default>
+    </key>
+
+    <key name="background-clock-date-size" type="i">
+      <default>48</default>
+    </key>
+
+    <key name="background-clock-date-color" type="s">
+      <default>"#fff"</default>
+    </key>
+
+    <key name="background-clock-date-shadow-x" type="i">
+      <default>2</default>
+    </key>
+
+    <key name="background-clock-date-shadow-y" type="i">
+      <default>2</default>
+    </key>
+
+    <key name="background-clock-date-shadow-blur" type="i">
+      <default>4</default>
+    </key>
+
+    <key name="background-clock-date-shadow-width" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-date-shadow-color" type="s">
+      <default>"#000"</default>
+    </key>
+
+    <key name="background-clock-clock-format" type="s">
+      <default>"%H:%M"</default>
+      <description>
+        M - minutes 00-59
+        H - hour 00-23
+        I - hour 01-12
+        k - hour 0-23
+        l - hour 1-12
+        p - AM PM
+        P - am pm
+
+        n - newline
+      </description>
+    </key>
+
+    <key name="background-clock-date-format" type="s">
+      <default>"%A %b"</default>
+      <description>
+        a - weekday abr
+        A - weekday name
+        b - monthname abr
+        B - monthname name
+        C - century 00-99
+        d - day 01-31
+        e - day 1-31
+        Y - year 2000
+        m - month 01-12
+        j - day of year 001-366
+
+        n - newline
+      </description>
+    </key>
+
+    <key name="background-clock-bg-color" type="s">
+      <default>"rgba(0,0,0,0)"</default>
+    </key>
+
+    <key name="background-clock-bg-padding" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-bg-border-size" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-bg-border-color" type="s">
+      <default>"#000"</default>
+    </key>
+
+    <key name="background-clock-bg-border-radius" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-bg-shadow-inset" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="background-clock-bg-shadow-x" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-bg-shadow-y" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-bg-shadow-blur" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-bg-shadow-width" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="background-clock-bg-shadow-color" type="s">
+      <default>"rgba(0,0,0,0)"</default>
+    </key>
+
+    <!-- quick-toggles -->
+    <key name="quick-toggles-style" type="i">
+      <default>0</default>
+    </key>
+
+    <key name="quick-toggles-hide-notifications" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="quick-toggles-hide-system-levels" type="b">
+      <default>false</default>
+    </key>
+
+    <key name="quick-toggles-hide-media" type="b">
+      <default>false</default>
+    </key>
+
+  </schema>
+</schemalist>

@@ -66,7 +66,7 @@ var VitalsMenuButton = GObject.registerClass({
         this._addSettingChangedSignal('update-time', this._updateTimeChanged.bind(this));
         this._addSettingChangedSignal('position-in-panel', this._positionInPanelChanged.bind(this));
 
-        let settings = [ 'use-higher-precision', 'alphabetize', 'hide-zeros', 'fixed-widths', 'hide-icons', 'unit', 'memory-measurement', 'include-public-ip', 'network-speed-format', 'storage-measurement' ];
+        let settings = [ 'use-higher-precision', 'alphabetize', 'hide-zeros', 'fixed-widths', 'hide-icons', 'unit', 'memory-measurement', 'include-public-ip', 'network-speed-format', 'storage-measurement', 'include-static-info' ];
         for (let setting of Object.values(settings))
             this._addSettingChangedSignal(setting, this._redrawMenu.bind(this));
 
@@ -245,12 +245,14 @@ var VitalsMenuButton = GObject.registerClass({
         // attempt to prevent ellipsizes
         label.get_clutter_text().ellipsize = 0;
 
+        // keep track of label for removal later
         this._hotLabels[key] = label;
+
+        // prevent "called on the widget"  "which is not in the stage" errors by adding before width below
+        this._menuLayout.add_actor(label);
 
         // support for fixed widths #55, save label (text) width
         this._widths[key] = label.width;
-
-        this._menuLayout.add_actor(label);
     }
 
     _showHideSensorsChanged(self, sensor) {
@@ -277,7 +279,7 @@ var VitalsMenuButton = GObject.registerClass({
         if (key in this._hotLabels) {
             let label = this._hotLabels[key];
             delete this._hotLabels[key];
-            // make sure set_label is not called on non existant actor
+            // make sure set_label is not called on non existent actor
             label.destroy();
         }
     }
