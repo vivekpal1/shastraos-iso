@@ -35,7 +35,6 @@ gpart
 gpm
 gptfdisk
 grml-zsh-config
-grub-silent
 hdparm
 intel-ucode
 irssi
@@ -346,7 +345,6 @@ extension-manager
 
 # Theming
 catppuccin-macchiato-grub-theme-git
-volantes-cursors
 
 
 #Applications
@@ -457,7 +455,7 @@ brave-bin
 
 # AUR and Repo
 yay
-pamac-flatpak
+pamac-nosnap
 flatpak
 
 
