@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 256 256"
+   id="svg3057"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   width="100%"
+   height="100%"
+   sodipodi:docname="libreoffice-math.svg">
+  <metadata
+     id="metadata3093">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="655"
+     inkscape:window-height="496"
+     id="namedview3091"
+     showgrid="false"
+     inkscape:zoom="0.921875"
+     inkscape:cx="128"
+     inkscape:cy="128"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg3057" />
+  <defs
+     id="defs3059">
+    <filter
+       color-interpolation-filters="sRGB"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="0">
+      <feColorMatrix
+         result="result1"
+         values="0"
+         type="saturate"
+         id="feColorMatrix3062" />
+      <feFlood
+         result="result2"
+         flood-color="#096f98"
+         id="feFlood3064" />
+      <feBlend
+         result="result2"
+         mode="screen"
+         in2="result1"
+         id="feBlend3066" />
+      <feComposite
+         in="result2"
+         operator="in"
+         in2="SourceGraphic"
+         id="feComposite3068" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       x="0"
+       y="0"
+       width="1"
+       height="1"
+       id="1">
+      <feColorMatrix
+         result="result1"
+         values="0"
+         type="saturate"
+         id="feColorMatrix3071" />
+      <feFlood
+         result="result2"
+         flood-color="#096f98"
+         id="feFlood3073" />
+      <feBlend
+         result="result2"
+         mode="screen"
+         in2="result1"
+         id="feBlend3075" />
+      <feComposite
+         in="result2"
+         operator="in"
+         in2="SourceGraphic"
+         id="feComposite3077" />
+    </filter>
+  </defs>
+  <g
+     transform="matrix(-1,0,0,1,255.65013,-796.36)"
+     id="g3079">
+    <g
+       transform="translate(1088.39,-936.13)"
+       id="g3081"
+       style="color:#000000;fill:#fd0000">
+      <path
+         d="m -1068.87,1784.85 c -72.72,102.23 71.53,251.73 178.76,188.89 91.69,-45.994 65.25,-185.01 -19.19,-224.33 -52.1,-30.774 -129.19,-20.627 -159.57,35.437 z"
+         id="path3083"
+         inkscape:connector-curvature="0"
+         style="fill:#48d1cc" />
+      <path
+         d="m -994.5,1797.24 c -6.079,0 -10.963,4.912 -10.963,10.992 v 100.52 c 0,6.079 4.884,10.963 10.963,10.963 h 74.72 c 6.079,0 10.963,-4.884 10.963,-10.963 v -64.64 -1.794 c -0.156,-0.189 -0.223,-0.422 -0.399,-0.598 l -44.48,-44.48 h -1.253 -39.552 z"
+         id="path3085"
+         inkscape:connector-curvature="0"
+         style="fill:#c131ff;stroke:#c800fd;stroke-width:7.28999996;filter:url(#0)" />
+      <path
+         d="m -940.81,1793.53 c 0.289,0.643 0.698,1.253 1.232,1.782 l 34.531,34.14 v -30.04 c 0,-3.251 -2.642,-5.878 -5.93,-5.878 h -29.833 z"
+         id="path3087"
+         inkscape:connector-curvature="0"
+         style="fill:#fd00e6;filter:url(#1)" />
+    </g>
+    <path
+       transform="translate(0,796.36)"
+       d="m 89.33,180.64 -2.196,-2.338 V 125.66 73.018 l 2.662,-2.094 c 2.492,-1.96 3.954,-2.094 22.972,-2.094 h 20.311 l 20.969,20.952 20.969,20.952 v 34.1 c 0,32.755 -0.08,34.18 -2.02,36.12 -1.952,1.952 -3.367,2.02 -41.745,2.02 H 91.527 l -2.196,-2.338 z"
+       id="path3089"
+       inkscape:connector-curvature="0"
+       style="fill:#f5f5f5" />
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16px" height="16px" viewBox="0 0 16 16" version="1.1">
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,54.901961%,0%);fill-opacity:1;" d="M 1.714844 11.933594 C 13.222656 26.539062 24.859375 -3.96875 6.109375 0.578125 C 1.4375 1.710938 -2.179688 6.992188 1.714844 11.933594 "/>
+<path style="fill-rule:evenodd;fill:rgb(100%,54.901961%,0%);fill-opacity:1;stroke-width:30.507;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 69.818625 119.658261 L 373.628145 119.658261 L 373.628145 290.893441 L 69.818625 290.893441 Z M 69.818625 119.658261 " transform="matrix(0.0233879,0,0,0.0275571,2.816307,3.022874)"/>
+<path style="fill-rule:nonzero;fill:rgb(100%,54.901961%,0%);fill-opacity:1;stroke-width:19.07;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 69.818625 119.658261 L 219.969674 209.953634 L 373.628145 119.658261 " transform="matrix(0.0233879,0,0,0.0275571,2.816307,3.022874)"/>
+<path style="fill:none;stroke-width:9.68;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(100%,54.901961%,0%);stroke-opacity:1;stroke-miterlimit:4;" d="M 23.151723 31.010539 C 25.834272 7.520573 46.240806 9.075264 47.550145 9.2166 L 47.550145 2.17809 L 57.83325 12.354248 L 47.550145 22.50214 L 47.550145 15.576699 C 45.985325 15.378829 31.582591 13.937206 23.151723 31.010539 Z M 23.151723 31.010539 " transform="matrix(0.122318,0,0,0.138191,4.894682,2.511508)"/>
+<path style="fill-rule:evenodd;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:3.125;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 26.21963 28.880006 C 28.444449 9.163468 45.572878 10.49214 46.671885 10.587045 L 46.671885 4.679202 L 55.303112 13.220662 L 46.671885 21.738396 L 46.671885 15.925458 C 45.385242 15.759374 33.296164 14.549334 26.21963 28.880006 Z M 26.21963 28.880006 " transform="matrix(0.145728,0,0,0.164638,3.905625,2.042125)"/>
+</g>
+</svg>

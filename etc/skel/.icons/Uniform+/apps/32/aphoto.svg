@@ -1,0 +1,26 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0 0 32 32" version="1.1">
+<defs>
+<filter id="alpha" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%">
+  <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+</filter>
+<mask id="mask0">
+  <g filter="url(#alpha)">
+<rect x="0" y="0" width="32" height="32" style="fill:rgb(0%,0%,0%);fill-opacity:0.101961;stroke:none;"/>
+  </g>
+</mask>
+<clipPath id="clip1">
+  <rect width="32" height="32"/>
+</clipPath>
+<g id="surface6" clip-path="url(#clip1)">
+<path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:4;" d="M 12.002452 14.998984 L 33.999029 14.998984 L 33.999029 33.002169 L 12.002452 33.002169 Z M 12.002452 14.998984 " transform="matrix(0.573065,0,0,0.622069,3.01244,1.599289)"/>
+<path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:4;" d="M 13.999662 27.997446 L 19.002912 22.999004 L 22.997332 26.000581 L 26.998569 21.002138 L 30.999806 23.997436 " transform="matrix(0.573065,0,0,0.622069,3.01244,1.599289)"/>
+</g>
+</defs>
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(60.392157%,80.392157%,19.607843%);fill-opacity:1;" d="M 29.335938 6.726562 C 39.6875 21.542969 16.375 40.125 4.179688 28.054688 C -7.308594 16.679688 7.539062 -4.5625 21.835938 0.960938 C 24.820312 2.113281 27.4375 4.007812 29.335938 6.726562 Z M 29.335938 6.726562 "/>
+<use xlink:href="#surface6" mask="url(#mask0)"/>
+<path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,96.078431%,93.333333%);stroke-opacity:1;stroke-miterlimit:4;" d="M 12.000438 15.000551 L 33.997016 15.000551 L 33.997016 32.997456 L 12.000438 32.997456 Z M 12.000438 15.000551 " transform="matrix(0.573065,0,0,0.622069,2.439375,0.97722)"/>
+<path style="fill:none;stroke-width:1.94;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,96.078431%,93.333333%);stroke-opacity:1;stroke-miterlimit:4;" d="M 15.176889 1032.390411 L 19.839318 1027.348012 L 23.567898 1030.380987 L 27.303295 1025.338588 L 31.031875 1028.371563 " transform="matrix(0.573065,0,0,0.622069,2.439375,-623.80375)"/>
+</g>
+</svg>

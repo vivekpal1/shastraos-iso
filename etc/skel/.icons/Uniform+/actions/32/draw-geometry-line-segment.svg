@@ -1,0 +1,24 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0 0 32 32" version="1.1">
+<defs>
+<filter id="alpha" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%">
+  <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+</filter>
+<mask id="mask0">
+  <g filter="url(#alpha)">
+<rect x="0" y="0" width="32" height="32" style="fill:rgb(0%,0%,0%);fill-opacity:0.6;stroke:none;"/>
+  </g>
+</mask>
+<clipPath id="clip1">
+  <rect width="32" height="32"/>
+</clipPath>
+<g id="surface6" clip-path="url(#clip1)">
+<path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:0.444;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 7.514394 9.586692 L 3.514378 13.586561 L 3.868025 13.940216 L 7.868041 9.940347 Z M 7.514394 9.586692 " transform="matrix(2.77245,0,0,2.849702,-0.37625,-17.37)"/>
+</g>
+</defs>
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,54.901961%,0%);fill-opacity:1;" d="M 5.792969 28.5 C 24.988281 43.390625 44.914062 6.304688 21.148438 0.882812 C 6.183594 -4.675781 -8.429688 17.460938 5.792969 28.5 Z M 5.792969 28.5 "/>
+<use xlink:href="#surface6" mask="url(#mask0)"/>
+<path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:0.444;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 7.765187 9.100073 C 7.43831 9.100073 7.172018 9.364629 7.172018 9.693611 C 7.172018 10.019851 7.436901 10.285778 7.765187 10.285778 C 8.092064 10.285778 8.358356 10.021222 8.358356 9.693611 C 8.358356 9.366 8.093473 9.100073 7.765187 9.100073 Z M 3.631321 13.216456 C 3.29599 13.216456 3.024063 13.489237 3.024063 13.825073 C 3.024063 14.160908 3.29599 14.432318 3.631321 14.432318 C 3.968061 14.432318 4.239989 14.160908 4.239989 13.825073 C 4.239989 13.489237 3.968061 13.216456 3.631321 13.216456 Z M 3.631321 13.216456 " transform="matrix(2.77245,0,0,2.849702,-0.37625,-17.37)"/>
+</g>
+</svg>

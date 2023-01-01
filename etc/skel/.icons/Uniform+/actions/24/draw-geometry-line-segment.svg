@@ -1,0 +1,24 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+<defs>
+<filter id="alpha" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%">
+  <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+</filter>
+<mask id="mask0">
+  <g filter="url(#alpha)">
+<rect x="0" y="0" width="24" height="24" style="fill:rgb(0%,0%,0%);fill-opacity:0.6;stroke:none;"/>
+  </g>
+</mask>
+<clipPath id="clip1">
+  <rect width="24" height="24"/>
+</clipPath>
+<g id="surface6" clip-path="url(#clip1)">
+<path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:0.444;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 7.514864 9.586235 L 3.515317 13.587018 L 3.868495 13.939759 L 7.868041 9.940804 Z M 7.514864 9.586235 " transform="matrix(2.079338,0,0,2.137277,-0.282187,-13.0275)"/>
+</g>
+</defs>
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,54.901961%,0%);fill-opacity:1;" d="M 4.34375 21.375 C 18.742188 32.542969 33.683594 4.730469 15.863281 0.660156 C 4.640625 -3.507812 -6.324219 13.097656 4.34375 21.375 Z M 4.34375 21.375 "/>
+<use xlink:href="#surface6" mask="url(#mask0)"/>
+<path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:0.444;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 7.764718 9.100073 C 7.437841 9.100073 7.171079 9.365086 7.171079 9.69224 C 7.171079 10.019394 7.437841 10.286235 7.764718 10.286235 C 8.091595 10.286235 8.358356 10.021222 8.358356 9.69224 C 8.358356 9.366913 8.093473 9.100073 7.764718 9.100073 Z M 3.631791 13.217827 C 3.295521 13.217827 3.023123 13.488323 3.023123 13.824616 C 3.023123 14.160908 3.295521 14.433232 3.631791 14.433232 C 3.968061 14.433232 4.240458 14.160908 4.240458 13.824616 C 4.240458 13.488323 3.968061 13.217827 3.631791 13.217827 Z M 3.631791 13.217827 " transform="matrix(2.079338,0,0,2.137277,-0.282187,-13.0275)"/>
+</g>
+</svg>

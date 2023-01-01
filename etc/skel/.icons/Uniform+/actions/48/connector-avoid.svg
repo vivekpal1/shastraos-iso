@@ -1,0 +1,10 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="48px" height="48px" viewBox="0 0 48 48" version="1.1">
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(100%,54.901961%,0%);fill-opacity:1;" d="M 44.5 36.34375 C 8.234375 78.59375 -26.636719 -8.277344 29.449219 0.648438 C 41.75 2.605469 54.273438 24.957031 44.5 36.34375 Z M 44.5 36.34375 "/>
+<path style="fill-rule:nonzero;fill:rgb(0%,100%,0%);fill-opacity:1;stroke-width:1.014;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 68.791667 154.0625 L 68.791667 135.291667 L 116.458333 135.291667 L 116.458333 172.8125 L 68.791667 172.8125 Z M 68.791667 154.0625 " transform="matrix(0.1875,0,0,0.1875,0,0)"/>
+<path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:1.014;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 50.541667 76.479167 L 50.541667 60.25 L 99.9375 60.25 L 100.541667 68.666667 C 100.854167 73.3125 100.875 80.604167 100.541667 84.895833 L 99.958333 92.708333 L 50.541667 92.708333 Z M 50.541667 76.479167 " transform="matrix(0.1875,0,0,0.1875,0,0)"/>
+<path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:1.014;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 169.208333 114.5 L 169.208333 81.541667 L 101.25 81.541667 L 101.25 73.4375 L 177.3125 73.4375 L 177.3125 147.479167 L 169.1875 147.479167 L 169.1875 114.520833 Z M 169.208333 114.5 " transform="matrix(0.1875,0,0,0.1875,0,0)"/>
+<path style="fill-rule:nonzero;fill:rgb(100%,100%,100%);fill-opacity:1;stroke-width:1.014;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(100%,100%,100%);stroke-opacity:1;stroke-miterlimit:4;" d="M 157.020833 170.291667 L 157.020833 148.479167 L 187.458333 148.479167 L 187.458333 192.104167 L 157.020833 192.104167 Z M 157.020833 170.291667 " transform="matrix(0.1875,0,0,0.1875,0,0)"/>
+</g>
+</svg>

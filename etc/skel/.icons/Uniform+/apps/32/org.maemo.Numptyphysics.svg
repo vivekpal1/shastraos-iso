@@ -1,0 +1,48 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0 0 32 32" version="1.1">
+<defs>
+<filter id="alpha" filterUnits="objectBoundingBox" x="0%" y="0%" width="100%" height="100%">
+  <feColorMatrix type="matrix" in="SourceGraphic" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+</filter>
+<mask id="mask0">
+  <g filter="url(#alpha)">
+<rect x="0" y="0" width="32" height="32" style="fill:rgb(0%,0%,0%);fill-opacity:0.2;stroke:none;"/>
+  </g>
+</mask>
+<clipPath id="clip1">
+  <rect width="32" height="32"/>
+</clipPath>
+<g id="surface6" clip-path="url(#clip1)">
+<path style="fill:none;stroke-width:20.376;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:4;" d="M 44.758673 79.005187 L 17.57669 49.857445 L -18.070671 67.649521 L 1.248946 32.800959 L -26.675206 4.388806 L 12.427885 11.997562 L 30.819789 -23.333731 L 35.667088 16.204216 L 74.955721 22.778549 L 38.867697 39.605164 Z M 44.758673 79.005187 " transform="matrix(0.168425,0,0,0.169932,12.789646,11.129203)"/>
+</g>
+<mask id="mask1">
+  <g filter="url(#alpha)">
+<rect x="0" y="0" width="32" height="32" style="fill:rgb(0%,0%,0%);fill-opacity:0.2;stroke:none;"/>
+  </g>
+</mask>
+<clipPath id="clip2">
+  <rect width="32" height="32"/>
+</clipPath>
+<g id="surface9" clip-path="url(#clip2)">
+<path style="fill:none;stroke-width:16.98;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:4;" d="M 44.758673 79.005187 L 17.57669 49.857445 L -18.070671 67.649521 L 1.248946 32.800959 L -26.675206 4.388806 L 12.427885 11.997562 L 30.819789 -23.333731 L 35.667088 16.204216 L 74.955721 22.778549 L 38.867697 39.605164 Z M 44.758673 79.005187 " transform="matrix(0.168425,0,0,0.169932,12.789646,11.129203)"/>
+</g>
+<mask id="mask2">
+  <g filter="url(#alpha)">
+<rect x="0" y="0" width="32" height="32" style="fill:rgb(0%,0%,0%);fill-opacity:0.2;stroke:none;"/>
+  </g>
+</mask>
+<clipPath id="clip3">
+  <rect width="32" height="32"/>
+</clipPath>
+<g id="surface12" clip-path="url(#clip3)">
+<path style="fill:none;stroke-width:13.584;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:4;" d="M 44.758673 79.005187 L 17.57669 49.857445 L -18.070671 67.649521 L 1.248946 32.800959 L -26.675206 4.388806 L 12.427885 11.997562 L 30.819789 -23.333731 L 35.667088 16.204216 L 74.955721 22.778549 L 38.867697 39.605164 Z M 44.758673 79.005187 " transform="matrix(0.168425,0,0,0.169932,12.789646,11.129203)"/>
+</g>
+</defs>
+<g id="surface1">
+<path style=" stroke:none;fill-rule:nonzero;fill:rgb(66.666667%,78.039216%,74.901961%);fill-opacity:1;" d="M 16.269531 0.589844 C 29.988281 -2.167969 35.195312 16.746094 29.253906 27.015625 C 24.515625 35.199219 8.292969 32.859375 2.242188 21.8125 C -3.804688 10.765625 5.261719 2.800781 16.269531 0.589844 Z M 16.269531 0.589844 "/>
+<use xlink:href="#surface6" mask="url(#mask0)"/>
+<use xlink:href="#surface9" mask="url(#mask1)"/>
+<use xlink:href="#surface12" mask="url(#mask2)"/>
+<path style="fill:none;stroke-width:10.188;stroke-linecap:round;stroke-linejoin:round;stroke:rgb(98.431373%,88.235294%,5.490196%);stroke-opacity:1;stroke-miterlimit:4;" d="M 44.756505 79.004004 L 17.574929 49.856699 L -18.071898 67.648508 L 1.24743 32.800468 L -26.676304 4.388741 L 12.426201 11.997383 L 30.81783 -23.333382 L 35.665056 16.203973 L 74.976294 22.778208 L 38.865617 39.604571 Z M 44.756505 79.004004 " transform="matrix(0.168428,0,0,0.169934,12.789898,11.129203)"/>
+</g>
+</svg>
