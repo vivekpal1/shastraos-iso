@@ -1,12 +1,15 @@
 <?xml version="1.0"?>
 <application-state>
   <context id="">
-    <application id="calamares.desktop" score="3" last-seen="1651652558"/>
-    <application id="org.gnome.Shell.Extensions.desktop" score="0" last-seen="1651652614"/>
-    <application id="org.gnome.gedit.desktop" score="0" last-seen="1651652748"/>
-    <application id="com.mattjakeman.ExtensionManager.desktop" score="1" last-seen="1651652616"/>
-    <application id="org.gnome.Nautilus.desktop" score="13" last-seen="1651652777"/>
-    <application id="org.manjaro.pamac.manager.desktop" score="2" last-seen="1651652606"/>
-    <application id="org.gnome.Settings.desktop" score="0" last-seen="1651652779"/>
+    <application id="org.gnome.Nautilus.desktop" score="12" last-seen="1672591757"/>
+    <application id="org.gnome.Settings.desktop" score="20" last-seen="1672591587"/>
+    <application id="gnome-background-panel.desktop" score="0" last-seen="0"/>
+    <application id="org.gnome.tweaks.desktop" score="46" last-seen="1672591306"/>
+    <application id="org.gnome.Shell.Extensions.desktop" score="73" last-seen="1672591617"/>
+    <application id="org.gnome.gThumb.desktop" score="1" last-seen="1672591639"/>
+    <application id="org.gnome.Console.desktop" score="1" last-seen="1672591642"/>
+    <application id="com.mattjakeman.ExtensionManager.desktop" score="26" last-seen="1672591075"/>
+    <application id="org.gnome.TextEditor.desktop" score="2" last-seen="1672590577"/>
+    <application id="io.bassi.Amberol.desktop" score="0" last-seen="1672591383"/>
   </context>
 </application-state>
