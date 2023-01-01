@@ -32,15 +32,16 @@ Visit <a href="https://shastraos.co/install">ShastraOS Installation Guide</a>
 
 <h4 align="center">Latest Release</h4>
 <p align="center">
-<a href="https://osdn.net/frs/redir.php?m=rwthaachen&f=shastraos%2F77132%2FShastraOS-preview-2022.10.18-x86_64.iso"> Download ShastraOS-preview-2022.10.18-x86_64.iso</a><br />
-File Size
-2,140,483,584 bytes<br />
+<a href="https://shastraos.co/preview/"> Download ShastraOS-preview-2023.01.01-x86_64.iso</a><br />
+
+>Contact us to get Preview version access.
+
 MD5
-8ac71c34d4e9629091df774652c22552<br />
+f459d721f590e2807a676b8198d8823d<br />
 SHA1
-96c236537106f6727d1f6c91fc8b0dae67987023<br />
+59ccaf25d8ab51862a67ba79c66cd23bdb90b599<br />
 SHA256
-2e5d931dfba375aaa67ae83ce9df384d958c7010d2526c91e00b64a94e674a53
+7a9029998dcc31119199e98579e195a72b832b3076c1062b2e999ba0ff1cce48
 </p>
 <hr>
 
