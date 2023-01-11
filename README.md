@@ -25,7 +25,7 @@
 </p>
 <h2 align="center">Installation</h2>
 <p align="center">
-ShastraOS is easy to insstall as other linux distros.
+ShastraOS is easy to install as other linux distros.
 Flash the ISO file in a USB and boot it into your computer.
 Visit <a href="https://shastraos.co/install">ShastraOS Installation Guide</a>
 </p>
