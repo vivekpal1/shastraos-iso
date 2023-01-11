@@ -7,7 +7,7 @@
 <p align="center">
   A decentralized open source operating system for 21st centuary
     <br />
-    <a href="https://shastraos.vercel.app"><strong>Visit Website</strong></a><br />
+    <a href="https://shastraos.org"><strong>Visit Website</strong></a><br />
     <a href="https://discord.com/invite/5Z4UMvhppm"><strong>Discord</strong></a><br />
     <a href="https://twitter.com/ShastraOS"><strong>Twitter</strong></a>
     <br /> <br />
@@ -21,18 +21,19 @@
 <p align="center">
 <a href="https://gitlab.archlinux.org/archlinux/archiso"><strong>Arch Linux</strong></a><br />
 <a href="https://gitlab.gnome.org/GNOME"><strong>Gnome</strong></a><br />
+ <a href="https://github.com/ipfs"><strong>IPFS</strong></a><br />
 <a href="https://github.com/calamares/calamares"><strong>Calamares</strong></a><br />
 </p>
 <h2 align="center">Installation</h2>
 <p align="center">
 ShastraOS is easy to install as other linux distros.
 Flash the ISO file in a USB and boot it into your computer.
-Visit <a href="https://shastraos.co/install">ShastraOS Installation Guide</a>
+Visit <a href="https://shastraos.org/preview">ShastraOS Installation Guide</a>
 </p>
 
 <h4 align="center">Latest Release</h4>
 <p align="center">
-<a href="https://shastraos.co/preview/"> Download ShastraOS-preview-2023.01.01-x86_64.iso</a><br />
+<a href="https://shastraos.org/preview"> Download ShastraOS-preview-2023.01.01-x86_64.iso</a><br />
 
 >Contact us to get Preview version access.
 
