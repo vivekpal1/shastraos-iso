@@ -33,16 +33,12 @@ Visit <a href="https://shastraos.org/preview">ShastraOS Installation Guide</a>
 
 <h4 align="center">Latest Release</h4>
 <p align="center">
-<a href="https://shastraos.org/preview"> Download ShastraOS-preview-2023.01.01-x86_64.iso</a><br />
+<a href="https://shastraos.org/preview"> Download ShastraOS-preview-2023.03.17-x86_64.iso</a><br />
 
->Contact us to get Preview version access.
+>[Contact us](mailto:info@shastraos.org) to get developer Preview version access.
 
-MD5
-f459d721f590e2807a676b8198d8823d<br />
-SHA1
-59ccaf25d8ab51862a67ba79c66cd23bdb90b599<br />
-SHA256
-7a9029998dcc31119199e98579e195a72b832b3076c1062b2e999ba0ff1cce48
+SHA512
+2578b92078d462f6be3f6d86bb5b2d9a9699b6cc4470b81a8dffda5a0b27fcd138b66ffdd6e7e7ade294699e67e903ec661d07711485d63970ab793ebbe360f4
 </p>
 <hr>
 
